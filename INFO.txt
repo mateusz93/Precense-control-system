@@ -1,0 +1,18 @@
+# Do repozytorium nie dodajemy plików utworzonych przez dane IDE, ani żadnych plików z rozszerzeniem .class
+#
+# Krótki tutorial jak zacząć robić aplikacje webową ;)
+# https://netbeans.org/kb/docs/web/mysql-webapp.html
+#
+# Wykorzystane technologie
+Java JDK 1.8
+Apache Tomcat 8
+Hibernate
+MySQL 14.14
+BootStrap 3
+#
+# MySQL
+utworzyć lokalną baze danych
+Hostname: 127.0.0.1
+Port: 3306
+Username: root
+Password: root

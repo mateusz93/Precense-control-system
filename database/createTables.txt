@@ -1,0 +1,12 @@
+// tutaj będziemy umieszczać zapytania SQL tworzące tabele
+
+CREATE TABLE `data`.`Users` 
+(
+`userID` INT(9) NOT NULL,
+`Imię` VARCHAR(30) NULL,
+`Nazwisko` VARCHAR(30) NULL,
+`Typ` VARCHAR(15) NULL,
+`PESEL` VARCHAR(45) NULL,
+PRIMARY KEY (`userID`),
+UNIQUE INDEX `PESEL_UNIQUE` (`PESEL` ASC)
+);
