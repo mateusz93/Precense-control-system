@@ -1,12 +1,77 @@
-// tutaj będziemy umieszczać zapytania SQL tworzące tabele
+#
+# tutaj będziemy umieszczać zapytania SQL tworzące tabele
+#
+#
 
-CREATE TABLE `data`.`Users` 
+CREATE TABLE `data`.`Użytkownicy` 
 (
-`userID` INT(9) NOT NULL,
-`Imię` VARCHAR(30) NULL,
-`Nazwisko` VARCHAR(30) NULL,
-`Typ` VARCHAR(15) NULL,
-`PESEL` VARCHAR(45) NULL,
-PRIMARY KEY (`userID`),
-UNIQUE INDEX `PESEL_UNIQUE` (`PESEL` ASC)
+`ID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`Imię` VARCHAR(25) NOT NULL,
+`Nazwisko` VARCHAR(25) NOT NULL,
+`Email` VARCHAR(50) NOT NULL,
+`Index` INT UNSIGNED NOT NULL,
+`Typ` VARCHAR(15) NOT NULL,
+`Hasło` VARCHAR(100) NOT NULL,
+`Ostatnie_logowanie` DATATIME NULL DEFAULT NULL,
+PRIMARY KEY (`ID`),
+UNIQUE INDEX `ID_UNIQUE` (`ID` ASC),
+UNIQUE INDEX `Email_UNIQUE` (`Email` ASC),
+UNIQUE INDEX `Index_UNIQUE` (`Index` ASC),
 );
+
+CREATE TABLE `data`.`Kursy` 
+(
+`ID` INT NOT NULL AUTO_INCREMENT,
+`Użytkownik_ID` INT NOT NULL,
+`Przedmiot_ID` INT NOT NULL,
+`Dzień` VARCHAR(15) NOT NULL,
+`Czas_rozpoczęcia` TIME NOT NULL,
+`Czas_zakończenia` TIME NOT NULL,
+`Data_rozpoczęcia` DATE NOT NULL,
+`Data_zakończenia` DATE NOT NULL,
+PRIMARY KEY (`ID`),
+UNIQUE INDEX `ID_UNIQUE` (`ID` ASC)
+);
+
+CREATE TABLE `data`.`Obecności` 
+(
+`ID` INT NOT NULL AUTO_INCREMENT,
+`Kurs_ID` INT NOT NULL,
+`Użytkownik_ID` INT NOT NULL,
+`Obecność` VARCHAR(10) NOT NULL,
+PRIMARY KEY (`ID`)
+);
+
+CREATE TABLE `data`.`Wydziały` 
+(
+`ID` INT NOT NULL AUTO_INCREMENT,
+`Nazwa` VARCHAR(15) NOT NULL,
+PRIMARY KEY (`ID`)
+);
+
+CREATE TABLE `data`.`Przedmioty` 
+(
+`ID` INT NOT NULL AUTO_INCREMENT,
+`Nazwa` VARCHAR(45) NOT NULL,
+`Typ` VARCHAR(45) NOT NULL,
+`Użytkownik_ID` INT NOT NULL,
+`Wydział_ID` INT NOT NULL,
+`Opis` VARCHAR(500) NULL,
+PRIMARY KEY (`ID`)
+);
+
+ALTER TABLE `data`.`Kursy` 
+ADD INDEX `fk_Kursy_2_idx` (`Użytkownik_ID` ASC);
+ALTER TABLE `data`.`Kursy` 
+ADD CONSTRAINT `fk_Kursy_1`
+  FOREIGN KEY (`Przedmiot_ID`)
+  REFERENCES `data`.`Przedmioty` (`ID`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_Kursy_2`
+  FOREIGN KEY (`Użytkownik_ID`)
+  REFERENCES `data`.`Użytkownicy` (`ID`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
