@@ -61,14 +61,25 @@ PRIMARY KEY (`ID`)
 );
 
 ALTER TABLE `data`.`Kursy` 
-ADD INDEX `fk_Kursy_2_idx` (`Użytkownik_ID` ASC);
-ALTER TABLE `data`.`Kursy` 
 ADD CONSTRAINT `fk_Kursy_1`
   FOREIGN KEY (`Przedmiot_ID`)
   REFERENCES `data`.`Przedmioty` (`ID`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION,
 ADD CONSTRAINT `fk_Kursy_2`
+  FOREIGN KEY (`Użytkownik_ID`)
+  REFERENCES `data`.`Użytkownicy` (`ID`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+ALTER TABLE `data`.`Przedmioty` 
+ADD CONSTRAINT `fk_Przedmioty_1`
+  FOREIGN KEY (`Wydział_ID`)
+  REFERENCES `data`.`Wydziały` (`ID`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_Przedmioty_2`
   FOREIGN KEY (`Użytkownik_ID`)
   REFERENCES `data`.`Użytkownicy` (`ID`)
   ON DELETE NO ACTION
