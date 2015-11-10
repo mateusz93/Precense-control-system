@@ -1,0 +1,1 @@
+// tutaj będziemy umieszczać zapytania SQL tworzące przykładowe rekordy w tabeli Subject
