@@ -19,7 +19,7 @@
 
     <body>
         <div class="container">
-            <h2>Alerts</h2>
+            <h2></h2>
 
             <div class="alert alert-success">
                 <strong>Hurra!</strong> Udało Ci się uruchomić aplikację webową. Wejdź na http://www.w3schools.com/bootstrap/
@@ -27,13 +27,7 @@
             </div>
 
         </div>
-        <p><i>To display a different welcome page for this project, modify</i>
-            <tt>index.jsp</tt> <i>, or create your own welcome page then change
-                the redirection in</i> <tt>redirect.jsp</tt> <i>to point to the new
-                welcome page and also update the welcome-file setting in</i>
-            <tt>web.xml</tt>.</p>
-
-        
+       
 
         <table border="0">
             <thead>
@@ -52,7 +46,24 @@
             </tbody>
         </table>
         
+         <table border="0">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <form action="login.jsp">
+                            <strong>Przejdz na strone logowania </strong>
+                            
+                            
+                            <input type="submit" value="Log in" name="submit" />
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         
+<!--        
         <%
             java.sql.Connection conn = null;
             String url = "jdbc:mysql://localhost:3306/data";
@@ -72,5 +83,6 @@
             }
             
         %>
+        -->
     </body>
 </html>

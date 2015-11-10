@@ -7,6 +7,16 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+    
+    <servlet>  
+        <servlet-name>login</servlet-name>  
+        <servlet-class>servlets.LoginServlet</servlet-class>  
+    </servlet>  
+    <servlet-mapping>  
+        <servlet-name>login</servlet-name>  
+        <url-pattern>/loginServlet</url-pattern>  
+    </servlet-mapping>  
+    
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -24,6 +34,10 @@
     <welcome-file-list>
         <welcome-file>redirect.jsp</welcome-file>
     </welcome-file-list>
+<!--    <welcome-file-list>  
+        <welcome-file>login.jsp</welcome-file>  
+    </welcome-file-list>  -->
+    
     <resource-ref>
         <description>Database for Web application</description>
         <res-ref-name>jdbc/WebApplication</res-ref-name>

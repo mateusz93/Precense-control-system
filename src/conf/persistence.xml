@@ -3,6 +3,27 @@
   <persistence-unit name="WebApplicationPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>db.Users</class>
+    <class>db.Użytkownicy</class>
+    <class>db.Kontakty</class>
+    <class>db.UżytkownicyKursy</class>
+    <class>db.Obecności</class>
+    <class>db.Przedmioty</class>
+    <class>db.Wydziały</class>
+    <class>db.ObecnościUżytkownicy</class>
+    <class>db.ObecnościTerminyzajęć</class>
+    <class>db.Terminyzajęć</class>
+    <class>db.UżytkownicyPrzedmioty</class>
+    <class>db.Kursy</class>
+    <class>db.CourseDates</class>
+    <class>db.Contacts</class>
+    <class>db.UsersCourses</class>
+    <class>db.Departments</class>
+    <class>db.UsersSubjects</class>
+    <class>db.Presence</class>
+    <class>db.Courses</class>
+    <class>db.PresenceCourseDates</class>
+    <class>db.PresenceUsers</class>
+    <class>db.Subjects</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/data?zeroDateTimeBehavior=convertToNull"/>

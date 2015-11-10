@@ -6,14 +6,23 @@
 package db;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -24,88 +33,161 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
-    @NamedQuery(name = "Users.findByUserID", query = "SELECT u FROM Users u WHERE u.userID = :userID"),
-    @NamedQuery(name = "Users.findByImi\u0119", query = "SELECT u FROM Users u WHERE u.imi\u0119 = :imi\u0119"),
-    @NamedQuery(name = "Users.findByNazwisko", query = "SELECT u FROM Users u WHERE u.nazwisko = :nazwisko"),
-    @NamedQuery(name = "Users.findByTyp", query = "SELECT u FROM Users u WHERE u.typ = :typ"),
+    @NamedQuery(name = "Users.findById", query = "SELECT u FROM Users u WHERE u.id = :id"),
+    @NamedQuery(name = "Users.findByLogin", query = "SELECT u FROM Users u WHERE u.login = :login"),
+    @NamedQuery(name = "Users.findByFirstName", query = "SELECT u FROM Users u WHERE u.firstName = :firstName"),
+    @NamedQuery(name = "Users.findByLastName", query = "SELECT u FROM Users u WHERE u.lastName = :lastName"),
     @NamedQuery(name = "Users.findByIndex", query = "SELECT u FROM Users u WHERE u.index = :index"),
-    @NamedQuery(name = "Users.findByPesel", query = "SELECT u FROM Users u WHERE u.pesel = :pesel")})
+    @NamedQuery(name = "Users.findByType", query = "SELECT u FROM Users u WHERE u.type = :type"),
+    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
+    @NamedQuery(name = "Users.findByLastLogin", query = "SELECT u FROM Users u WHERE u.lastLogin = :lastLogin"),
+    @NamedQuery(name = "Users.findByStatus", query = "SELECT u FROM Users u WHERE u.status = :status")})
 public class Users implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "userID")
-    private Integer userID;
-    @Column(name = "Imi\u0119")
-    private String imię;
-    @Column(name = "Nazwisko")
-    private String nazwisko;
-    @Column(name = "Typ")
-    private String typ;
-    @Column(name = "Index")
-    private String index;
-    @Column(name = "PESEL")
-    private String pesel;
+    @Column(name = "ID")
+    private Integer id;
+    @Basic(optional = false)
+    @Column(name = "login")
+    private String login;
+    @Basic(optional = false)
+    @Column(name = "firstName")
+    private String firstName;
+    @Basic(optional = false)
+    @Column(name = "lastName")
+    private String lastName;
+    @Basic(optional = false)
+    @Column(name = "index")
+    private int index;
+    @Basic(optional = false)
+    @Column(name = "type")
+    private String type;
+    @Basic(optional = false)
+    @Column(name = "password")
+    private String password;
+    @Column(name = "lastLogin")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastLogin;
+    @Column(name = "Status")
+    private String status;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    private Collection<PresenceUsers> presenceUsersCollection;
+    @OneToMany(mappedBy = "teacherID")
+    private Collection<UsersSubjects> usersSubjectsCollection;
 
     public Users() {
     }
 
-    public Users(Integer userID) {
-        this.userID = userID;
+    public Users(Integer id) {
+        this.id = id;
     }
 
-    public Integer getUserID() {
-        return userID;
+    public Users(Integer id, String login, String firstName, String lastName, int index, String type, String password) {
+        this.id = id;
+        this.login = login;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.index = index;
+        this.type = type;
+        this.password = password;
     }
 
-    public void setUserID(Integer userID) {
-        this.userID = userID;
+    public Integer getId() {
+        return id;
     }
 
-    public String getImię() {
-        return imię;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setImię(String imię) {
-        this.imię = imię;
+    public String getLogin() {
+        return login;
     }
 
-    public String getNazwisko() {
-        return nazwisko;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public void setNazwisko(String nazwisko) {
-        this.nazwisko = nazwisko;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getTyp() {
-        return typ;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setTyp(String typ) {
-        this.typ = typ;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String getIndex() {
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(String index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
-    public String getPesel() {
-        return pesel;
+    public String getType() {
+        return type;
     }
 
-    public void setPesel(String pesel) {
-        this.pesel = pesel;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @XmlTransient
+    public Collection<PresenceUsers> getPresenceUsersCollection() {
+        return presenceUsersCollection;
+    }
+
+    public void setPresenceUsersCollection(Collection<PresenceUsers> presenceUsersCollection) {
+        this.presenceUsersCollection = presenceUsersCollection;
+    }
+
+    @XmlTransient
+    public Collection<UsersSubjects> getUsersSubjectsCollection() {
+        return usersSubjectsCollection;
+    }
+
+    public void setUsersSubjectsCollection(Collection<UsersSubjects> usersSubjectsCollection) {
+        this.usersSubjectsCollection = usersSubjectsCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (userID != null ? userID.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -116,7 +198,7 @@ public class Users implements Serializable {
             return false;
         }
         Users other = (Users) object;
-        if ((this.userID == null && other.userID != null) || (this.userID != null && !this.userID.equals(other.userID))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -124,7 +206,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "db.Users[ userID=" + userID + " ]";
+        return "db.Users[ id=" + id + " ]";
     }
     
 }
