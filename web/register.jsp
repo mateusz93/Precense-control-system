@@ -76,12 +76,12 @@
                                         </div>
                                     </div>
                                 </form>
-                                <form id="register-form" action="RegisterServlet" method="post" role="form" style="display: none;">
+                                <form id="register-form" action="registerServlet" method="post" role="form" style="display: none;">
                                       <div class="form-group">
-                                        <input type="text" name="first name" id="firstName" tabindex="1" class="form-control" placeholder="First Name" value="">
+                                        <input type="text" name="firstName" id="firstName" tabindex="1" class="form-control" placeholder="First Name" value="">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="last name" id="lastName" tabindex="1" class="form-control" placeholder="Last Name" value="">
+                                        <input type="text" name="lastName" id="lastName" tabindex="1" class="form-control" placeholder="Last Name" value="">
                                     </div>
                                      <div class="form-group">
                                         <input type="text" name="type" id="type" tabindex="1" class="form-control" placeholder="Type" value="">
@@ -96,7 +96,7 @@
                                         <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                                        <input type="password" name="confirmPassword" id="confirmPassword" tabindex="2" class="form-control" placeholder="Confirm Password">
                                     </div>
                                     <div class="form-group">
                                         <div class="row">

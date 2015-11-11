@@ -201,12 +201,12 @@
         </form>
     </div>
 
-    <div class="container">
+<!--    <div class="container">
         <div class="alert alert-success">
             <strong>Hurra!</strong> Udało Ci się uruchomić aplikację webową. Wejdź na http://www.w3schools.com/bootstrap/
             aby uzyskać więcej informacji o BootStrapie
         </div>
-    </div>
+    </div>-->
     
 </body>
 </html>
