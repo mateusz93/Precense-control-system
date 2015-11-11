@@ -16,6 +16,17 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
+    
+     <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                <a class="navbar-brand" href="index.htm">SKO</a>
+            </div>
+            </div>
+        </nav>
+    
+    
+    
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -35,6 +46,9 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <form id="login-form" action="http://phpoll.com/login/process" method="post" role="form" style="display: block;">
+                                    <div class="form-group">
+                                        <input type="text" name="type" id="type" tabindex="1" class="form-control" placeholder="Type" value="">
+                                    </div>
                                     <div class="form-group">
                                         <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                                     </div>
@@ -63,8 +77,17 @@
                                     </div>
                                 </form>
                                 <form id="register-form" action="http://phpoll.com/register/process" method="post" role="form" style="display: none;">
+                                      <div class="form-group">
+                                        <input type="text" name="first name" id="firstName" tabindex="1" class="form-control" placeholder="First Name" value="">
+                                    </div>
                                     <div class="form-group">
-                                        <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                        <input type="text" name="last name" id="lastName" tabindex="1" class="form-control" placeholder="Last Name" value="">
+                                    </div>
+                                     <div class="form-group">
+                                        <input type="text" name="type" id="type" tabindex="1" class="form-control" placeholder="Type" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="User Name" value="">
                                     </div>
                                     <div class="form-group">
                                         <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
@@ -93,6 +116,29 @@
 
 
     <style type="text/css">
+        .navbar {
+                margin-bottom: 0;
+                background-color: #f4511e;
+                z-index: 9999;
+                border: 0;
+                font-size: 12px !important;
+                line-height: 1.42857143 !important;
+                letter-spacing: 4px;
+                border-radius: 0;
+                font-family: Montserrat, sans-serif;
+            }
+            .navbar li a, .navbar .navbar-brand {
+                color: #fff !important;
+            }
+            .navbar-nav li a:hover, .navbar-nav li.active a {
+                color: #f4511e !important;
+                background-color: #fff !important;
+            }
+            .navbar-default .navbar-toggle {
+                border-color: transparent;
+                color: #fff !important;
+            }
+        
         body {
             padding-top: 90px;
         }

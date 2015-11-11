@@ -197,7 +197,7 @@
         <p>Sprawdzaj obecność codziennie w łatwy sposób</p> 
         <form class="form-inline">
             <input type="email" class="form-control" size="50" placeholder="Email Address" required>
-            <button type="button" class="btn btn-danger">Zarejestruj</button>
+            <a href="register.jsp"><button type="button" class="btn btn-danger">Zarejestruj</button></a>
         </form>
     </div>
 
