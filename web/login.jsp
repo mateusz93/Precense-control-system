@@ -35,10 +35,10 @@
                             <div class="form-wrap">
                                 <h1>Log in to your account</h1>
                                 <form role="form" action="javascript:;" method="post" id="login-form" autocomplete="off">
-                                    <div class="form-group">
+<!--                                    <div class="form-group">
                                         <label for="text" class="sr-only">Login</label>
                                         <input type="text" name="type" id="type" class="form-control" placeholder="Type">
-                                    </div>
+                                    </div>-->
                                     <div class="form-group">
                                         <label for="text" class="sr-only">Login</label>
                                         <input type="text" name="username" id="email" class="form-control" placeholder="Login">
