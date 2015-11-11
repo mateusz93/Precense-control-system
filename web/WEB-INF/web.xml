@@ -34,9 +34,6 @@
     <welcome-file-list>
         <welcome-file>redirect.jsp</welcome-file>
     </welcome-file-list>
-<!--    <welcome-file-list>  
-        <welcome-file>login.jsp</welcome-file>  
-    </welcome-file-list>  -->
     
     <resource-ref>
         <description>Database for Web application</description>

@@ -9,7 +9,7 @@
 
 <html>
     <head>
-        <title>Welcome to Spring Web MVC project</title>
+        <title>System kontroli obecności</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
@@ -17,89 +17,196 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
 
-    <body>
-        <div class="container">
-            <h2></h2>
-
-            <div class="alert alert-success">
-                <strong>Hurra!</strong> Udało Ci się uruchomić aplikację webową. Wejdź na http://www.w3schools.com/bootstrap/
-                aby uzyskać więcej informacji o BootStrapie
-            </div>
-
-        </div>
-       
-
-        <table border="0">
-            <thead>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <form action="response.jsp">
-                            <strong>Kliknij obok aby zobaczyć co potrafi BootStrap </strong>
-                            
-                            
-                            <input type="submit" value="Tutaj :)" name="submit" />
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        
-         <table border="0">
-            <thead>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <form action="login.jsp">
-                            <strong>Przejdz na strone logowania </strong>
-                            
-                            
-                            <input type="submit" value="Log in" name="submit" />
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        
-         <table border="0">
-            <thead>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <form action="coursesList.jsp">
-                            <strong>Lista kursów</strong>
-                            
-                            
-                            <input type="submit" value="kursy" name="submit" />
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        
-<!--        
-        <%
-            java.sql.Connection conn = null;
-            String url = "jdbc:mysql://localhost:3306/data";
-            String Driver = "com.mysql.jdbc.Driver";
-            String username="root";
-            String password="root";
-            try {
-                Class.forName(Driver);
-                conn = DriverManager.getConnection(url, username, password);
-                if(conn!=null) {
-                 out.println("Connected to database");   
-                } else {
-                    out.println("Not connected to database");
-                }
-            }catch(Exception e) {
-                e.printStackTrace();
+    <style>
+        body {
+            font: 400 15px Lato, sans-serif;
+            line-height: 1.8;
+            color: #818181;
+        }
+        h2 {
+            font-size: 24px;
+            text-transform: uppercase;
+            color: #303030;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        h4 {
+            font-size: 19px;
+            line-height: 1.375em;
+            color: #303030;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }  
+        .jumbotron {
+            background-color: #f4511e;
+            color: #fff;
+            padding: 100px 25px;
+            font-family: Montserrat, sans-serif;
+        }
+        .container-fluid {
+            padding: 60px 50px;
+        }
+        .bg-grey {
+            background-color: #f6f6f6;
+        }
+        .logo-small {
+            color: #f4511e;
+            font-size: 50px;
+        }
+        .logo {
+            color: #f4511e;
+            font-size: 200px;
+        }
+        .thumbnail {
+            padding: 0 0 15px 0;
+            border: none;
+            border-radius: 0;
+        }
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            margin-bottom: 10px;
+        }
+        .carousel-control.right, .carousel-control.left {
+            background-image: none;
+            color: #f4511e;
+        }
+        .carousel-indicators li {
+            border-color: #f4511e;
+        }
+        .carousel-indicators li.active {
+            background-color: #f4511e;
+        }
+        .item h4 {
+            font-size: 19px;
+            line-height: 1.375em;
+            font-weight: 400;
+            font-style: italic;
+            margin: 70px 0;
+        }
+        .item span {
+            font-style: normal;
+        }
+        .panel {
+            border: 1px solid #f4511e; 
+            border-radius:0 !important;
+            transition: box-shadow 0.5s;
+        }
+        .panel:hover {
+            box-shadow: 5px 0px 40px rgba(0,0,0, .2);
+        }
+        .panel-footer .btn:hover {
+            border: 1px solid #f4511e;
+            background-color: #fff !important;
+            color: #f4511e;
+        }
+        .panel-heading {
+            color: #fff !important;
+            background-color: #f4511e !important;
+            padding: 25px;
+            border-bottom: 1px solid transparent;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+        .panel-footer {
+            background-color: white !important;
+        }
+        .panel-footer h3 {
+            font-size: 32px;
+        }
+        .panel-footer h4 {
+            color: #aaa;
+            font-size: 14px;
+        }
+        .panel-footer .btn {
+            margin: 15px 0;
+            background-color: #f4511e;
+            color: #fff;
+        }
+        .navbar {
+            margin-bottom: 0;
+            background-color: #f4511e;
+            z-index: 9999;
+            border: 0;
+            font-size: 12px !important;
+            line-height: 1.42857143 !important;
+            letter-spacing: 4px;
+            border-radius: 0;
+            font-family: Montserrat, sans-serif;
+        }
+        .navbar li a, .navbar .navbar-brand {
+            color: #fff !important;
+        }
+        .navbar-nav li a:hover, .navbar-nav li.active a {
+            color: #f4511e !important;
+            background-color: #fff !important;
+        }
+        .navbar-default .navbar-toggle {
+            border-color: transparent;
+            color: #fff !important;
+        }
+        footer .glyphicon {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #f4511e;
+        }
+        @media screen and (max-width: 768px) {
+            .col-sm-4 {
+                text-align: center;
+                margin: 25px 0;
             }
-            
-        %>
-        -->
-    </body>
+            .btn-lg {
+                width: 100%;
+                margin-bottom: 35px;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            .logo {
+                font-size: 150px;
+            }
+        }
+    </style>
+
+    <body>
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button>
+                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#services">Obecności</a></li>
+                    <li><a href="coursesList.jsp">Moje przedmioty</a></li>
+                    <li><a href="#portfolio">Zapisy na zajęcia</a></li>
+                    <li><a href="#pricing">Statystyki</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="jumbotron text-center">
+        <h1>System kontroli obecności</h1> 
+        <p>Sprawdzaj obecność codziennie w łatwy sposób</p> 
+        <form class="form-inline">
+            <input type="email" class="form-control" size="50" placeholder="Email Address" required>
+            <button type="button" class="btn btn-danger">Zarejestruj</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="alert alert-success">
+            <strong>Hurra!</strong> Udało Ci się uruchomić aplikację webową. Wejdź na http://www.w3schools.com/bootstrap/
+            aby uzyskać więcej informacji o BootStrapie
+        </div>
+    </div>
+    
+</body>
 </html>

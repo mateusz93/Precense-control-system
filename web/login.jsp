@@ -17,23 +17,17 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
     <body>
+
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                <a class="navbar-brand" href="index.htm">SKO</a>
+            </div>
+            </div>
+        </nav>
+
+
             <form action="loginServlet" method="post">
-            <!--                    <fieldset style="width: 300px">
-                                        <legend> Login to App </legend>
-                                        <table>
-                                                <tr>
-                                                        <td>User ID</td>
-                                                        <td><input type="text" name="username" required="required" /></td>
-                                                    </tr>
-                                                <tr>
-                                                        <td>Password</td>
-                                                        <td><input type="password" name="userpass" required="required" /></td>
-                                                    </tr>
-                                                <tr>
-                                                        <td><input type="submit" value="Login" /></td>
-                                                    </tr>
-                                            </table>
-                                    </fieldset>-->
             <section id="login">
                 <div class="container">
                     <div class="row">
@@ -55,8 +49,8 @@
                                     </div>
                                     <input type="submit" id="btn-login" class="btn btn-custom btn-lg btn-block" value="Log in">
                                 </form>
-<!--                                <a href="javascript:;" class="forget" data-toggle="modal" data-target=".forget-modal">Forgot your password?</a>
-                                <hr>-->
+                                <!--                                <a href="javascript:;" class="forget" data-toggle="modal" data-target=".forget-modal">Forgot your password?</a>
+                                                                <hr>-->
                             </div>
                         </div> 
                     </div> 
@@ -65,40 +59,29 @@
                 </form>
 
 
-<!--        <div class="modal fade forget-modal" tabindex="-1" role="dialog" aria-labelledby="myForgetModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title">Recovery password</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Type your email account</p>
-                        <input type="email" name="recovery-email" id="recovery-email" class="form-control" autocomplete="off">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-custom">Recovery</button>
-                    </div>
-                </div> 
-            </div> 
-        </div> -->
-
-<!--        <footer id="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <p>Page © - 2015</p>
-                        <p>Powered by <strong><a target="_blank">Mati</a></strong></p>
-                    </div>
-                </div>
-            </div>
-        </footer>-->
-
         <style type="text/css">
+            .navbar {
+                margin-bottom: 0;
+                background-color: #f4511e;
+                z-index: 9999;
+                border: 0;
+                font-size: 12px !important;
+                line-height: 1.42857143 !important;
+                letter-spacing: 4px;
+                border-radius: 0;
+                font-family: Montserrat, sans-serif;
+            }
+            .navbar li a, .navbar .navbar-brand {
+                color: #fff !important;
+            }
+            .navbar-nav li a:hover, .navbar-nav li.active a {
+                color: #f4511e !important;
+                background-color: #fff !important;
+            }
+            .navbar-default .navbar-toggle {
+                border-color: transparent;
+                color: #fff !important;
+            }
             /*    --------------------------------------------------
                     :: Login Section
                     -------------------------------------------------- */
@@ -110,7 +93,8 @@
                 margin: 0 auto;
             }
             #login h1 {
-                color: #1fa67b;
+/*                color: #1fa67b;*/
+                color:#f4511e;
                 font-size: 18px;
                 text-align: center;
                 font-weight: bold;
@@ -130,7 +114,8 @@
             }
             #login .checkbox.show:before {
                 content: '\e013';
-                color: #1fa67b;
+/*                color: #1fa67b;*/
+                color: #f4511e;
                 font-size: 17px;
                 margin: 1px 0 0 3px;
                 position: absolute;
@@ -169,7 +154,8 @@
             }
             .btn-custom {
                 color: #fff;
-                background-color: #1fa67b;
+/*                background-color: #1fa67b;*/
+                background-color: #f4511e;
             }
             .btn-custom:hover,
             .btn-custom:focus {

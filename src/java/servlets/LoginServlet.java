@@ -38,14 +38,13 @@ public class LoginServlet extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
             rd.forward(request, response);
         } else {
+            out.print("<br><br><br>");
             out.print("<div class=\"container\">");
             out.print("<div class=\"alert alert-danger fade in\">");
             out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
             out.print("<strong>Error:</strong> Bledny email lub haslo");
             out.print("</div>");
             out.print("</div>");
-            
-           //out.print("<center><p style=\"color:red\">Sorry username or password error</p></center>");
             RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
             rd.include(request, response);
         }
