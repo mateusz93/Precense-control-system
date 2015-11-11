@@ -63,6 +63,23 @@
             </tbody>
         </table>
         
+         <table border="0">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <form action="coursesList.jsp">
+                            <strong>Lista kursów</strong>
+                            
+                            
+                            <input type="submit" value="kursy" name="submit" />
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
 <!--        
         <%
             java.sql.Connection conn = null;

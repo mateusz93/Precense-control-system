@@ -106,7 +106,7 @@
                 padding-top: 50px
             }
             #login .form-wrap {
-                width: 50%;
+                width: 40%;
                 margin: 0 auto;
             }
             #login h1 {
