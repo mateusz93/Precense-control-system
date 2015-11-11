@@ -52,7 +52,7 @@ public class RegisterServlet extends HttpServlet {
             out.print("<div class=\"container\">");
             out.print("<div class=\"alert alert-danger fade in\">");
             out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
-            out.print("<strong>Error:</strong> Bledny email lub haslo");
+            out.print("<strong>Error:</strong> Haslo nie jest takie samo");
             out.print("</div>");
             out.print("</div>");
         }

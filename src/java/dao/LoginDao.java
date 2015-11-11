@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 public class LoginDao {
 
@@ -31,6 +32,12 @@ public class LoginDao {
             pst.setString(2, pass);
             rs = pst.executeQuery();
             status = rs.next();
+                        
+            PreparedStatement pst2 = null;
+            System.out.println();
+            pst2 = conn.prepareStatement("UPDATE Users SET lastLogin=NOW() WHERE ID=?");
+            pst2.setLong(1, rs.getLong("ID"));
+            pst2.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
         } finally {
