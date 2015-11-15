@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class LoginDao {
 
-    public static boolean validate(String name, String pass) {
+    public static boolean validate(String name, String pass, String type) {
         boolean status = false;
         Connection conn = null;
         PreparedStatement pst = null;
@@ -27,9 +27,10 @@ public class LoginDao {
         try {
             Class.forName(driver).newInstance();
             conn = DriverManager.getConnection(url + dbName, userName, password);
-            pst = conn.prepareStatement("select * from Users where login=? and password=?");
+            pst = conn.prepareStatement("select * from Users where login=? and password=? and type=?");
             pst.setString(1, name);
             pst.setString(2, pass);
+            pst.setString(3, type);
             rs = pst.executeQuery();
             status = rs.next();
                         

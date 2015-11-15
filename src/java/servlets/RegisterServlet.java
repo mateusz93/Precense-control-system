@@ -20,34 +20,33 @@ import javax.servlet.http.HttpSession;
  * @author mateusz
  */
 public class RegisterServlet extends HttpServlet {
-    
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        String firstName = request.getParameter("firstName");  
-        String lastName = request.getParameter("lastName");  
-        String type = request.getParameter("type");  
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String type = request.getParameter("type");
         String email = request.getParameter("email");
-        String username = request.getParameter("username");    
-        String password = request.getParameter("password"); 
-        String confirmPassword = request.getParameter("confirmPassword");  
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
 
         HttpSession session = request.getSession(false);
 
-        if (session != null) {
-            session.setAttribute("username", username);
-        }
-       
-        if(RegisterDao.accept(firstName, lastName, type, email, username, password, confirmPassword)) {
+        if (RegisterDao.accept(firstName, lastName, type, email, username, password, confirmPassword)) {
+            if (session != null) {
+                session.setAttribute("username", username);
+            }
             out.print("<div class=\"container\">");
             out.print("<div class=\"alert alert-success fade in\">");
             out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
             out.print("<strong>Success!</strong> Konto utworzone");
             out.print("</div>");
             out.print("</div>");
-            
+
         } else {
             out.print("<div class=\"container\">");
             out.print("<div class=\"alert alert-danger fade in\">");
@@ -59,10 +58,10 @@ public class RegisterServlet extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
         rd.include(request, response);
         out.close();
-    
+
     }
-    
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    
+
     }
 }

@@ -3,8 +3,8 @@ package servlets;
 /**
  *
  * @author mateusz
- * 
- *  http://javaandj2eetutor.blogspot.com/2014/01/login-application-using-jsp-servlet-and.html
+ *
+ * http://javaandj2eetutor.blogspot.com/2014/01/login-application-using-jsp-servlet-and.html
  */
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,21 +21,23 @@ public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        String n=request.getParameter("username");    
-        String p=request.getParameter("userpass"); 
+        String n = request.getParameter("username");
+        String p = request.getParameter("userpass");
+        String t = request.getParameter("type");
 
-        HttpSession session = request.getSession(false);
+        //HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
 
-        if (session != null) {
-            session.setAttribute("name", n);
-        }
-       
-        if (LoginDao.validate(n, p)) {
-            RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
+        if (LoginDao.validate(n, p, t)) {
+            if (session != null) {
+                session.setAttribute("username", n);
+            }
+            //RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("redirect.jsp");
             rd.forward(request, response);
         } else {
             out.print("<br><br><br>");

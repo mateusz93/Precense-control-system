@@ -21,12 +21,12 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                <a class="navbar-brand" href="index.htm">SKO</a>
-            </div>
+                    <a class="navbar-brand" href="index.htm">SKO</a>
+                </div>
             </div>
         </nav>
 
-
+       
             <form action="loginServlet" method="post">
             <section id="login">
                 <div class="container">
@@ -36,7 +36,7 @@
                                 <h1>Log in to your account</h1>
                                 <form role="form" action="javascript:;" method="post" id="login-form" autocomplete="off">                                   
                                     <div class="form-group"> 
-                                        <label for="text" class="sr-only">Login</label>
+                                        <label for="text" class="sr-only">Typ</label>
                                         <input type="text" name="type" id="type" class="form-control" placeholder="Type">
                                     </div>
                                     <div class="form-group">
@@ -90,14 +90,14 @@
                     :: Login Section
                     -------------------------------------------------- */
             #login {
-                padding-top: 50px
+                padding-top: 25px
             }
             #login .form-wrap {
                 width: 40%;
                 margin: 0 auto;
             }
             #login h1 {
-/*                color: #1fa67b;*/
+                /*                color: #1fa67b;*/
                 color:#f4511e;
                 font-size: 18px;
                 text-align: center;
@@ -118,7 +118,7 @@
             }
             #login .checkbox.show:before {
                 content: '\e013';
-/*                color: #1fa67b;*/
+                /*                color: #1fa67b;*/
                 color: #f4511e;
                 font-size: 17px;
                 margin: 1px 0 0 3px;
@@ -158,7 +158,7 @@
             }
             .btn-custom {
                 color: #fff;
-/*                background-color: #1fa67b;*/
+                /*                background-color: #1fa67b;*/
                 background-color: #f4511e;
             }
             .btn-custom:hover,

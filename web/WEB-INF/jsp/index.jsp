@@ -6,7 +6,6 @@
     "http://www.w3.org/TR/html4/loose.dtd">
 
 
-
 <html>
     <head>
         <title>System kontroli obecności</title>
@@ -130,9 +129,9 @@
             background-color: #f4511e;
             z-index: 9999;
             border: 0;
-            font-size: 12px !important;
+            font-size: 14px !important;
             line-height: 1.42857143 !important;
-            letter-spacing: 4px;
+            letter-spacing: 2px;
             border-radius: 0;
             font-family: Montserrat, sans-serif;
         }
@@ -179,10 +178,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
                 </button>
+                <%
+                    if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+                %>
                 <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
+                <%} else {
+                %>
+                <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
+                <%
+                    }
+                %>
+<!--                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>-->
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="profil.jsp">Profil</a></li>
                     <li><a href="#services">Obecności</a></li>
                     <li><a href="coursesList.jsp">Moje przedmioty</a></li>
                     <li><a href="#portfolio">Zapisy na zajęcia</a></li>
@@ -201,12 +211,12 @@
         </form>
     </div>
 
-<!--    <div class="container">
-        <div class="alert alert-success">
-            <strong>Hurra!</strong> Udało Ci się uruchomić aplikację webową. Wejdź na http://www.w3schools.com/bootstrap/
-            aby uzyskać więcej informacji o BootStrapie
-        </div>
-    </div>-->
-    
+    <!--    <div class="container">
+            <div class="alert alert-success">
+                <strong>Hurra!</strong> Udało Ci się uruchomić aplikację webową. Wejdź na http://www.w3schools.com/bootstrap/
+                aby uzyskać więcej informacji o BootStrapie
+            </div>
+        </div>-->
+
 </body>
 </html>
