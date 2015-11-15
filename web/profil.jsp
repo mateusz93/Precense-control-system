@@ -18,6 +18,43 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
 
+    <sql:setDataSource
+        var="myDB"
+        driver="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/data"
+        user="root" password="root"
+        />
+
+    <c:set var="userName" value="${sessionScope.username}"/>
+
+    <sql:query var="user" dataSource="${myDB}">
+        SELECT * FROM Users WHERE login = ?;
+        <sql:param value="${userName}" />
+    </sql:query>
+
+    <c:forEach var="u" items="${user.rows}">
+        <c:set var="userID" value="${u.ID}"/>
+        <c:set var="firstName" value="${u.firstName}"/>
+        <c:set var="lastName" value="${u.lastName}"/>
+        <c:set var="index" value="${u.index}"/>
+        <c:set var="type" value="${u.type}"/>
+        <c:set var="password" value="${u.password}"/>
+    </c:forEach>
+
+    <sql:query var="contact" dataSource="${myDB}">
+        SELECT * FROM Contacts WHERE userID = ?;
+        <sql:param value="${userID}" />
+    </sql:query>
+        
+    <c:forEach var="c" items="${contact.rows}">
+        <c:set var="email" value="${c.email}"/>
+        <c:set var="PESEL" value="${c.PESEL}"/>
+        <c:set var="phone" value="${c.phone}"/>
+        <c:set var="street" value="${c.street}"/>
+        <c:set var="city" value="${c.city}"/>
+    </c:forEach>
+        
+
     <style>
         body {
             font: 400 15px Lato, sans-serif;
@@ -230,7 +267,7 @@
                 <div class="alert alert-info alert-dismissable">
                     <a class="panel-close close" data-dismiss="alert">×</a> 
                     <i class="fa fa-coffee"></i>
-                    This is an <strong>.alert</strong>. Use this to show important messages to the user.
+                    Poprawnie załadowano dane profilu z bazy.
                 </div>
                 <h3>Dane osobiste</h3>
 
@@ -238,55 +275,55 @@
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Imię:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="${firstName}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Nazwisko:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="${lastName}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">PESEL:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="${PESEL}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Email:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="${email}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Typ:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="${type}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Index:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="${index}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Telefon:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="${phone}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Ulica:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="${street}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Miasto:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="${city}" type="text">
                         </div>
                     </div>
                     <!--                    <div class="form-group">
@@ -309,7 +346,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">login:</label>
                         <div class="col-md-8">
-                            <input class="form-control" value="" type="text">
+                            <input class="form-control" value="<%= session.getAttribute("username")%>" type="text">
                         </div>
                     </div>
                     <div class="form-group">
@@ -341,17 +378,6 @@
         }
     %>
 
-
-
-    <sql:setDataSource
-        var="myDB"
-        driver="com.mysql.jdbc.Driver"
-        url="jdbc:mysql://localhost:3306/data"
-        user="root" password="root"
-        />
-    <sql:query var="coursesList" dataSource="${myDB}">
-        SELECT * FROM Contacts WHERE userID='';
-    </sql:query>
 
 </body>
 </html>
