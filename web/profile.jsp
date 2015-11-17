@@ -231,7 +231,7 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="profil.jsp">Profil</a></li>
+                    <li><a href="profile.jsp">Profil</a></li>
                     <li><a href="precenses.jsp">Obecności</a></li>
                     <li><a href="coursesList.jsp">Moje przedmioty</a></li>
                     <li><a href="saves.jsp">Zapisy na zajęcia</a></li>
@@ -267,63 +267,66 @@
                 <div class="alert alert-info alert-dismissable">
                     <a class="panel-close close" data-dismiss="alert">×</a> 
                     <i class="fa fa-coffee"></i>
-                    Poprawnie załadowano dane profilu z bazy.
+                    <% 
+                    String message = (String) request.getAttribute("message");    
+                    out.println("Servlet communicated message to JSP: "+ message);
+                    %> 
                 </div>
                 <h3>Dane osobiste</h3>
 
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" id="profile-form" action="profileServlet" method="post" role="form">
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Imię:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${firstName}" type="text">
+                            <input class="form-control" value="${firstName}" name="firstName" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Nazwisko:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${lastName}" type="text">
+                            <input class="form-control" value="${lastName}" name="lastName" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">PESEL:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${PESEL}" type="text">
+                            <input class="form-control" value="${PESEL}" name="PESEL" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Email:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${email}" type="text">
+                            <input class="form-control" readonly="readonly" value="${email}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Typ:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${type}" type="text">
+                            <input class="form-control" readonly="readonly" value="${type}" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Index:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${index}" type="text">
+                            <input class="form-control" value="${index}" name="index" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Telefon:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${phone}" type="text">
+                            <input class="form-control" value="${phone}" name="phone" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Ulica:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${street}" type="text">
+                            <input class="form-control" value="${street}" name="street" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Miasto:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${city}" type="text">
+                            <input class="form-control" value="${city}" name="city" type="text">
                         </div>
                     </div>
                     <!--                    <div class="form-group">
@@ -344,29 +347,29 @@
                                             </div>
                                         </div>-->
                     <div class="form-group">
-                        <label class="col-md-3 control-label">login:</label>
+                        <label class="col-md-3 control-label">Login:</label>
                         <div class="col-md-8">
-                            <input class="form-control" value="<%= session.getAttribute("username")%>" type="text">
+                            <input class="form-control" readonly="readonly" value="<%= session.getAttribute("username")%>" name="login" type="text">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Hasło:</label>
                         <div class="col-md-8">
-                            <input class="form-control" value="" type="password">
+                            <input class="form-control" value="" type="password" name="password" >
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-3 control-label">Potwierdz hasło:</label>
+                        <label class="col-md-3 control-label">Potwierdź hasło:</label>
                         <div class="col-md-8">
-                            <input class="form-control" value="" type="password">
+                            <input class="form-control" value="" type="password" name="confirmPassword" >
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label"></label>
                         <div class="col-md-8">
-                            <input class="btn btn-primary" value="Zapisz zmiany" type="button">
-                            <span></span>
-                            <input class="btn btn-default" value="Anuluj" type="reset">
+                            <input class="btn btn-primary" type="submit" value="Zapisz zmiany">
+<!--                            <span></span>
+                            <input class="btn btn-default" value="Anuluj" type="reset">-->
                         </div>
                     </div>
                 </form>

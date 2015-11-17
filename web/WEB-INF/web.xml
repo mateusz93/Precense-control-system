@@ -25,6 +25,14 @@
         <servlet-name>register</servlet-name>  
         <url-pattern>/registerServlet</url-pattern>  
     </servlet-mapping> 
+    <servlet>  
+        <servlet-name>profile</servlet-name>  
+        <servlet-class>servlets.ProfileServlet</servlet-class>  
+    </servlet>  
+    <servlet-mapping>  
+        <servlet-name>profile</servlet-name>  
+        <url-pattern>/profileServlet</url-pattern>  
+    </servlet-mapping> 
     
     <servlet>
         <servlet-name>dispatcher</servlet-name>

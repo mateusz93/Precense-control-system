@@ -196,7 +196,7 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="profil.jsp">Profil</a></li>
+                    <li><a href="profile.jsp">Profil</a></li>
                     <li><a href="precenses.jsp">Obecności</a></li>
                     <li><a href="coursesList.jsp">Moje przedmioty</a></li>
                     <li><a href="saves.jsp">Zapisy na zajęcia</a></li>

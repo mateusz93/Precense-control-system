@@ -185,14 +185,14 @@
                 <%} else {
                 %>
                 <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
-                <%
+                
+<!--                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>--><%
                     }
                 %>
-<!--                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>-->
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="profil.jsp">Profil</a></li>
+                    <li><a href="profile.jsp">Profil</a></li>
                     <li><a href="#services">Obecności</a></li>
                     <li><a href="coursesList.jsp">Moje przedmioty</a></li>
                     <li><a href="#portfolio">Zapisy na zajęcia</a></li>
@@ -205,8 +205,9 @@
     <div class="jumbotron text-center">
         <h1>System kontroli obecności</h1> 
         <p>Sprawdzaj obecność codziennie w łatwy sposób</p> 
-        <form class="form-inline">
-            <input type="email" class="form-control" size="50" placeholder="Email Address" required>
+        <form class="form-inline">           
+            <input type="email" class="form-control" name="newEmail" size="50" placeholder="Email Address" required>
+            <!--<button type="button" class="btn btn-danger">Zarejestruj</button>/a>-->
             <a href="register.jsp"><button type="button" class="btn btn-danger">Zarejestruj</button></a>
         </form>
     </div>
