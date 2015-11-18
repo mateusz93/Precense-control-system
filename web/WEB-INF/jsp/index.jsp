@@ -193,10 +193,10 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="profile.jsp">Profil</a></li>
-                    <li><a href="#services">Obecności</a></li>
+                    <li><a href="precenses.jsp">Obecności</a></li>
                     <li><a href="coursesList.jsp">Moje przedmioty</a></li>
-                    <li><a href="#portfolio">Zapisy na zajęcia</a></li>
-                    <li><a href="#pricing">Statystyki</a></li>
+                    <li><a href="saves.jsp">Zapisy na zajęcia</a></li>
+                    <li><a href="stats.jsp">Statystyki</a></li>
                 </ul>
             </div>
         </div>
