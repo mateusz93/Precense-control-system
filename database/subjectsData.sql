@@ -5,4 +5,7 @@ INSERT INTO `data`.`Subjects` (`Name`, `departmentID`, `description`) VALUES ('P
 INSERT INTO `data`.`Subjects` (`Name`, `departmentID`, `description`) VALUES ('Zaawansowane programowanie obiektowe', '1', 'Obiektowosc, watki, kolekcje w jezyku JAVA');
 INSERT INTO `data`.`Subjects` (`Name`, `departmentID`, `description`) VALUES ('Bazy danych', '1', 'MySQL');
 INSERT INTO `data`.`Subjects` (`Name`, `departmentID`, `description`) VALUES ('Fizyka 1', '2', 'Mechanika kwantowa');
+INSERT INTO `data`.`Subjects` (`Name`, `departmentID`, `description`) VALUES ('Projektowanie aplikacji internetowych', '1', 'Podstawy tworzenia aplikacji internetowych w jezyku JAVA');
+INSERT INTO `data`.`Subjects` (`Name`, `departmentID`) VALUES ('Statystyka', '1');
+INSERT INTO `data`.`Subjects` (`Name`, `departmentID`, `description`) VALUES ('Kryptografia', '3', 'Szyfr cezara, szyfr afiniczny, klucz publiczny i prywatny');
 

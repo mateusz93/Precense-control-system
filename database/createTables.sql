@@ -114,7 +114,7 @@ FOREIGN KEY (`subjectID`) REFERENCES Subjects(`ID`)
 CREATE TABLE `data`.`Users_Courses` 
 (
 `ID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-`subjectID` INT UNSIGNED,
+`userID` INT UNSIGNED,
 `courseID` INT UNSIGNED,
 PRIMARY KEY (`ID`),
 UNIQUE index `ID_UNIQUE` (`ID` ASC),
@@ -150,3 +150,16 @@ CREATE TABLE `data`.`Subjects`
 PRIMARY KEY (`ID`),
 FOREIGN KEY (`departmentID`) REFERENCES Departments(`ID`)
 );
+
+CREATE TABLE `data`.`studentCourses` 
+(
+  `ID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `courseID` INT NULL,
+  `studentID` INT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC),
+  FOREIGN KEY (`courseID`) REFERENCES Courses(`ID`),
+  FOREIGN KEY (`studentID`) REFERENCES Users(`ID`)
+);
+
+
