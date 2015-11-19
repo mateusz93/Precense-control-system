@@ -151,11 +151,11 @@ PRIMARY KEY (`ID`),
 FOREIGN KEY (`departmentID`) REFERENCES Departments(`ID`)
 );
 
-CREATE TABLE `data`.`studentCourses` 
+CREATE TABLE `data`.`StudentCourses` 
 (
   `ID` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `courseID` INT NULL,
-  `studentID` INT NULL,
+  `courseID` INT UNSIGNED NULL,
+  `studentID` INT UNSIGNED NULL,
   PRIMARY KEY (`ID`),
   UNIQUE INDEX `ID_UNIQUE` (`ID` ASC),
   FOREIGN KEY (`courseID`) REFERENCES Courses(`ID`),
