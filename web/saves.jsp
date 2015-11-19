@@ -213,7 +213,7 @@
         user="root" password="root"
         />
     <sql:query var="subjectList" dataSource="${myDB}">
-        SELECT concat(Users.firstName, ' ', Users.lastName) AS teacherName, concat(Departments.Name, '') AS departmentName, Courses.type, Courses.coursesQuantity, Subjects.description, Subjects.Name
+        SELECT Courses.ID, concat(Users.firstName, ' ', Users.lastName) AS teacherName, concat(Departments.Name, '') AS departmentName, Courses.type, Courses.coursesQuantity, Subjects.description, Subjects.Name
         FROM Subjects
         JOIN Departments
         ON Subjects.departmentID=Departments.ID
@@ -226,7 +226,23 @@
     </sql:query>
 
     <div class="container">
+         <%
+            if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+        %>
+        <c:redirect url="/login.jsp"/>
+        <%} else {
+        %>
         <h2>.</h2>
+        <h5>
+            <% 
+                    String message = (String) request.getAttribute("message");
+                    if (!"null".equals(message)) {
+                        out.println("Wiadomosc z servletu: " + message);
+                    }
+            %> 
+            
+        </h5>
+        
         <p>Lista wszystkich zajęć</p> 
         <form action="savesServlet" method="post">
             <table class="table table-striped">
@@ -241,8 +257,10 @@
                     </tr>
                 </thead>
                 <tbody>
+                    
                     <c:forEach var="subjects" items="${subjectList.rows}">
                         <tr>
+                            <input type="hidden" name="ID" value="${subjects.ID}">
                             <td><c:out value="${subjects.Name}"  /></td>
                             <td><c:out value="${subjects.departmentName}" /></td>
                             <td><c:out value="${subjects.type}" /></td>
@@ -256,6 +274,8 @@
             </table>
         </form>
     </div>
-
+        <%
+        }
+    %>
 
 </html>
