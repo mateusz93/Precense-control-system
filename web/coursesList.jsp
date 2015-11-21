@@ -4,6 +4,8 @@
     Author     : mateusz
 --%>
 
+<%@page import="dao.Course"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -172,7 +174,7 @@
         }
     </style>
 
-    <body>
+   
 
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -196,9 +198,9 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="profile.jsp">Profil</a></li>
+                    <li><a href="profileServlet">Profil</a></li>
                     <li><a href="precenses.jsp">Obecności</a></li>
-                    <li><a href="coursesList.jsp">Moje przedmioty</a></li>
+                    <li><a href="coursesServlet">Moje przedmioty</a></li>
                     <li><a href="saves.jsp">Zapisy na zajęcia</a></li>
                     <li><a href="stats.jsp">Statystyki</a></li>
                 </ul>
@@ -206,42 +208,47 @@
         </div>
     </nav>
 
-    <sql:setDataSource
-        var="myDB"
-        driver="com.mysql.jdbc.Driver"
-        url="jdbc:mysql://localhost:3306/data"
-        user="root" password="root"
-        />
-    <sql:query var="coursesList" dataSource="${myDB}">
-        SELECT * FROM CourseDates;
-    </sql:query>
+
 
     <div class="container">
+        <%
+            if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+        %>
+        <c:redirect url="/login.jsp"/>
+        <%} else {
+        %>
         <h2>Lista kursów</h2>
         <p>Lista wszystkich kursów pobrana z bazki</p>            
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Kurs ID</th>
-                    <th>Czas rozpoczęcia</th>
-                    <th>Czas zakończenia</th>
-                    <th>Dzień</th>
+                    <th>Nazwa</th>
+                    <th>Wydział</th>
+                    <th>Typ zajęć</th>
+                    <th>Ilość zajęć</th>
+                    <th>Prowadzący</th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="courses" items="${coursesList.rows}">
+                <c:forEach var="courses" items="${coursesList}">
                     <tr>
-                        <td><c:out value="${courses.ID}"  /></td>
-                        <td><c:out value="${courses.courseID}" /></td>
-                        <td><c:out value="${courses.startTime}" /></td>
-                        <td><c:out value="${courses.finishTime}"  /></td>
-                        <td><c:out value="${courses.date}"  /></td>
+                        <td><c:out value="${courses.subjectName}"  /></td>
+                        <td><c:out value="${courses.departmentName}" /></td>
+                        <td><c:out value="${courses.type}" /></td>
+                        <td><c:out value="${courses.quantity}"  /></td>
+                        <td><c:out value="${courses.teacherName}"  /></td>
+                        <td><button name="info" type="submit" class="btn btn-info">Pokaż</button></td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
     </div>
+
+
+    <%
+ }
+    %>
+
 
 </body>
 </html>
