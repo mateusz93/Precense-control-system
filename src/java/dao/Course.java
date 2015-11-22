@@ -10,7 +10,7 @@ package dao;
  * @author Mateusz Wieczorek
  */
 public class Course {
-    
+    private int id;
     private String subjectName;
     private String departmentName;
     private String type;
@@ -18,6 +18,20 @@ public class Course {
     private String teacherName;
     private String description;
 
+     /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     /**
      * @return the subjectName
      */

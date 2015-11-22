@@ -36,6 +36,14 @@
         <servlet-name>courses</servlet-name>
         <url-pattern>/coursesServlet</url-pattern>
     </servlet-mapping>
+     <servlet>
+        <servlet-name>courseInfo</servlet-name>
+        <servlet-class>servlets.CourseInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>courseInfo</servlet-name>
+        <url-pattern>/courseInfoServlet</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>register</servlet-name>
         <servlet-class>servlets.RegisterServlet</servlet-class>
