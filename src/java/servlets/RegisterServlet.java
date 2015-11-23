@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import dao.RegisterDao;
@@ -17,51 +12,61 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author mateusz
+ * @author Mateusz Wieczorek
+ *
  */
 public class RegisterServlet extends HttpServlet {
-
+    
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String type = request.getParameter("type");
-        String email = request.getParameter("email");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String confirmPassword = request.getParameter("confirmPassword");
-
-        HttpSession session = request.getSession(false);
-
-        if (RegisterDao.accept(firstName, lastName, type, email, username, password, confirmPassword)) {
-            if (session != null) {
-                session.setAttribute("username", username);
-            }
-            out.print("<div class=\"container\">");
-            out.print("<div class=\"alert alert-success fade in\">");
-            out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
-            out.print("<strong>Success!</strong> Konto utworzone");
-            out.print("</div>");
-            out.print("</div>");
-
+        
+        if (request.getParameter("newEmail") != null) {
+            request.setAttribute("newEmail", request.getParameter("newEmail"));
         } else {
-            out.print("<div class=\"container\">");
-            out.print("<div class=\"alert alert-danger fade in\">");
-            out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
-            out.print("<strong>Error:</strong> Haslo nie jest takie samo");
-            out.print("</div>");
-            out.print("</div>");
+            String firstName = request.getParameter("firstName");
+            String lastName = request.getParameter("lastName");
+            String type = request.getParameter("type");
+            String email = request.getParameter("email");
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String confirmPassword = request.getParameter("confirmPassword");
+            
+            HttpSession session = request.getSession(false);
+            
+            if (RegisterDao.accept(firstName, lastName, type, email, username, password, confirmPassword)) {
+                if (session != null) {
+                    session.setAttribute("username", username);
+                }
+                out.print("<div class=\"container\">");
+                out.print("<div class=\"alert alert-success fade in\">");
+                out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
+                out.print("<strong>Success!</strong> Konto utworzone");
+                out.print("</div>");
+                out.print("</div>");
+                
+            } else {
+                out.print("<div class=\"container\">");
+                out.print("<div class=\"alert alert-danger fade in\">");
+                out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
+                out.print("<strong>Error:</strong> Haslo nie jest takie samo");
+                out.print("</div>");
+                out.print("</div>");
+            }
+
+//        RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+//        rd.include(request, response);
+            out.close();
+            response.sendRedirect("/WebApplication/register.jsp");
         }
-        RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
-        rd.include(request, response);
-        out.close();
-
+        
+        doGet(request, response);
+        
     }
-
+    
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        
+        request.getRequestDispatcher("/register.jsp").forward(request, response);
     }
 }

@@ -205,10 +205,9 @@
     <div class="jumbotron text-center">
         <h1>System kontroli obecności</h1> 
         <p>Sprawdzaj obecność codziennie w łatwy sposób</p> 
-        <form class="form-inline">           
-            <input type="email" class="form-control" name="newEmail" size="50" placeholder="Email Address" required>
-            <!--<button type="button" class="btn btn-danger">Zarejestruj</button>/a>-->
-            <a href="register.jsp"><button type="button" class="btn btn-danger">Zarejestruj</button></a>
+        <form class="form-inline" action="registerServlet" method="post">           
+            <input type="email" class="form-control" name="newEmail" size="50" placeholder="Email" required>
+            <button type="submit" class="btn btn-danger">Zarejestruj</button>
         </form>
     </div>
 
