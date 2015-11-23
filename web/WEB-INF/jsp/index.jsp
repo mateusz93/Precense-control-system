@@ -178,24 +178,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
                 </button>
-                <%
-                    if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
-                %>
+                <% if ((session.getAttribute("username") == null)) { %>
                 <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
-                <%} else {
-                %>
+                <%} else { %> 
                 <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
-                
-<!--                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>--><%
-                    }
-                %>
+                <% } %>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="profile.jsp">Profil</a></li>
+                    <li><a href="profileServlet">Profil</a></li>
                     <li><a href="precenses.jsp">Obecności</a></li>
-                    <li><a href="coursesList.jsp">Moje przedmioty</a></li>
-                    <li><a href="saves.jsp">Zapisy na zajęcia</a></li>
+                    <li><a href="coursesServlet">Moje przedmioty</a></li>
+                    <li><a href="savesServlet">Zapisy na zajęcia</a></li>
                     <li><a href="stats.jsp">Statystyki</a></li>
                 </ul>
             </div>

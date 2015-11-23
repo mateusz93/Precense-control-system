@@ -28,6 +28,14 @@
         <servlet-name>login</servlet-name>
         <url-pattern>/loginServlet</url-pattern>
     </servlet-mapping>
+     <servlet>
+        <servlet-name>unsubscribeSubject</servlet-name>
+        <servlet-class>servlets.UnsubscribeSubjectServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>unsubscribeSubject</servlet-name>
+        <url-pattern>/unsubscribeSubjectServlet</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>courses</servlet-name>
         <servlet-class>servlets.CoursesServlet</servlet-class>
