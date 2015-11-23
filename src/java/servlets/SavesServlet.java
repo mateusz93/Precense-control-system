@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
 public class SavesServlet extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+        request.setCharacterEncoding("ISO-8859-2");
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         
@@ -32,7 +32,6 @@ public class SavesServlet extends HttpServlet {
         String studentName = session.getAttribute("username").toString();
         System.out.println(studentName);
         System.out.println(request.getParameter("ID"));
-        
         int courseID = Integer.parseInt(request.getParameter("ID"));
         
             Connection conn = null;
@@ -55,7 +54,7 @@ public class SavesServlet extends HttpServlet {
                 rs.next();
                 studentID = rs.getInt("ID");
                 
-                 pst = conn.prepareStatement("INSERT INTO StudentCourses (courseID, studentID) VALUES (?, ?)");
+                 pst = conn.prepareStatement("INSERT INTO StudentCourses (courseID, studentID, saveTime) VALUES (?, ?, NOW())");
                  pst.setInt(1, courseID);
                  pst.setInt(2, studentID);
                  int result = pst.executeUpdate();
@@ -94,17 +93,16 @@ public class SavesServlet extends HttpServlet {
          out.print("</div>");
          out.print("</div>");
          
-        //doGet(request, response);
-         request.setCharacterEncoding("UTF-8");
-        RequestDispatcher rd = request.getRequestDispatcher("saves.jsp");
-        rd.forward(request, response);
+        doGet(request, response);
+//        RequestDispatcher rd = request.getRequestDispatcher("saves.jsp");
+//        rd.forward(request, response);
         out.close();
         
        
     }
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+        request.setCharacterEncoding("ISO-8859-2");
         
         request.setAttribute("message", "co jest z tobą");  // Will be available as ${message} in JSP
         request.getRequestDispatcher("/saves.jsp").forward(request, response);
