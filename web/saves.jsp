@@ -1,13 +1,7 @@
-<%-- 
-    Document   : Saves
-    Created on : Nov 11, 2015, 9:29:00 AM
-    Author     : mateusz
---%>
-
+<%@ page session="true" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>   
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -19,7 +13,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
-    
+
     <style>
         body {
             font: 400 15px Lato, sans-serif;
@@ -182,67 +176,42 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
                 </button>
-                <%
-                    if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
-                %>
+               <% if ((session.getAttribute("username") == null)) { %>
                 <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
-                <%} else {
-                %>
+                <%} else { %> 
                 <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
-                <%
-                    }
-                %>
-                <!--                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>-->
+                <% } %>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="profile.jsp">Profil</a></li>
-                    <li><a href="precenses.jsp">Obecności</a></li>
-                    <li><a href="coursesList.jsp">Moje przedmioty</a></li>
-                    <li><a href="saves.jsp">Zapisy na zajęcia</a></li>
-                    <li><a href="stats.jsp">Statystyki</a></li>
+                    <li><a href="profileServlet">Profil</a></li>
+                    <li><a href="precensesServlet">Obecności</a></li>
+                    <li><a href="coursesServlet">Moje przedmioty</a></li>
+                    <li><a href="savesServlet">Zapisy na zajęcia</a></li>
+                    <li><a href="statsServlet">Statystyki</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <sql:setDataSource
-        var="myDB"
-        driver="com.mysql.jdbc.Driver"
-        url="jdbc:mysql://localhost:3306/data"
-        user="root" password="root"
-        />
-    <sql:query var="subjectList" dataSource="${myDB}">
-        SELECT Courses.ID, concat(Users.firstName, ' ', Users.lastName) AS teacherName, concat(Departments.Name, '') AS departmentName, Courses.type, Courses.coursesQuantity, Subjects.description, Subjects.Name
-        FROM Subjects
-        JOIN Departments
-        ON Subjects.departmentID=Departments.ID
-        JOIN Courses
-        ON Courses.subjectID=Subjects.ID
-        JOIN Users_Subjects
-        ON Users_Subjects.courseID=Courses.ID
-        JOIN Users
-        ON Users_Subjects.teacherID=Users.ID
-    </sql:query>
-
     <div class="container">
-         <%
+        <%
             if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
-        %>
-        <c:redirect url="/login.jsp"/>
-        <%} else {
+                response.sendRedirect("login.jsp");
+            } else if ("Teacher".equals(session.getAttribute("type"))) {
+                response.sendRedirect("/teacherSavesServlet");
+            }
         %>
         <h2>.</h2>
         <h5>
-            <% 
-                    String message = (String) request.getAttribute("message");
-                    if (!"null".equals(message)) {
-                        out.println("Wiadomosc z servletu: " + message);
-                    }
+            <%
+                String message = (String) request.getAttribute("message");
+                if (!"null".equals(message)) {
+                    out.println("Wiadomosc z servletu: " + message);
+                }
             %> 
-            
         </h5>
-        
+
         <p>Lista wszystkich zajęć</p> 
         <form action="savesServlet" method="post">
             <table class="table table-striped">
@@ -257,25 +226,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-                    <c:forEach var="subjects" items="${subjectList.rows}">
+                    <c:forEach var="subjects" items="${subjectList}">
                         <tr>
-                            <input type="hidden" name="ID" value="${subjects.ID}">
-                            <td><c:out value="${subjects.Name}"  /></td>
+                            <td><c:out value="${subjects.subjectName}"  /></td>
                             <td><c:out value="${subjects.departmentName}" /></td>
                             <td><c:out value="${subjects.type}" /></td>
                             <td><c:out value="${subjects.coursesQuantity}"  /></td>
                             <td><c:out value="${subjects.teacherName}"  /></td>
                             <td><c:out value="${subjects.description}"  /></td>
-                            <td><button type="submit" class="btn btn-success">Zapisz się</button></td>
+                            <td><button name="ID" value="${subjects.id}" type="submit" class="btn btn-success">Zapisz się</button></td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
         </form>
     </div>
-        <%
-        }
-    %>
 
 </html>

@@ -1,9 +1,6 @@
-<%@page import="java.sql.DriverManager"%>
-
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page session="true" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>   
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -18,42 +15,6 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
 
-    <sql:setDataSource
-        var="myDB"
-        driver="com.mysql.jdbc.Driver"
-        url="jdbc:mysql://localhost:3306/data"
-        user="root" password="root"
-        />
-
-    <c:set var="userName" value="${sessionScope.username}"/>
-
-    <sql:query var="user" dataSource="${myDB}">
-        SELECT * FROM Users WHERE login = ?;
-        <sql:param value="${userName}" />
-    </sql:query>
-
-    <c:forEach var="u" items="${user.rows}">
-        <c:set var="userID" value="${u.ID}"/>
-        <c:set var="firstName" value="${u.firstName}"/>
-        <c:set var="lastName" value="${u.lastName}"/>
-        <c:set var="index" value="${u.index}"/>
-        <c:set var="type" value="${u.type}"/>
-        <c:set var="password" value="${u.password}"/>
-    </c:forEach>
-
-    <sql:query var="contact" dataSource="${myDB}">
-        SELECT * FROM Contacts WHERE userID = ?;
-        <sql:param value="${userID}" />
-    </sql:query>
-        
-    <c:forEach var="c" items="${contact.rows}">
-        <c:set var="email" value="${c.email}"/>
-        <c:set var="PESEL" value="${c.PESEL}"/>
-        <c:set var="phone" value="${c.phone}"/>
-        <c:set var="street" value="${c.street}"/>
-        <c:set var="city" value="${c.city}"/>
-    </c:forEach>
-        
 
     <style>
         body {
@@ -217,25 +178,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
                 </button>
-                <%
-                    if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
-                %>
+                <% if ((session.getAttribute("username") == null)) { %>
                 <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
-                <%} else {
-                %>
+                <%} else { %> 
                 <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
-                <%
-                    }
-                %>
-                <!--                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>-->
+                <% } %>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="profile.jsp">Profil</a></li>
-                    <li><a href="precenses.jsp">Obecności</a></li>
-                    <li><a href="coursesList.jsp">Moje przedmioty</a></li>
-                    <li><a href="saves.jsp">Zapisy na zajęcia</a></li>
-                    <li><a href="stats.jsp">Statystyki</a></li>
+                    <li><a href="profileServlet">Profil</a></li>
+                    <li><a href="precensesServlet">Obecności</a></li>
+                    <li><a href="coursesServlet">Moje przedmioty</a></li>
+                    <li><a href="savesServlet">Zapisy na zajęcia</a></li>
+                    <li><a href="statsServlet">Statystyki</a></li>
                 </ul>
             </div>
         </div>
@@ -244,9 +199,8 @@
     <div class="container">
         <%
             if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
-        %>
-        <c:redirect url="/login.jsp"/>
-        <%} else {
+                response.sendRedirect("login.jsp");
+            }
         %>
         <h2>Profil</h2>
         <p>Profil</p>
@@ -255,7 +209,7 @@
             <!-- left column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
+                    <img src="/https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT2d4kAayBmJjefFVzQR7txYHk9Lzg0bdXeGWkRF7jRUgdZMNtR" class="avatar img-circle" alt="avatar">
                     <h6>Upload a different photo...</h6>
 
                     <input class="form-control" type="file">
@@ -267,9 +221,9 @@
                 <div class="alert alert-info alert-dismissable">
                     <a class="panel-close close" data-dismiss="alert">×</a> 
                     <i class="fa fa-coffee"></i>
-                    <% 
-                    String message = (String) request.getAttribute("message");    
-                    out.println("Servlet communicated message to JSP: "+ message);
+                    <%
+                        String message = (String) request.getAttribute("message");
+                        out.println("Servlet communicated message to JSP: " + message);
                     %> 
                 </div>
                 <h3>Dane osobiste</h3>
@@ -290,7 +244,7 @@
                     <div class="form-group">
                         <label class="col-lg-3 control-label">PESEL:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" value="${PESEL}" name="PESEL" type="text">
+                            <input class="form-control" value="${pesel}" name="PESEL" type="text">
                         </div>
                     </div>
                     <div class="form-group">
@@ -329,23 +283,7 @@
                             <input class="form-control" value="${city}" name="city" type="text">
                         </div>
                     </div>
-                    <!--                    <div class="form-group">
-                                            <label class="col-lg-3 control-label">Time Zone:</label>
-                                            <div class="col-lg-8">
-                                                <div class="ui-select">
-                                                    <select id="user_time_zone" class="form-control">
-                                                        <option value="Hawaii">(GMT-10:00) Hawaii</option>
-                                                        <option value="Alaska">(GMT-09:00) Alaska</option>
-                                                        <option value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
-                                                        <option value="Arizona">(GMT-07:00) Arizona</option>
-                                                        <option value="Mountain Time (US &amp; Canada)">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
-                                                        <option value="Central Time (US &amp; Canada)" selected="selected">(GMT-06:00) Central Time (US &amp; Canada)</option>
-                                                        <option value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
-                                                        <option value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>-->
+                  
                     <div class="form-group">
                         <label class="col-md-3 control-label">Login:</label>
                         <div class="col-md-8">
@@ -368,8 +306,8 @@
                         <label class="col-md-3 control-label"></label>
                         <div class="col-md-8">
                             <input class="btn btn-primary" type="submit" value="Zapisz zmiany">
-<!--                            <span></span>
-                            <input class="btn btn-default" value="Anuluj" type="reset">-->
+                            <!--                            <span></span>
+                                                        <input class="btn btn-default" value="Anuluj" type="reset">-->
                         </div>
                     </div>
                 </form>
@@ -377,10 +315,6 @@
         </div>
     </div>
     <hr>
-    <%
-        }
-    %>
-
 
 </body>
 </html>

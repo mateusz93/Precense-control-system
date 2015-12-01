@@ -16,12 +16,12 @@ import javax.servlet.http.HttpSession;
  *
  */
 public class RegisterServlet extends HttpServlet {
-    
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        
+
         if (request.getParameter("newEmail") != null) {
             request.setAttribute("newEmail", request.getParameter("newEmail"));
         } else {
@@ -32,41 +32,30 @@ public class RegisterServlet extends HttpServlet {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String confirmPassword = request.getParameter("confirmPassword");
-            
+
             HttpSession session = request.getSession(false);
-            
+
             if (RegisterDao.accept(firstName, lastName, type, email, username, password, confirmPassword)) {
                 if (session != null) {
                     session.setAttribute("username", username);
                 }
-                out.print("<div class=\"container\">");
-                out.print("<div class=\"alert alert-success fade in\">");
-                out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
-                out.print("<strong>Success!</strong> Konto utworzone");
-                out.print("</div>");
-                out.print("</div>");
-                
+                request.setAttribute("message", "Konto poprawnie utworzone!");
+
             } else {
-                out.print("<div class=\"container\">");
-                out.print("<div class=\"alert alert-danger fade in\">");
-                out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
-                out.print("<strong>Error:</strong> Haslo nie jest takie samo");
-                out.print("</div>");
-                out.print("</div>");
+                request.setAttribute("message", "Hasło niepoprawne!");
             }
 
-//        RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
-//        rd.include(request, response);
             out.close();
-            response.sendRedirect("/WebApplication/register.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
+            rd.forward(request, response);
         }
-        
         doGet(request, response);
-        
     }
-    
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
+        System.out.println("WSZZEDLEM");
+
         request.getRequestDispatcher("/register.jsp").forward(request, response);
     }
 }

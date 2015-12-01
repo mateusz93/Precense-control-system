@@ -1,6 +1,6 @@
 package servlets;
 
-import dao.Course;
+import model.Course;
 import db.CourseDates;
 import java.io.IOException;
 import java.sql.Connection;
@@ -53,7 +53,7 @@ public class CourseInfoServlet extends HttpServlet {
                 date.setFinishTime(rs.getTime("finishTime"));
                 datesList.add(date);
             }
-             request.setAttribute("datesList", datesList);
+            request.setAttribute("datesList", datesList);
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
             e.printStackTrace();

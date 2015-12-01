@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
  * @author Mateusz Wieczorek
  * 
  */
-public class CoursesServlet extends HttpServlet {
+public class TeacherCoursesServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
@@ -75,21 +75,11 @@ public class CoursesServlet extends HttpServlet {
                 courseList.add(course);
             }
             request.setAttribute("coursesList", courseList);
-//            for (int i = 0; i < courseList.size(); i++) {
-//                System.out.println(courseList.get(i).getId());
-//                System.out.println(courseList.get(i).getSubjectName());
-//                System.out.println(courseList.get(i).getDepartmentName());
-//                System.out.println(courseList.get(i).getType());
-//                System.out.println(courseList.get(i).getQuantity());
-//                System.out.println(courseList.get(i).getTeacherName());
-//            }
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
 
-      //  request.setCharacterEncoding("ISO-8859-2");
-        //  request.setAttribute("message", "co jest z tobą");  // Will be available as ${message} in JSP
+        }
         request.getRequestDispatcher("/coursesList.jsp").forward(request, response);
     }
 }

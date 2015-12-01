@@ -1,13 +1,13 @@
-<%@ page session="true" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>   
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Terminy kursów</title>
+        <title>Kursy</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -166,6 +166,8 @@
         }
     </style>
 
+
+
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -174,51 +176,79 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
                 </button>
-                <% if ((session.getAttribute("username") == null)) { %>
+                <%
+                    if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+                %>
                 <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
-                <%} else { %> 
+                <%} else {
+                %>
                 <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
-                <% } %>
+                <%
+                    }
+                %>
+                <!--                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>-->
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="profileServlet">Profil</a></li>
-                    <li><a href="precensesServlet">Obecności</a></li>
+                    <li><a href="precenses.jsp">Obecności</a></li>
                     <li><a href="coursesServlet">Moje przedmioty</a></li>
-                    <li><a href="savesServlet">Zapisy na zajęcia</a></li>
-                    <li><a href="statsServlet">Statystyki</a></li>
+                    <li><a href="saves.jsp">Zapisy na zajęcia</a></li>
+                    <li><a href="stats.jsp">Statystyki</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
+
+
     <div class="container">
-        <% if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) { %>
+        <%
+            if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+        %>
         <c:redirect url="/login.jsp"/>
-        <% } else { %>
-        <h2>Nazwa przedmiotu</h2>
-        <h2>Nazwa przedmiotu</h2>
-        <p>Lista wszystkich terminów danego kursu pobrana z bazki</p>            
+        <%} else {
+        %>
+        <h2>Lista kursów</h2>
+        <p>Lista wszystkich kursów pobrana z bazki</p>            
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Dzień</th>
-                    <th>Czas rozpoczęcia</th>
-                    <th>Czas zakończenia</th>
+                    <th>Nazwa</th>
+                    <th>Wydział</th>
+                    <th>Typ zajęć</th>
+                    <th>Ilość zajęć</th>
+                    <th>Prowadzący</th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="dates" items="${datesList}">
+            
+                <c:forEach var="courses" items="${coursesList}">
                     <tr>
-                        <td><c:out value="${dates.date}"  /></td>
-                        <td><c:out value="${dates.startTime}" /></td>
-                        <td><c:out value="${dates.finishTime}" /></td>
+                        <td><c:out value="${courses.subjectName}"  /></td>
+                        <td><c:out value="${courses.departmentName}" /></td>
+                        <td><c:out value="${courses.type}" /></td>
+                        <td><c:out value="${courses.quantity}"  /></td>
+                        <td><c:out value="${courses.teacherName}"  /></td>
+                        <form action="courseInfoServlet" method="post">
+                            <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
+                            <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info">Pokaż</button></td>
+                        </form>
+                        <form action="unsubscribeSubjectServlet" method="post">
+                            <td><button name="unsubscribe" value="${courses.id}" type="submit" class="btn btn-danger">Wypisz się</button></td>
+                        </form>
                     </tr>
                 </c:forEach>
+            
             </tbody>
         </table>
     </div>
-    <% }%>    
+
+
+    <%
+        }
+    %>
+
 
 </body>
 </html>

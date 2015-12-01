@@ -1,15 +1,14 @@
 package dao;
 /**
  *
- * @author mateusz
+ * @author Mateusz Wieczorek
+ * 
  */
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
 public class LoginDao {
 
@@ -40,7 +39,7 @@ public class LoginDao {
             pst2.setLong(1, rs.getLong("ID"));
             pst2.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         } finally {
             if (conn != null) {
                 try {

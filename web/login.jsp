@@ -1,15 +1,8 @@
-<%-- 
-    Document   : login
-    Created on : Nov 10, 2015, 9:31:21 PM
-    Author     : mateusz
---%>
-
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>Login Application</title>
+        <title>Strona logowania</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
@@ -264,20 +257,20 @@
 
         </script>
 
-<!--        <script type="text/javascript">
-            function showPassword() {
-
-                var key_attr = $('#key').attr('type');
-
-                if (key_attr != 'text') {
-                    $('.checkbox').addClass('show');
-                    $('#key').attr('type', 'text');
-                } else {
-                    $('.checkbox').removeClass('show');
-                    $('#key').attr('type', 'password');
-
-                }
-            }
-        </script>-->
+        <!--        <script type="text/javascript">
+                    function showPassword() {
+        
+                        var key_attr = $('#key').attr('type');
+        
+                        if (key_attr != 'text') {
+                            $('.checkbox').addClass('show');
+                            $('#key').attr('type', 'text');
+                        } else {
+                            $('.checkbox').removeClass('show');
+                            $('#key').attr('type', 'password');
+        
+                        }
+                    }
+                </script>-->
     </body>
 </html>
