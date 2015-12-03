@@ -1,6 +1,7 @@
 package servlets;
 
 import model.Course;
+import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,11 +18,18 @@ import javax.servlet.http.HttpSession;
 /**
  *
  * @author Mateusz Wieczorek
- * 
+ *
  */
 public class TeacherCoursesServlet extends HttpServlet {
 
+    private final static Logger log = Logger.getLogger(TeacherCoursesServlet.class.getName());
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("TUTAJ!!!");
+        if (log.isInfoEnabled()) {
+            log.info("doPost function envoked");
+        }
+
         doGet(request, response);
     }
 
@@ -48,29 +56,27 @@ public class TeacherCoursesServlet extends HttpServlet {
             pst.setString(1, studentName);
             rs = pst.executeQuery();
             rs.next();
-            int studentID = rs.getInt("ID");
-            System.out.println("Student ID = " + studentID);
+            int teacherID = rs.getInt("ID");
+            System.out.println("TUTAJ!!!");
+            if (log.isInfoEnabled()) {
+                log.info("doPost function envoked");
+            }
+            System.out.println("teacherID = " + teacherID);
 
-            pst = conn.prepareStatement("SELECT Subjects.Name AS subjectName, Departments.Name AS departmentName, Courses.type, Courses.ID AS courseID, Courses.coursesQuantity, concat(Users.firstName, ' ', Users.lastName) AS teacherName FROM StudentCourses\n"
-                    + "	JOIN Courses\n"
-                    + "	ON Courses.ID=StudentCourses.courseID\n"
-                    + "	JOIN Users_Subjects\n"
-                    + "	ON Users_Subjects.courseID=Courses.ID\n"
-                    + "	JOIN Users\n"
-                    + "	ON Users_Subjects.teacherID=Users.ID\n"
+            pst = conn.prepareStatement("SELECT Subjects.Name AS subjectName, Departments.Name AS departmentName, Courses.type, Courses.coursesQuantity FROM Courses\n"
+                    + "	JOIN Users_Courses\n"
+                    + "	ON Users_Courses.userID=? AND Users_Courses.courseID=Courses.ID\n"
                     + "	JOIN Subjects\n"
                     + "	ON Subjects.ID=Courses.subjectID\n"
                     + "	JOIN Departments\n"
-                    + "	ON Departments.ID=Subjects.departmentID WHERE StudentCourses.studentID=?;");
-            pst.setInt(1, studentID);
+                    + "	ON Subjects.departmentID=Departments.ID");
+            pst.setInt(1, teacherID);
             rs = pst.executeQuery();
             while (rs.next()) {
                 Course course = new Course();
-                course.setId(rs.getInt("courseID"));
                 course.setSubjectName(rs.getString("subjectName"));
                 course.setDepartmentName(rs.getString("departmentName"));
                 course.setType(rs.getString("type"));
-                course.setTeacherName(rs.getString("teacherName"));
                 course.setQuantity(rs.getInt("coursesQuantity"));
                 courseList.add(course);
             }
@@ -80,6 +86,6 @@ public class TeacherCoursesServlet extends HttpServlet {
             e.printStackTrace();
 
         }
-        request.getRequestDispatcher("/coursesList.jsp").forward(request, response);
+        request.getRequestDispatcher("/teacherCoursesList.jsp").forward(request, response);
     }
 }
