@@ -183,11 +183,19 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
+                    <% if ("Teacher".equals(session.getAttribute("type"))) { %>
                     <li><a href="profileServlet">Profil</a></li>
                     <li><a href="teacherPrecensesServlet">Obecności</a></li>
                     <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
                     <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>
                     <li><a href="teacherStatsServlet">Statystyki</a></li>
+                    <%} else { %> 
+                    <li><a href="profileServlet">Profil</a></li>
+                    <li><a href="precensesServlet">Obecności</a></li>
+                    <li><a href="coursesServlet">Moje przedmioty</a></li>
+                    <li><a href="savesServlet">Zapisy na zajęcia</a></li>
+                    <li><a href="statsServlet">Statystyki</a></li>
+                    <% }%>
                 </ul>
             </div>
         </div>
@@ -205,7 +213,7 @@
     <div class="container">
         <h2>Lista kursów</h2>
         <form action="addSubjectServlet" method="post">
-            <td><button type="button" class="btn btn-success">Dodaj</button></td>
+            <td><button type="submit" class="btn btn-success">Dodaj</button></td>
         </form>
         <table class="table table-striped">
             <thead>

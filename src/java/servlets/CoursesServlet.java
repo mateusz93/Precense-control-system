@@ -17,11 +17,12 @@ import javax.servlet.http.HttpSession;
 /**
  *
  * @author Mateusz Wieczorek
- * 
+ *
  */
 public class CoursesServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         doGet(request, response);
     }
 
@@ -38,30 +39,31 @@ public class CoursesServlet extends HttpServlet {
         String password = "root";
 
         try {
+            String studentName = null;
             Class.forName(driver).newInstance();
             conn = DriverManager.getConnection(url + dbName, userName, password);
 
             //get ID from studentName
             HttpSession session = request.getSession(true);
-            String studentName = session.getAttribute("username").toString();
+            if (session.getAttribute("username") != null) {
+                studentName = session.getAttribute("username").toString();
+            }
             pst = conn.prepareStatement("SELECT ID from Users WHERE login=?");
             pst.setString(1, studentName);
             rs = pst.executeQuery();
             rs.next();
             int studentID = rs.getInt("ID");
-            System.out.println("Student ID = " + studentID);
 
-            pst = conn.prepareStatement("SELECT Subjects.Name AS subjectName, Departments.Name AS departmentName, Courses.type, Courses.ID AS courseID, Courses.coursesQuantity, concat(Users.firstName, ' ', Users.lastName) AS teacherName FROM StudentCourses\n"
-                    + "	JOIN Courses\n"
-                    + "	ON Courses.ID=StudentCourses.courseID\n"
-                    + "	JOIN Users_Subjects\n"
-                    + "	ON Users_Subjects.courseID=Courses.ID\n"
+            pst = conn.prepareStatement("SELECT Subjects.Name AS subjectName, Departments.Name AS departmentName, TeacherCourses.type, TeacherCourses.ID AS courseID, TeacherCourses.coursesQuantity, concat(Users.firstName, ' ', Users.lastName) AS teacherName FROM StudentCourses\n"
+                    + "	JOIN TeacherCourses\n"
+                    + "	ON TeacherCourses.ID=StudentCourses.teacherCourseID\n"
                     + "	JOIN Users\n"
-                    + "	ON Users_Subjects.teacherID=Users.ID\n"
+                    + "	ON Users.ID=TeacherCourses.teacherID\n"
                     + "	JOIN Subjects\n"
-                    + "	ON Subjects.ID=Courses.subjectID\n"
+                    + "	ON Subjects.ID=TeacherCourses.subjectID\n"
                     + "	JOIN Departments\n"
-                    + "	ON Departments.ID=Subjects.departmentID WHERE StudentCourses.studentID=?;");
+                    + "	ON Departments.ID=Subjects.departmentID \n"
+                    + "	WHERE StudentCourses.studentID=?;");
             pst.setInt(1, studentID);
             rs = pst.executeQuery();
             while (rs.next()) {
@@ -88,7 +90,7 @@ public class CoursesServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-      //  request.setCharacterEncoding("ISO-8859-2");
+        //  request.setCharacterEncoding("ISO-8859-2");
         //  request.setAttribute("message", "co jest z tobą");  // Will be available as ${message} in JSP
         request.getRequestDispatcher("/coursesList.jsp").forward(request, response);
     }

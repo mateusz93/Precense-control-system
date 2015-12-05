@@ -1,0 +1,268 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Dodawanie kursu</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    </head>
+
+    <style>
+        body {
+            font: 400 15px Lato, sans-serif;
+            line-height: 1.8;
+            color: #818181;
+        }
+        h2 {
+            font-size: 24px;
+            text-transform: uppercase;
+            color: #303030;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        h4 {
+            font-size: 19px;
+            line-height: 1.375em;
+            color: #303030;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }  
+        .jumbotron {
+            background-color: #f4511e;
+            color: #fff;
+            padding: 100px 25px;
+            font-family: Montserrat, sans-serif;
+        }
+        .container-fluid {
+            padding: 60px 50px;
+        }
+        .bg-grey {
+            background-color: #f6f6f6;
+        }
+        .logo-small {
+            color: #f4511e;
+            font-size: 50px;
+        }
+        .logo {
+            color: #f4511e;
+            font-size: 200px;
+        }
+        .thumbnail {
+            padding: 0 0 15px 0;
+            border: none;
+            border-radius: 0;
+        }
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            margin-bottom: 10px;
+        }
+        .carousel-control.right, .carousel-control.left {
+            background-image: none;
+            color: #f4511e;
+        }
+        .carousel-indicators li {
+            border-color: #f4511e;
+        }
+        .carousel-indicators li.active {
+            background-color: #f4511e;
+        }
+        .item h4 {
+            font-size: 19px;
+            line-height: 1.375em;
+            font-weight: 400;
+            font-style: italic;
+            margin: 70px 0;
+        }
+        .item span {
+            font-style: normal;
+        }
+        .panel {
+            border: 1px solid #f4511e; 
+            border-radius:0 !important;
+            transition: box-shadow 0.5s;
+        }
+        .panel:hover {
+            box-shadow: 5px 0px 40px rgba(0,0,0, .2);
+        }
+        .panel-footer .btn:hover {
+            border: 1px solid #f4511e;
+            background-color: #fff !important;
+            color: #f4511e;
+        }
+        .panel-heading {
+            color: #fff !important;
+            background-color: #f4511e !important;
+            padding: 25px;
+            border-bottom: 1px solid transparent;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+        .panel-footer {
+            background-color: white !important;
+        }
+        .panel-footer h3 {
+            font-size: 32px;
+        }
+        .panel-footer h4 {
+            color: #aaa;
+            font-size: 14px;
+        }
+        .panel-footer .btn {
+            margin: 15px 0;
+            background-color: #f4511e;
+            color: #fff;
+        }
+        .navbar {
+            margin-bottom: 0;
+            background-color: #f4511e;
+            z-index: 9999;
+            border: 0;
+            font-size: 14px !important;
+            line-height: 1.42857143 !important;
+            letter-spacing: 2px;
+            border-radius: 0;
+            font-family: Montserrat, sans-serif;
+        }
+        .navbar li a, .navbar .navbar-brand {
+            color: #fff !important;
+        }
+        .navbar-nav li a:hover, .navbar-nav li.active a {
+            color: #f4511e !important;
+            background-color: #fff !important;
+        }
+        .navbar-default .navbar-toggle {
+            border-color: transparent;
+            color: #fff !important;
+        }
+        footer .glyphicon {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #f4511e;
+        }
+        .input-append .btn.dropdown-toggle {
+            float: none;
+        }
+        @media screen and (max-width: 768px) {
+            .col-sm-4 {
+                text-align: center;
+                margin: 25px 0;
+            }
+            .btn-lg {
+                width: 100%;
+                margin-bottom: 35px;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            .logo {
+                font-size: 150px;
+            }
+        }
+    </style>
+
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <% if ((session.getAttribute("username") == null)) { %>
+                    <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
+                    <%} else { %> 
+                    <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
+                    <% } %>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <% if ("Teacher".equals(session.getAttribute("type"))) { %>
+                        <li><a href="profileServlet">Profil</a></li>
+                        <li><a href="teacherPrecensesServlet">Obecności</a></li>
+                        <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
+                        <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>
+                        <li><a href="teacherStatsServlet">Statystyki</a></li>
+                        <%} else { %> 
+                        <li><a href="profileServlet">Profil</a></li>
+                        <li><a href="precensesServlet">Obecności</a></li>
+                        <li><a href="coursesServlet">Moje przedmioty</a></li>
+                        <li><a href="savesServlet">Zapisy na zajęcia</a></li>
+                        <li><a href="statsServlet">Statystyki</a></li>
+                        <% }%>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <%
+            if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+                response.sendRedirect("login.jsp");
+            }
+        %>
+
+
+        <%
+            if ("Teacher".equals(session.getAttribute("type"))) {
+        %>
+        <div class="container">
+            <h2>Lista kursów</h2>
+            <h3>Dodaj nowy kurs</h3>
+            <div class="form-group">
+                <label for="subjectName">Nazwa przedmiotu</label>
+                <input type="text" class="form-control" id="usr">
+            </div>
+            <div class="input-append btn-group">
+                <label for="subjectName">Wydział</label>
+                <input type="text" class="form-control" id="usr">
+<!--                <input class="span2" id="appendedInputButton" size="40" type="text">-->
+                <a class="btn btn-primary dropdown-toggle right" data-toggle="dropdown" href="#">Lista wydziałów
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+                    <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+                    <li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+                </ul>
+            </div>
+           
+            <div class="form-group">
+                <label for="subjectName">Typ</label>
+                <input type="text" class="form-control" id="usr">
+            </div>
+            <div class="form-group">
+                <label for="subjectName">Ilość zajęć</label>
+                <input type="text" class="form-control" id="usr">
+            </div>
+            <div class="form-group">
+                <label for="subjectName">Minimalna ilość obecności</label>
+                <input type="text" class="form-control" id="usr">
+            </div>
+            <div class="form-group">
+                <label for="subjectName">Opis</label>
+                <input type="text" class="form-control" id="usr">
+            </div>
+            <!--            <div class="form-group">
+                            <label for="departmentName">Wydział</label>
+                            <input type="text" class="form-control" id="usr">
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Lista wydziałów
+                                    <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">HTML</a></li>
+                                    <li><a href="#">CSS</a></li>
+                                    <li><a href="#">JavaScript</a></li>
+                                </ul>
+                            </div>
+                        </div>-->
+
+            <form action="" method="post">
+                <td><button type="submit" class="btn btn-success">Zatwierdź</button></td>
+            </form>
+        </div>
+        <% }%>
+</html>

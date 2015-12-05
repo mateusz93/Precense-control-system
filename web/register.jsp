@@ -1,9 +1,3 @@
-<%-- 
-    Document   : register.jsp
-    Created on : Nov 11, 2015, 3:50:57 PM
-    Author     : mateusz
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

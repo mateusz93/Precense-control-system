@@ -11,13 +11,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author Mateusz Wieczorek
  * 
  */
-public class TeacherStatsServlet extends HttpServlet {
+public class AddSubjectServlet extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/teacherStats.jsp").forward(request, response);
+        request.getRequestDispatcher("/addCourse.jsp").forward(request, response);
     }
+            
 }

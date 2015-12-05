@@ -183,26 +183,35 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
+                    <% if ("Teacher".equals(session.getAttribute("type"))) { %>
+                    <li><a href="profileServlet">Profil</a></li>
+                    <li><a href="teacherPrecensesServlet">Obecności</a></li>
+                    <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
+                    <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>
+                    <li><a href="teacherStatsServlet">Statystyki</a></li>
+                    <%} else { %> 
                     <li><a href="profileServlet">Profil</a></li>
                     <li><a href="precensesServlet">Obecności</a></li>
                     <li><a href="coursesServlet">Moje przedmioty</a></li>
                     <li><a href="savesServlet">Zapisy na zajęcia</a></li>
                     <li><a href="statsServlet">Statystyki</a></li>
+                    <% }%>
                 </ul>
             </div>
         </div>
     </nav>
+    <%
+        if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+            response.sendRedirect("login.jsp");
+        }
+    %>
 
+    
+    <%
+        if ("Student".equals(session.getAttribute("type"))) {
+    %>
     <div class="container">
-        <%
-            if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
-                response.sendRedirect("login.jsp");
-            } else if ("Teacher".equals(session.getAttribute("type"))) {
-                response.sendRedirect("/teacherCoursesServlet");
-            }
-        %>
-        <h2>Lista kursów</h2>
-        <p>Lista wszystkich kursów pobrana z bazki</p>            
+        <h2>Lista kursów</h2>           
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -221,18 +230,19 @@
                         <td><c:out value="${courses.type}" /></td>
                         <td><c:out value="${courses.quantity}"  /></td>
                         <td><c:out value="${courses.teacherName}"  /></td>
-                <form action="courseInfoServlet" method="post">
-                    <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
-                    <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info">Pokaż</button></td>
-                </form>
-                <form action="unsubscribeSubjectServlet" method="post">
-                    <td><button name="unsubscribe" value="${courses.id}" type="submit" class="btn btn-danger">Wypisz się</button></td>
-                </form>
-                </tr>
+                        <form action="courseInfoServlet" method="at servlets.CoursesServlet.doGet(CoursesServlet.java:46)post">
+                            <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
+                            <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info">Pokaż</button></td>
+                        </form>
+                        <form action="unsubscribeSubjectServlet" method="post">
+                            <td><button name="unsubscribe" value="${courses.id}" type="submit" class="btn btn-danger">Wypisz się</button></td>
+                        </form>
+                    </tr>
             </c:forEach>
             </tbody>
         </table>
     </div>
-
+    <% } %>
+    
 </body>
 </html>

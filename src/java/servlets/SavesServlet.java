@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
  * @author Mateusz Wieczorek
  *
  */
+@WebServlet
 public class SavesServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -56,7 +57,7 @@ public class SavesServlet extends HttpServlet {
             rs.next();
             studentID = rs.getInt("ID");
 
-            pst = conn.prepareStatement("INSERT INTO StudentCourses (courseID, studentID, saveTime) VALUES (?, ?, NOW())");
+            pst = conn.prepareStatement("INSERT INTO StudentCourses (teacherCourseID, studentID, saveTime) VALUES (?, ?, NOW())");
             pst.setInt(1, courseID);
             pst.setInt(2, studentID);
             int result = pst.executeUpdate();
@@ -113,30 +114,39 @@ public class SavesServlet extends HttpServlet {
 
         try {
             List<Save> subjectList = new ArrayList<Save>();
-            
+
             Class.forName(driver).newInstance();
             conn = DriverManager.getConnection(url + dbName, userName, pass);
-            pst = conn.prepareStatement("SELECT Courses.ID, concat(Users.firstName, ' ', Users.lastName) AS teacherName, concat(Departments.Name, '') AS departmentName, Courses.type, Courses.coursesQuantity, Subjects.description, Subjects.Name\n"
-                    + "        FROM Subjects\n"
-                    + "        JOIN Departments\n"
-                    + "        ON Subjects.departmentID=Departments.ID\n"
-                    + "        JOIN Courses\n"
-                    + "        ON Courses.subjectID=Subjects.ID\n"
-                    + "        JOIN Users_Subjects\n"
-                    + "        ON Users_Subjects.courseID=Courses.ID\n"
-                    + "        JOIN Users\n"
-                    + "        ON Users_Subjects.teacherID=Users.ID");
+            pst = conn.prepareStatement("SELECT TeacherCourses.ID, Subjects.Name, concat(Departments.Name, '') AS departmentName, TeacherCourses.type, TeacherCourses.coursesQuantity, concat(Users.firstName, ' ', Users.lastName) AS teacherName, Subjects.description FROM TeacherCourses\n"
+                    + "	JOIN Subjects\n"
+                    + "	ON Subjects.ID=TeacherCourses.subjectID\n"
+                    + "	JOIN Departments\n"
+                    + "	ON Departments.ID=Subjects.departmentID\n"
+                    + "	JOIN Users\n"
+                    + "	ON Users.ID=TeacherCourses.teacherID");
             rs = pst.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Save save = new Save();
                 save.setSubjectName(rs.getString("Name"));
                 save.setTeacherName(rs.getString("teacherName"));
+                save.setDepartmentName(rs.getString("departmentName"));
                 save.setCoursesQuantity(rs.getInt("coursesQuantity"));
                 save.setType(rs.getString("type"));
                 save.setDescription(rs.getString("description"));
                 save.setId(rs.getInt("ID"));
                 subjectList.add(save);
             }
+            for(Save s : subjectList) {
+                System.out.println("Nazwa: " + s.getSubjectName());
+                System.out.println("Prowadzący: " + s.getTeacherName());
+                System.out.println("Wydział: " + s.getDepartmentName());
+                System.out.println("Ilość: " + s.getCoursesQuantity());
+                System.out.println("Typ: " + s.getType());
+                System.out.println("Opis: " + s.getDescription());
+                
+            }
+            
+            
             request.setAttribute("subjectList", subjectList);
         } catch (Exception e) {
             e.printStackTrace();

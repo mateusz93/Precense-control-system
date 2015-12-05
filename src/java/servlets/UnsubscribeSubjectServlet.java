@@ -45,7 +45,7 @@ public class UnsubscribeSubjectServlet extends HttpServlet {
             int studentId = rs.getInt("ID");
             int courseId = Integer.parseInt(request.getParameter("unsubscribe"));
             
-            pst = conn.prepareStatement("DELETE FROM StudentCourses WHERE courseID=? AND studentID=?");
+            pst = conn.prepareStatement("DELETE FROM StudentCourses WHERE teacherCourseID=? AND studentID=?");
             pst.setInt(1, courseId);
             pst.setInt(2, studentId);
             pst.executeUpdate();

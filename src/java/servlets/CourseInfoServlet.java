@@ -24,6 +24,11 @@ import javax.servlet.http.HttpSession;
 public class CourseInfoServlet extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        doGet(request, response);
+    }
+    
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -59,12 +64,6 @@ public class CourseInfoServlet extends HttpServlet {
             e.printStackTrace();
 
         }
-        
-        doGet(request, response);
-    }
-    
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
          request.getRequestDispatcher("/courseDates.jsp").forward(request, response);
     }
 }

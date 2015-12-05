@@ -27,7 +27,7 @@ public class TeacherCoursesServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("TUTAJ!!!");
         if (log.isInfoEnabled()) {
-            log.info("doPost function envoked");
+            log.info("doPost function envocked");
         }
 
         doGet(request, response);
@@ -63,13 +63,14 @@ public class TeacherCoursesServlet extends HttpServlet {
             }
             System.out.println("teacherID = " + teacherID);
 
-            pst = conn.prepareStatement("SELECT Subjects.Name AS subjectName, Departments.Name AS departmentName, Courses.type, Courses.coursesQuantity FROM Courses\n"
-                    + "	JOIN Users_Courses\n"
-                    + "	ON Users_Courses.userID=? AND Users_Courses.courseID=Courses.ID\n"
+            pst = conn.prepareStatement("SELECT Subjects.Name AS subjectName, Departments.Name AS departmentName, TeacherCourses.type, TeacherCourses.coursesQuantity FROM TeacherCourses\n"
                     + "	JOIN Subjects\n"
-                    + "	ON Subjects.ID=Courses.subjectID\n"
+                    + "	ON Subjects.ID=TeacherCourses.subjectID\n"
                     + "	JOIN Departments\n"
-                    + "	ON Subjects.departmentID=Departments.ID");
+                    + "	ON Subjects.departmentID=Departments.ID\n"
+                    + "	JOIN Users\n"
+                    + "	ON Users.ID=TeacherCourses.teacherID\n"
+                    + "	WHERE Users.ID = ?;");
             pst.setInt(1, teacherID);
             rs = pst.executeQuery();
             while (rs.next()) {

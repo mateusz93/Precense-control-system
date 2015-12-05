@@ -1,18 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-
-
+<!DOCTYPE html>
 <html>
     <head>
-        <title>Statystyki</title>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Obecności</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
-
     <style>
         body {
             font: 400 15px Lato, sans-serif;
@@ -166,48 +162,56 @@
     </style>
 
     <body>
-
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>                        
-                </button>
-                <% if ((session.getAttribute("username") == null)) { %>
-                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
-                <%} else { %> 
-                <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
-                <% } %>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <% if ("Teacher".equals(session.getAttribute("type"))) { %>
-                    <li><a href="profileServlet">Profil</a></li>
-                    <li><a href="teacherPrecensesServlet">Obecności</a></li>
-                    <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
-                    <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>
-                    <li><a href="teacherStatsServlet">Statystyki</a></li>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <% if ((session.getAttribute("username") == null)) { %>
+                    <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
                     <%} else { %> 
-                    <li><a href="profileServlet">Profil</a></li>
-                    <li><a href="precensesServlet">Obecności</a></li>
-                    <li><a href="coursesServlet">Moje przedmioty</a></li>
-                    <li><a href="savesServlet">Zapisy na zajęcia</a></li>
-                    <li><a href="statsServlet">Statystyki</a></li>
-                    <% }%>
-                </ul>
+                    <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
+                    <% } %>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <% if ("Teacher".equals(session.getAttribute("type"))) { %>
+                        <li><a href="profileServlet">Profil</a></li>
+                        <li><a href="teacherPrecensesServlet">Obecności</a></li>
+                        <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
+                        <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>
+                        <li><a href="teacherStatsServlet">Statystyki</a></li>
+                        <%} else { %> 
+                        <li><a href="profileServlet">Profil</a></li>
+                        <li><a href="precensesServlet">Obecności</a></li>
+                        <li><a href="coursesServlet">Moje przedmioty</a></li>
+                        <li><a href="savesServlet">Zapisy na zajęcia</a></li>
+                        <li><a href="statsServlet">Statystyki</a></li>
+                        <% }%>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+        <%
+            if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+                response.sendRedirect("login.jsp");
+            }
+        %>
 
-    <%
-        if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
-            response.sendRedirect("login.jsp");
-        } else if ("Teacher".equals(session.getAttribute("type"))) {
-            response.sendRedirect("/teacherStatsServlet");
-        }
-    %>
 
-</body>
+        <%
+            if ("Teacher".equals(session.getAttribute("type"))) {
+        %>
+
+
+
+
+
+
+
+        <% }%>
+    </body>
 </html>
