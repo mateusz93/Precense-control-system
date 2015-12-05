@@ -25,3 +25,12 @@ FOREIGN KEY (`studentID`) REFERENCES Users(`ID`),
 FOREIGN KEY (`courseDateID`) REFERENCES CourseDates(`ID`)
 );
 
+ALTER TABLE `data`.`CourseDates` 
+DROP FOREIGN KEY `CourseDates_ibfk_1`;
+
+ALTER TABLE `data`.`CourseDates` 
+ADD CONSTRAINT `fk_CourseDates_1`
+  FOREIGN KEY (`courseID`) REFERENCES `data`.`TeacherCourses` (`ID`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+

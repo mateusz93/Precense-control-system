@@ -24,7 +24,9 @@ import javax.servlet.http.HttpSession;
 public class CourseInfoServlet extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+        HttpSession session = request.getSession(true);
+        int courseID = Integer.parseInt(request.getParameter("info"));
+        System.out.println("course ID: " + courseID);
         doGet(request, response);
     }
     
@@ -46,7 +48,7 @@ public class CourseInfoServlet extends HttpServlet {
 
             HttpSession session = request.getSession(true);
             int courseID = Integer.parseInt(request.getParameter("info"));
-            
+            System.out.println("course ID: " + courseID);
             pst = conn.prepareStatement("SELECT * from CourseDates WHERE courseID=?");
             pst.setInt(1, courseID);
             rs = pst.executeQuery();

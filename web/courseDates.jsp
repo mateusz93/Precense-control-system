@@ -206,7 +206,13 @@
         <% } else { %>
         <h2>Nazwa przedmiotu</h2>
         <h2>Nazwa przedmiotu</h2>
-        <p>Lista wszystkich terminów danego kursu pobrana z bazki</p>            
+        <%
+        if ("Teacher".equals(session.getAttribute("type"))) {
+        %>
+        <form action="" method="post">
+            <td><button type="submit" class="btn btn-success">Dodaj</button></td>
+        </form>
+        <% }%>
         <table class="table table-striped">
             <thead>
                 <tr>

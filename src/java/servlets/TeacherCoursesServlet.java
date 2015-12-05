@@ -63,7 +63,7 @@ public class TeacherCoursesServlet extends HttpServlet {
             }
             System.out.println("teacherID = " + teacherID);
 
-            pst = conn.prepareStatement("SELECT Subjects.Name AS subjectName, Departments.Name AS departmentName, TeacherCourses.type, TeacherCourses.coursesQuantity FROM TeacherCourses\n"
+            pst = conn.prepareStatement("SELECT TeacherCourses.ID, Subjects.Name AS subjectName, Departments.Name AS departmentName, TeacherCourses.type, TeacherCourses.coursesQuantity FROM TeacherCourses\n"
                     + "	JOIN Subjects\n"
                     + "	ON Subjects.ID=TeacherCourses.subjectID\n"
                     + "	JOIN Departments\n"
@@ -79,6 +79,7 @@ public class TeacherCoursesServlet extends HttpServlet {
                 course.setDepartmentName(rs.getString("departmentName"));
                 course.setType(rs.getString("type"));
                 course.setQuantity(rs.getInt("coursesQuantity"));
+                course.setId(rs.getInt("ID"));
                 courseList.add(course);
             }
             request.setAttribute("coursesList", courseList);
