@@ -212,7 +212,7 @@
     %>
     <div class="container">
         <h2>Lista kursów</h2>
-        <form action="addSubjectServlet" method="post">
+        <form action="addSubjectServlet" method="get">
             <td><button type="submit" class="btn btn-success">Dodaj</button></td>
         </form>
         <table class="table table-striped">
