@@ -29,6 +29,14 @@
         <url-pattern>/addSubjectServlet</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>addCourseDate</servlet-name>
+        <servlet-class>servlets.AddCourseDateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addCourseDate</servlet-name>
+        <url-pattern>/addCourseDateServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>unsubscribeSubject</servlet-name>
         <servlet-class>servlets.UnsubscribeSubjectServlet</servlet-class>
     </servlet>

@@ -233,7 +233,7 @@
                         <td><c:out value="${courses.quantity}"  /></td>
                         <form action="courseInfoServlet" method="post">
                             <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
-                            <td><button name="info" value="${courses.id}" scope="request" type="submit" class="btn btn-info">Szczegóły</button></td>
+                            <td><button name="info" value="${courses.id}" scope="session" type="submit" class="btn btn-info">Szczegóły</button></td>
                         </form>
                     </tr>
             </c:forEach>

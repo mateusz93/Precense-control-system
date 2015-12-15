@@ -31,6 +31,10 @@ public class CourseInfoServlet extends HttpServlet {
     }
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
+        int courseID = Integer.parseInt(request.getParameter("info"));
+        
+        session.setAttribute("courseID", courseID);
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -46,8 +50,7 @@ public class CourseInfoServlet extends HttpServlet {
             Class.forName(driver).newInstance();
             conn = DriverManager.getConnection(url + dbName, userName, password);
 
-            HttpSession session = request.getSession(true);
-            int courseID = Integer.parseInt(request.getParameter("info"));
+            
             System.out.println("course ID: " + courseID);
             pst = conn.prepareStatement("SELECT * from CourseDates WHERE courseID=?");
             pst.setInt(1, courseID);
@@ -60,12 +63,13 @@ public class CourseInfoServlet extends HttpServlet {
                 date.setFinishTime(rs.getTime("finishTime"));
                 datesList.add(date);
             }
+            request.setAttribute("courseID", courseID);
             request.setAttribute("datesList", datesList);
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
             e.printStackTrace();
 
         }
-         request.getRequestDispatcher("/courseDates.jsp").forward(request, response);
+        request.getRequestDispatcher("/courseDates.jsp").forward(request, response);
     }
 }

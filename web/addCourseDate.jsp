@@ -1,19 +1,15 @@
-<%@ page session="true" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Terminy kursów</title>
+        <title>Dodanie terminu</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
-    <body>
+    
     <style>
         body {
             font: 400 15px Lato, sans-serif;
@@ -149,6 +145,9 @@
             margin-bottom: 20px;
             color: #f4511e;
         }
+        .input-append .btn.dropdown-toggle {
+            float: none;
+        }
         @media screen and (max-width: 768px) {
             .col-sm-4 {
                 text-align: center;
@@ -166,72 +165,68 @@
         }
     </style>
 
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>                        
-                </button>
-                <% if ((session.getAttribute("username") == null)) { %>
-                <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
-                <%} else { %> 
-                <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
-                <% } %>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>                        
+                    </button>
+                    <% if ((session.getAttribute("username") == null)) { %>
+                    <a class="navbar-brand" href="login.jsp" action="login.jsp">Zaloguj</a>
+                    <%} else { %> 
+                    <a class="navbar-brand" href="logout.jsp" action="logout.jsp">Wyloguj</a>
+                    <% } %>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <% if ("Teacher".equals(session.getAttribute("type"))) { %>
+                        <li><a href="profileServlet">Profil</a></li>
+                        <li><a href="teacherPrecensesServlet">Obecności</a></li>
+                        <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
+                        <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>
+                        <li><a href="teacherStatsServlet">Statystyki</a></li>
+                            <%} else { %> 
+                        <li><a href="profileServlet">Profil</a></li>
+                        <li><a href="precensesServlet">Obecności</a></li>
+                        <li><a href="coursesServlet">Moje przedmioty</a></li>
+                        <li><a href="savesServlet">Zapisy na zajęcia</a></li>
+                        <li><a href="statsServlet">Statystyki</a></li>
+                            <% }%>
+                    </ul>
+                </div>
             </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <% if ("Teacher".equals(session.getAttribute("type"))) { %>
-                    <li><a href="profileServlet">Profil</a></li>
-                    <li><a href="teacherPrecensesServlet">Obecności</a></li>
-                    <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
-                    <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>
-                    <li><a href="teacherStatsServlet">Statystyki</a></li>
-                        <%} else { %> 
-                    <li><a href="profileServlet">Profil</a></li>
-                    <li><a href="precensesServlet">Obecności</a></li>
-                    <li><a href="coursesServlet">Moje przedmioty</a></li>
-                    <li><a href="savesServlet">Zapisy na zajęcia</a></li>
-                    <li><a href="statsServlet">Statystyki</a></li>
-                        <% }%>
-                </ul>
-            </div>
-        </div>
-    </nav>
+        </nav>
+        <%
+            if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+                response.sendRedirect("login.jsp");
+            }
+        %>
 
-    <div class="container">
-        <% if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) { %>
-        <c:redirect url="/login.jsp"/>
-        <% } else { %>
-        <h2>Nazwa przedmiotu</h2>
-        <h2>Nazwa przedmiotu</h2>
+
         <%
             if ("Teacher".equals(session.getAttribute("type"))) {
         %>
-        <form action="addCourseDateServlet" method="get">
-            <td><button type="submit" value="${courseID}" name="courseID" class="btn btn-success">Dodaj termin</button></td>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Dzień</th>
-                        <th>Czas rozpoczęcia</th>
-                        <th>Czas zakończenia</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="dates" items="${datesList}">
-                        <tr>
-                            <td><c:out value="${dates.date}"  /></td>
-                            <td><c:out value="${dates.startTime}" /></td>
-                            <td><c:out value="${dates.finishTime}" /></td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </form>
+        <div class="container">
+            <h2>Lista kursów</h2>
+            <h3>Dodaj nowy termin</h3>
+            <form action="addCourseDateServlet" method="post">
+                <div class="form-group">
+                    <label>Data</label>
+                    <input type="text" placeholder="Format: YYYY-MM-DD" name="date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Czas rozpoczęcia</label>
+                    <input type="text" placeholder="Format: GG-MM-SS" name="startTime" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Czas rozpoczęcia</label>
+                    <input type="text" placeholder="Format: GG-MM-SS" name="finishTime" class="form-control">
+                </div>
+                <td><button type="submit"  class="btn btn-success">Zatwierdź</button></td>
+            </form>
+        </div>
         <% }%>
-    </div>
-    <% }%>    
-</body>
 </html>
