@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,11 +55,11 @@ public class CourseDates implements Serializable {
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
     private Date date;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseDateID")
+    private Collection<StudentPrecenses> studentPrecensesCollection;
     @JoinColumn(name = "courseID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
-    private Courses courseID;
-    @OneToMany(mappedBy = "courseDatesID")
-    private Collection<PresenceCourseDates> presenceCourseDatesCollection;
+    private TeacherCourses courseID;
 
     public CourseDates() {
     }
@@ -99,21 +100,21 @@ public class CourseDates implements Serializable {
         this.date = date;
     }
 
-    public Courses getCourseID() {
+    @XmlTransient
+    public Collection<StudentPrecenses> getStudentPrecensesCollection() {
+        return studentPrecensesCollection;
+    }
+
+    public void setStudentPrecensesCollection(Collection<StudentPrecenses> studentPrecensesCollection) {
+        this.studentPrecensesCollection = studentPrecensesCollection;
+    }
+
+    public TeacherCourses getCourseID() {
         return courseID;
     }
 
-    public void setCourseID(Courses courseID) {
+    public void setCourseID(TeacherCourses courseID) {
         this.courseID = courseID;
-    }
-
-    @XmlTransient
-    public Collection<PresenceCourseDates> getPresenceCourseDatesCollection() {
-        return presenceCourseDatesCollection;
-    }
-
-    public void setPresenceCourseDatesCollection(Collection<PresenceCourseDates> presenceCourseDatesCollection) {
-        this.presenceCourseDatesCollection = presenceCourseDatesCollection;
     }
 
     @Override

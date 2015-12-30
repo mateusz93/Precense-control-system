@@ -6,6 +6,7 @@
 package db;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -24,39 +27,34 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author mateusz
  */
 @Entity
-@Table(name = "Subjects")
+@Table(name = "StudentCourses")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Subjects.findAll", query = "SELECT s FROM Subjects s"),
-    @NamedQuery(name = "Subjects.findById", query = "SELECT s FROM Subjects s WHERE s.id = :id"),
-    @NamedQuery(name = "Subjects.findByName", query = "SELECT s FROM Subjects s WHERE s.name = :name"),
-    @NamedQuery(name = "Subjects.findByDescription", query = "SELECT s FROM Subjects s WHERE s.description = :description")})
-public class Subjects implements Serializable {
+    @NamedQuery(name = "StudentCourses.findAll", query = "SELECT s FROM StudentCourses s"),
+    @NamedQuery(name = "StudentCourses.findById", query = "SELECT s FROM StudentCourses s WHERE s.id = :id"),
+    @NamedQuery(name = "StudentCourses.findByTeacherCourseID", query = "SELECT s FROM StudentCourses s WHERE s.teacherCourseID = :teacherCourseID"),
+    @NamedQuery(name = "StudentCourses.findBySaveTime", query = "SELECT s FROM StudentCourses s WHERE s.saveTime = :saveTime")})
+public class StudentCourses implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @Column(name = "Name")
-    private String name;
-    @Column(name = "description")
-    private String description;
-    @JoinColumn(name = "departmentID", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
-    private Departments departmentID;
+    @Column(name = "teacherCourseID")
+    private Integer teacherCourseID;
+    @Column(name = "saveTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date saveTime;
+    @JoinColumn(name = "studentID", referencedColumnName = "ID")
+    @ManyToOne
+    private Users studentID;
 
-    public Subjects() {
+    public StudentCourses() {
     }
 
-    public Subjects(Integer id) {
+    public StudentCourses(Integer id) {
         this.id = id;
-    }
-
-    public Subjects(Integer id, String name) {
-        this.id = id;
-        this.name = name;
     }
 
     public Integer getId() {
@@ -67,28 +65,28 @@ public class Subjects implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getTeacherCourseID() {
+        return teacherCourseID;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTeacherCourseID(Integer teacherCourseID) {
+        this.teacherCourseID = teacherCourseID;
     }
 
-    public String getDescription() {
-        return description;
+    public Date getSaveTime() {
+        return saveTime;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSaveTime(Date saveTime) {
+        this.saveTime = saveTime;
     }
 
-    public Departments getDepartmentID() {
-        return departmentID;
+    public Users getStudentID() {
+        return studentID;
     }
 
-    public void setDepartmentID(Departments departmentID) {
-        this.departmentID = departmentID;
+    public void setStudentID(Users studentID) {
+        this.studentID = studentID;
     }
 
     @Override
@@ -101,10 +99,10 @@ public class Subjects implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Subjects)) {
+        if (!(object instanceof StudentCourses)) {
             return false;
         }
-        Subjects other = (Subjects) object;
+        StudentCourses other = (StudentCourses) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -113,7 +111,7 @@ public class Subjects implements Serializable {
 
     @Override
     public String toString() {
-        return "db.Subjects[ id=" + id + " ]";
+        return "db.StudentCourses[ id=" + id + " ]";
     }
     
 }

@@ -58,9 +58,8 @@ public class Users implements Serializable {
     @Basic(optional = false)
     @Column(name = "lastName")
     private String lastName;
-    @Basic(optional = false)
     @Column(name = "index")
-    private int index;
+    private Integer index;
     @Basic(optional = false)
     @Column(name = "type")
     private String type;
@@ -72,10 +71,10 @@ public class Users implements Serializable {
     private Date lastLogin;
     @Column(name = "Status")
     private String status;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
-    private Collection<PresenceUsers> presenceUsersCollection;
-    @OneToMany(mappedBy = "teacherID")
-    private Collection<UsersSubjects> usersSubjectsCollection;
+    @OneToMany(mappedBy = "studentID")
+    private Collection<StudentCourses> studentCoursesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentID")
+    private Collection<StudentPrecenses> studentPrecensesCollection;
 
     public Users() {
     }
@@ -84,12 +83,11 @@ public class Users implements Serializable {
         this.id = id;
     }
 
-    public Users(Integer id, String login, String firstName, String lastName, int index, String type, String password) {
+    public Users(Integer id, String login, String firstName, String lastName, String type, String password) {
         this.id = id;
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.index = index;
         this.type = type;
         this.password = password;
     }
@@ -126,11 +124,11 @@ public class Users implements Serializable {
         this.lastName = lastName;
     }
 
-    public int getIndex() {
+    public Integer getIndex() {
         return index;
     }
 
-    public void setIndex(int index) {
+    public void setIndex(Integer index) {
         this.index = index;
     }
 
@@ -167,21 +165,21 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
-    public Collection<PresenceUsers> getPresenceUsersCollection() {
-        return presenceUsersCollection;
+    public Collection<StudentCourses> getStudentCoursesCollection() {
+        return studentCoursesCollection;
     }
 
-    public void setPresenceUsersCollection(Collection<PresenceUsers> presenceUsersCollection) {
-        this.presenceUsersCollection = presenceUsersCollection;
+    public void setStudentCoursesCollection(Collection<StudentCourses> studentCoursesCollection) {
+        this.studentCoursesCollection = studentCoursesCollection;
     }
 
     @XmlTransient
-    public Collection<UsersSubjects> getUsersSubjectsCollection() {
-        return usersSubjectsCollection;
+    public Collection<StudentPrecenses> getStudentPrecensesCollection() {
+        return studentPrecensesCollection;
     }
 
-    public void setUsersSubjectsCollection(Collection<UsersSubjects> usersSubjectsCollection) {
-        this.usersSubjectsCollection = usersSubjectsCollection;
+    public void setStudentPrecensesCollection(Collection<StudentPrecenses> studentPrecensesCollection) {
+        this.studentPrecensesCollection = studentPrecensesCollection;
     }
 
     @Override
