@@ -1,5 +1,7 @@
 <%@ page session="true" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -189,26 +191,56 @@
                     <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
                     <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>
                     <li><a href="teacherStatsServlet">Statystyki</a></li>
-                    <%} else { %> 
+                        <%} else { %> 
                     <li><a href="profileServlet">Profil</a></li>
                     <li><a href="precensesServlet">Obecności</a></li>
                     <li><a href="coursesServlet">Moje przedmioty</a></li>
                     <li><a href="savesServlet">Zapisy na zajęcia</a></li>
                     <li><a href="statsServlet">Statystyki</a></li>
-                    <% }%>
+                        <% }%>
                 </ul>
             </div>
         </div>
     </nav>
-
-
     <%
         if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
             response.sendRedirect("login.jsp");
-        } else if ("Teacher".equals(session.getAttribute("type"))) {
-            response.sendRedirect("/teacherPrecensesServlet");
         }
     %>
+
+    <%
+        if ("Student".equals(session.getAttribute("type"))) {
+    %>
+    <div class="container">
+        <h2>Lista kursów</h2>           
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Wydział</th>
+                    <th>Typ zajęć</th>
+                    <th>Ilość zajęć</th>
+                    <th>Prowadzący</th>
+                </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="courses" items="${coursesList}">
+                <tr>
+                    <td><c:out value="${courses.subjectName}"  /></td>
+                    <td><c:out value="${courses.departmentName}" /></td>
+                    <td><c:out value="${courses.type}" /></td>
+                    <td><c:out value="${courses.quantity}"  /></td>
+                    <td><c:out value="${courses.teacherName}"  /></td>
+                    <form action="precensesInfoServlet" method="post">
+                        <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
+                        <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info">Pokaż obecności</button></td>
+                    </form>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+    <% }%>
 
 </body>
 </html>
