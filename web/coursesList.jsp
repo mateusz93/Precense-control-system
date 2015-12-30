@@ -230,9 +230,9 @@
                         <td><c:out value="${courses.type}" /></td>
                         <td><c:out value="${courses.quantity}"  /></td>
                         <td><c:out value="${courses.teacherName}"  /></td>
-                        <form action="courseInfoServlet" method="at servlets.CoursesServlet.doGet(CoursesServlet.java:46)post">
+                        <form action="courseInfoServlet" method="post">
                             <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
-                            <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info">Pokaż</button></td>
+                            <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info">Pokaż terminy</button></td>
                         </form>
                         <form action="unsubscribeSubjectServlet" method="post">
                             <td><button name="unsubscribe" value="${courses.id}" type="submit" class="btn btn-danger">Wypisz się</button></td>

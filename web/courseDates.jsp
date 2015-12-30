@@ -204,33 +204,30 @@
         <% if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) { %>
         <c:redirect url="/login.jsp"/>
         <% } else { %>
-        <h2>Nazwa przedmiotu</h2>
-        <h2>Nazwa przedmiotu</h2>
-        <%
-            if ("Teacher".equals(session.getAttribute("type"))) {
-        %>
+        <br><br><br>
+        <% if ("Teacher".equals(session.getAttribute("type"))) { %>
         <form action="addCourseDateServlet" method="get">
             <td><button type="submit" value="${courseID}" name="courseID" class="btn btn-success">Dodaj termin</button></td>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Dzień</th>
-                        <th>Czas rozpoczęcia</th>
-                        <th>Czas zakończenia</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="dates" items="${datesList}">
-                        <tr>
-                            <td><c:out value="${dates.date}"  /></td>
-                            <td><c:out value="${dates.startTime}" /></td>
-                            <td><c:out value="${dates.finishTime}" /></td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
         </form>
         <% }%>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Dzień</th>
+                    <th>Czas rozpoczęcia</th>
+                    <th>Czas zakończenia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="dates" items="${datesList}">
+                    <tr>
+                        <td><c:out value="${dates.date}"  /></td>
+                        <td><c:out value="${dates.startTime}" /></td>
+                        <td><c:out value="${dates.finishTime}" /></td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
     </div>
     <% }%>    
 </body>
