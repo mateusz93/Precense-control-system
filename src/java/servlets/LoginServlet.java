@@ -44,15 +44,13 @@ public class LoginServlet extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("redirect.jsp");
             rd.forward(request, response);
         } else {
-            out.print("<br><br><br>");
             out.print("<div class=\"container\">");
             out.print("<div class=\"alert alert-danger fade in\">");
             out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
             out.print("<strong>Error:</strong> Bledny email lub haslo");
             out.print("</div>");
             out.print("</div>");
-            RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
-            rd.include(request, response);
+            request.getRequestDispatcher("login.jsp").include(request, response);
         }
         out.close();
       //  response.sendRedirect("/WebApplication/login.jsp");
