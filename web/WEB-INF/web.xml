@@ -21,6 +21,14 @@
         <url-pattern>/loginServlet</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>precensesInfoServlet</servlet-name>
+        <servlet-class>servlets.PrecensesInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>precensesInfoServlet</servlet-name>
+        <url-pattern>/precensesInfoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>addSubject</servlet-name>
         <servlet-class>servlets.AddSubjectServlet</servlet-class>
     </servlet>
@@ -61,12 +69,28 @@
         <url-pattern>/teacherPrecensesServlet</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>checkPrecenses</servlet-name>
+        <servlet-class>servlets.CheckPrecensesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>checkPrecenses</servlet-name>
+        <url-pattern>/checkPrecensesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>courses</servlet-name>
         <servlet-class>servlets.CoursesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>courses</servlet-name>
         <url-pattern>/coursesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>courseDates</servlet-name>
+        <servlet-class>servlets.CourseDatesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>courseDates</servlet-name>
+        <url-pattern>/courseDatesServlet</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>teacherCourses</servlet-name>

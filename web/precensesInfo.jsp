@@ -1,20 +1,19 @@
 <%@ page session="true" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 5.00 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
-
 <html>
     <head>
-        <title>Obecności</title>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Szczegóły obecności</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
-
+    <body>
     <style>
         body {
             font: 400 15px Lato, sans-serif;
@@ -167,8 +166,6 @@
         }
     </style>
 
-    <body>
-
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -202,45 +199,76 @@
             </div>
         </div>
     </nav>
-    <%
-        if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
-            response.sendRedirect("login.jsp");
-        }
-    %>
 
-    <%
-        if ("Student".equals(session.getAttribute("type"))) {
-    %>
     <div class="container">
-        <h2>Lista kursów</h2>           
+        <% if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) { %>
+        <c:redirect url="/login.jsp"/>
+        <% } else { %>
+        <h2>Nazwa przedmiotu</h2>
+        <h2>Nazwa przedmiotu</h2>
+        <%
+            if ("Student".equals(session.getAttribute("type"))) {
+        %>
+
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Nazwa</th>
-                    <th>Wydział</th>
-                    <th>Typ zajęć</th>
-                    <th>Ilość zajęć</th>
-                    <th>Prowadzący</th>
+                    <th>Dzień</th>
+                    <th>Czas rozpoczęcia</th>
+                    <th>Czas zakończenia</th>
+                    <th>Obecność</th>
                 </tr>
             </thead>
             <tbody>
-            <c:forEach var="courses" items="${coursesList}">
-                <tr>
-                    <td><c:out value="${courses.subjectName}"  /></td>
-                    <td><c:out value="${courses.departmentName}" /></td>
-                    <td><c:out value="${courses.type}" /></td>
-                    <td><c:out value="${courses.quantity}"  /></td>
-                    <td><c:out value="${courses.teacherName}"  /></td>
-                    <form action="precensesInfoServlet" method="post">
-                        <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
-                        <td><button name="info" value="${courses.id}" scope="session" type="submit" class="btn btn-info">Pokaż obecności</button></td>
-                    </form>
-                </tr>
+                <c:forEach var="dates" items="${datesList}">
+                    <tr>
+                        <td><c:out value="${dates.date}"  /></td>
+                        <td><c:out value="${dates.startTime}" /></td>
+                        <td><c:out value="${dates.finishTime}" /></td>
+
+                        <td>
+                            <form role="form">
+                                <c:if test="${dates.status == 'Obecny'}">
+                                    <label class="radio-inline">
+                                    <input readonly checked disabled type="radio" name="optionRadio">Obecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input readonly disabled type="radio" name="optionRadio">Nieobecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input readonly disabled type="radio" name="optionRadio">Spóźniony
+                                    </label>
+                                </c:if>
+                                <c:if test="${dates.status == 'Nieobecny'}">
+                                    <label class="radio-inline">
+                                    <input readonly disabled type="radio" name="optionRadio">Obecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input readonly checked disabled type="radio" name="optionRadio">Nieobecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input readonly disabled type="radio" name="optionRadio">Spóźniony
+                                    </label>
+                                </c:if>
+                                <c:if test="${dates.status == 'Spó?niony'}">
+                                    <label class="radio-inline">
+                                    <input readonly disabled type="radio" name="optionRadio">Obecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input readonly disabled type="radio" name="optionRadio">Nieobecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input readonly checked disabled type="radio" name="optionRadio">Spóźniony
+                                    </label>
+                                </c:if>
+                            </form>
+                        </td>
+                    </tr>
             </c:forEach>
             </tbody>
         </table>
+        <% }%>
     </div>
-    <% }%>
-
+    <% }%>    
 </body>
 </html>
