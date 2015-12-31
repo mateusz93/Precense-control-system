@@ -204,8 +204,7 @@
             <% if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) { %>
             <c:redirect url="/login.jsp"/>
             <% } else { %>
-            <h2>Nazwa przedmiotu</h2>
-            <h2>Nazwa przedmiotu</h2>
+            <br><br><br>
             <%
                 if ("Teacher".equals(session.getAttribute("type"))) {
             %>
@@ -215,7 +214,6 @@
                         <th>Dzień</th>
                         <th>Czas rozpoczęcia</th>
                         <th>Czas zakończenia</th>
-                        <th>ID</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -224,7 +222,6 @@
                             <td><c:out value="${dates.date}"  /></td>
                             <td><c:out value="${dates.startTime}" /></td>
                             <td><c:out value="${dates.finishTime}" /></td>
-                            <td><c:out value="${dates.id}" /></td>
                             <form action="checkPrecensesServlet" method="post">
                                 <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
                                 <td><button name="dateID" value="${dates.id}" scope="request" type="submit" class="btn btn-info">Sprawdź obecność</button></td>
