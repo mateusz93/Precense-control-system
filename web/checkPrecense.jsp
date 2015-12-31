@@ -2,12 +2,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 5.00 Transitional//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Szczegóły obecności</title>
+        <title>Sprawdz obecność</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -207,65 +207,89 @@
         <h2>Nazwa przedmiotu</h2>
         <h2>Nazwa przedmiotu</h2>
         <%
-            if ("Student".equals(session.getAttribute("type"))) {
+            if ("Teacher".equals(session.getAttribute("type"))) {
         %>
-
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Dzień</th>
-                    <th>Czas rozpoczęcia</th>
-                    <th>Czas zakończenia</th>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
                     <th>Obecność</th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="dates" items="${datesList}">
+            
+                <c:forEach var="student" items="${students}">
                     <tr>
-                        <td><c:out value="${dates.date}"  /></td>
-                        <td><c:out value="${dates.startTime}" /></td>
-                        <td><c:out value="${dates.finishTime}" /></td>
-
+                        <td><c:out value="${student.firstName}"  /></td>
+                        <td><c:out value="${student.lastName}" /></td>
                         <td>
                             <form role="form">
-                                <c:if test="${dates.status == 'Obecny'}">
+                                <c:if test="${student.precenseStatus == 'Obecny'}">
                                     <label class="radio-inline">
-                                    <input checked disabled type="radio" name="optionRadio">Obecny
+                                    <input checked type="radio" name="optionRadio">Obecny
                                     </label>
                                     <label class="radio-inline">
-                                        <input disabled type="radio" name="optionRadio">Nieobecny
+                                        <input type="radio" name="optionRadio">Nieobecny
                                     </label>
                                     <label class="radio-inline">
-                                        <input disabled type="radio" name="optionRadio">Spóźniony
-                                    </label>
-                                </c:if>
-                                <c:if test="${dates.status == 'Nieobecny'}">
-                                    <label class="radio-inline">
-                                    <input disabled type="radio" name="optionRadio">Obecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input checked disabled type="radio" name="optionRadio">Nieobecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input disabled type="radio" name="optionRadio">Spóźniony
+                                        <input type="radio" name="optionRadio">Spóźniony
                                     </label>
                                 </c:if>
-                                <c:if test="${dates.status == 'Spó?niony'}">
+                                <c:if test="${student.precenseStatus == 'Nieobecny'}">
                                     <label class="radio-inline">
-                                    <input disabled type="radio" name="optionRadio">Obecny
+                                    <input type="radio" name="optionRadio">Obecny
                                     </label>
                                     <label class="radio-inline">
-                                        <input disabled type="radio" name="optionRadio">Nieobecny
+                                        <input checked type="radio" name="optionRadio">Nieobecny
                                     </label>
                                     <label class="radio-inline">
-                                        <input checked disabled type="radio" name="optionRadio">Spóźniony
+                                        <input type="radio" name="optionRadio">Spóźniony
                                     </label>
                                 </c:if>
+                                <c:if test="${student.precenseStatus == 'Spó?niony'}">
+                                    <label class="radio-inline">
+                                    <input type="radio" name="optionRadio">Obecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionRadio">Nieobecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input checked type="radio" name="optionRadio">Spóźniony
+                                    </label>
+                                </c:if>
+                                <c:if test="${student.precenseStatus != 'Obecny' &&
+                                      student.precenseStatus != 'Nieobecny' && 
+                                      student.precenseStatus != 'Spó?niony'}">
+                                    <label class="radio-inline">
+                                    <input type="radio" name="optionRadio">Obecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionRadio">Nieobecny
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionRadio">Spóźniony
+                                    </label>
+                                </c:if>
+                                
+<!--                                <label class="radio-inline">
+                                    <input type="radio" name="optionRadio" onclick = \"getAnswer('a') value="a">Obecny
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optionRadio" onclick = \"getAnswer('b') value="b">Nieobecny
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optionRadio" onclick = \"getAnswer('c') value="c">Spóźniony
+                                </label>-->
                             </form>
                         </td>
+                        <c:set var="status" scope="session" value="${optionRadio}"/>
                     </tr>
-            </c:forEach>
-            </tbody>
+                </c:forEach>
+            <form action="updatePrecensesServlet" method="post">        
+                <button name="students" value="${students}" scope="request" type="submit" class="btn btn-success">Zatwierdź</button>
+            </form>
+        </tbody>
         </table>
         <% }%>
     </div>
