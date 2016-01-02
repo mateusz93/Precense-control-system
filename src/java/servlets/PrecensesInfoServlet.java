@@ -93,10 +93,13 @@ public class PrecensesInfoServlet extends HttpServlet {
                 
                 ResultSet rs2 = null;
                 PreparedStatement pst2 = conn.prepareStatement("SELECT StudentPrecenses.status from StudentPrecenses WHERE courseDateID=?");
+                System.out.println("courdeDateID: "+ rs.getInt("ID"));
                 pst2.setInt(1, rs.getInt("ID"));
                 rs2 = pst2.executeQuery();
-                rs2.next();
-                date.setStatus(rs2.getString("status"));
+                if (rs2.next()) {
+                    System.out.println("[" + rs2.getString("status") + "]");
+                    date.setStatus(rs2.getString("status"));
+                }
                 
                 datesList.add(date);
                 System.out.println(date.toString());
