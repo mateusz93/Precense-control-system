@@ -250,7 +250,7 @@
                                         <input disabled type="radio" name="optionRadio">Spóźniony
                                     </label>
                                 </c:if>
-                                <c:if test="${dates.status == 'Spó?niony'}">
+                                <c:if test="${dates.status == 'Spozniony'}">
                                     <label class="radio-inline">
                                     <input disabled type="radio" name="optionRadio">Obecny
                                     </label>
