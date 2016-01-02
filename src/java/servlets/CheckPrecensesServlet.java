@@ -33,6 +33,7 @@ public class CheckPrecensesServlet extends HttpServlet {
         int courseID = (int) session.getAttribute("courseID");
         int dateID = Integer.parseInt(request.getParameter("dateID"));
         System.out.println("Date ID: " + dateID);
+        session.setAttribute("dateID", dateID);
         List<Student> students = (ArrayList<Student>) session.getAttribute("students");
         //List<Student> students = (ArrayList<Student>) request.getAttribute("students");
         

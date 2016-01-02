@@ -62,6 +62,7 @@ public class CourseDatesServlet extends HttpServlet {
                 date.setId(rs.getInt("ID"));
                 datesList.add(date);
             }
+            session.setAttribute("courseID", courseID);
             request.setAttribute("courseID", courseID);
             request.setAttribute("datesList", datesList);
             

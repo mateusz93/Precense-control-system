@@ -204,93 +204,80 @@
         <% if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) { %>
         <c:redirect url="/login.jsp"/>
         <% } else { %>
-        <h2>Nazwa przedmiotu</h2>
-        <h2>Nazwa przedmiotu</h2>
+        <br><br><br>
         <%
             if ("Teacher".equals(session.getAttribute("type"))) {
         %>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Imię</th>
-                    <th>Nazwisko</th>
-                    <th>Obecność</th>
-                </tr>
-            </thead>
-            <tbody>
-            
-                <c:forEach var="student" items="${students}">
+        <form action="updatePrecensesServlet" method="post">
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td><c:out value="${student.firstName}"  /></td>
-                        <td><c:out value="${student.lastName}" /></td>
-                        <td>
-                            <form role="form">
-                                <c:if test="${student.precenseStatus == 'Obecny'}">
-                                    <label class="radio-inline">
-                                    <input checked type="radio" name="optionRadio">Obecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="optionRadio">Nieobecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="optionRadio">Spóźniony
-                                    </label>
-                                </c:if>
-                                <c:if test="${student.precenseStatus == 'Nieobecny'}">
-                                    <label class="radio-inline">
-                                    <input type="radio" name="optionRadio">Obecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input checked type="radio" name="optionRadio">Nieobecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="optionRadio">Spóźniony
-                                    </label>
-                                </c:if>
-                                <c:if test="${student.precenseStatus == 'Spó?niony'}">
-                                    <label class="radio-inline">
-                                    <input type="radio" name="optionRadio">Obecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="optionRadio">Nieobecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input checked type="radio" name="optionRadio">Spóźniony
-                                    </label>
-                                </c:if>
-                                <c:if test="${student.precenseStatus != 'Obecny' &&
-                                      student.precenseStatus != 'Nieobecny' && 
-                                      student.precenseStatus != 'Spó?niony'}">
-                                    <label class="radio-inline">
-                                    <input type="radio" name="optionRadio">Obecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="optionRadio">Nieobecny
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="optionRadio">Spóźniony
-                                    </label>
-                                </c:if>
-                                
-<!--                                <label class="radio-inline">
-                                    <input type="radio" name="optionRadio" onclick = \"getAnswer('a') value="a">Obecny
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="optionRadio" onclick = \"getAnswer('b') value="b">Nieobecny
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="optionRadio" onclick = \"getAnswer('c') value="c">Spóźniony
-                                </label>-->
-                            </form>
-                        </td>
-                        <c:set var="status" scope="session" value="${optionRadio}"/>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>Obecność</th>
                     </tr>
-                </c:forEach>
-            <form action="updatePrecensesServlet" method="post">        
-                <button name="students" value="${students}" scope="request" type="submit" class="btn btn-success">Zatwierdź</button>
-            </form>
-        </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <c:forEach var="student" items="${students}">
+                        <tr>
+                            <td><c:out value="${student.firstName}"  /></td>
+                            <td><c:out value="${student.lastName}" /></td>
+                            <td>
+                                
+                                    <c:if test="${student.precenseStatus == 'Obecny'}">
+                                        <label class="radio-inline">
+                                            <input checked type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
+                                        </label>
+                                    </c:if>
+                                    <c:if test="${student.precenseStatus == 'Nieobecny'}">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input checked type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
+                                        </label>
+                                    </c:if>
+                                    <c:if test="${student.precenseStatus == 'Spozniony'}">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input checked type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
+                                        </label>
+                                    </c:if>
+                                    <c:if test="${student.precenseStatus != 'Obecny' &&
+                                                  student.precenseStatus != 'Nieobecny' && 
+                                                  student.precenseStatus != 'Spozniony'}">
+                                          <label class="radio-inline">
+                                              <input type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
+                                          </label>
+                                          <label class="radio-inline">
+                                              <input type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
+                                          </label>
+                                          <label class="radio-inline">
+                                              <input type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
+                                          </label>
+                                    </c:if>
+                                
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+            <button value="submit" type="submit" class="btn btn-success">Zatwierdź</button>
+        </form>
         <% }%>
     </div>
     <% }%>    

@@ -14,7 +14,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="index.htm">SKO</a>
+                <a class="navbar-brand" href="index.htm">Strona główna</a>
             </div>
         </div>
     </nav>
