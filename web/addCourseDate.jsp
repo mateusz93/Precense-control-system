@@ -210,8 +210,8 @@
             if ("Teacher".equals(session.getAttribute("type"))) {
         %>
         <div class="container">
-            <h2>Lista kursów</h2>
-            <h3>Dodaj nowy termin</h3>
+            <br><br>
+            <h3>Dodaj nowy termin zajęć</h3>
             <form action="addCourseDateServlet" method="post">
                 <div class="form-group">
                     <label>Data</label>
@@ -219,11 +219,11 @@
                 </div>
                 <div class="form-group">
                     <label>Czas rozpoczęcia</label>
-                    <input type="text" placeholder="Format: GG-MM-SS" name="startTime" class="form-control">
+                    <input type="text" placeholder="Format: GG:MM:SS" name="startTime" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>Czas rozpoczęcia</label>
-                    <input type="text" placeholder="Format: GG-MM-SS" name="finishTime" class="form-control">
+                    <label>Czas zakończenia</label>
+                    <input type="text" placeholder="Format: GG:MM:SS" name="finishTime" class="form-control">
                 </div>
                 <td><button type="submit"  class="btn btn-success">Zatwierdź</button></td>
             </form>
