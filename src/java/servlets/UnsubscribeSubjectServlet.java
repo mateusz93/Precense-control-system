@@ -20,6 +20,7 @@ public class UnsubscribeSubjectServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        request.setAttribute("message", "Wypisano z kursu");  // Will be available as ${message} in JSP
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -58,7 +59,6 @@ public class UnsubscribeSubjectServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         request.getRequestDispatcher("/coursesServlet").forward(request, response);
     }
 }

@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -87,14 +86,7 @@ public class SavesServlet extends HttpServlet {
                 }
             }
         }
-        out.print("<br><br><br>");
-        out.print("<div class=\"container\">");
-        out.print("<div class=\"alert alert-success fade in\">");
-        out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
-        out.print("<strong>Sukces</strong> Zapisano na kurs!");
-        out.print("</div>");
-        out.print("</div>");
-
+        request.setAttribute("message", "Zapisano na kurs");  // Will be available as ${message} in JSP
         doGet(request, response);
         out.close();
 
@@ -151,7 +143,7 @@ public class SavesServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        request.setAttribute("message", "co jest z tobą");  // Will be available as ${message} in JSP
+        
         request.getRequestDispatcher("/saves.jsp").forward(request, response);
     }
 }

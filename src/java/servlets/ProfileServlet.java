@@ -24,10 +24,6 @@ public class ProfileServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.setCharacterEncoding("ISO-8859-2");
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String pesel = request.getParameter("PESEL");
@@ -49,22 +45,18 @@ public class ProfileServlet extends HttpServlet {
         System.out.println("index: " + index);
         System.out.println("type: " + type);
         System.out.println("password: " + password);
+        System.out.println("confirmPassword: " + confirmPassword);
         System.out.println("email: " + email);
         System.out.println("pesel: " + pesel);
         System.out.println("phone: " + phone);
         System.out.println("street: " + street);
 
         HttpSession session = request.getSession(true);
-        if (password == null || confirmPassword == null) {
-            out.print("<div class=\"container\">");
-            out.print("<div class=\"alert alert-danger fade in\">");
-            out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
-            out.print("<strong>Błąd!</strong> Nie podales hasła");
-            out.print("</div>");
-            out.print("</div>");
+
+        if ("".equals(password) || "".equals(confirmPassword)) {
+            request.setAttribute("message", "Nie podałeś hasła");
         } else if (!password.equals(confirmPassword)) {
-//             String message = "Example source code of Servlet to JSP communication."; 
-//             request.setAttribute("message", message); 
+            request.setAttribute("message", "Hasła są różne");
         } else {
             Connection conn = null;
             PreparedStatement pst = null;
@@ -79,70 +71,55 @@ public class ProfileServlet extends HttpServlet {
             try {
                 Class.forName(driver).newInstance();
                 conn = DriverManager.getConnection(url + dbName, userName, pass);
-                pst = conn.prepareStatement("UPDATE Users SET firstName=?, lastName=?, `index`=? WHERE login=?");
-                pst.setString(1, firstName);
-                pst.setString(2, lastName);
-                pst.setString(3, index);
-                pst.setString(4, username);
-                pst.executeUpdate();
-
-                PreparedStatement pst3 = null;
-                pst3 = conn.prepareStatement("SELECT * from Users WHERE login=?");
-                pst3.setString(1, username);
-                rs = pst3.executeQuery();
+                pst = conn.prepareStatement("SELECT * from Users WHERE login=?");
+                pst.setString(1, username);
+                rs = pst.executeQuery();
                 rs.next();
-                int userID = rs.getInt("ID");
+                System.out.println("AAAAAAAAAAAA: " + password);
+                System.out.println("AAAAAAAAAAAA: " + rs.getString("password"));
+                if (!password.equals(rs.getString("password"))) {
+                    request.setAttribute("message", "Niepoprawne hasło");
+                } else {
+                    pst = conn.prepareStatement("UPDATE Users SET firstName=?, lastName=?, `index`=? WHERE login=?");
+                    pst.setString(1, firstName);
+                    pst.setString(2, lastName);
+                    pst.setString(3, index);
+                    pst.setString(4, username);
+                    pst.executeUpdate();
 
-                PreparedStatement pst2 = null;
-                pst2 = conn.prepareStatement("UPDATE Contacts SET PESEL=?, phone=?, street=?, city=? WHERE userID=?");
-                pst2.setString(1, pesel);
-                pst2.setString(2, phone);
-                pst2.setString(3, street);
-                pst2.setString(4, city);
-                pst2.setInt(5, userID);
-                pst2.executeUpdate();
-            } catch (Exception e) {
+                    PreparedStatement pst3 = null;
+                    pst3 = conn.prepareStatement("SELECT * from Users WHERE login=?");
+                    pst3.setString(1, username);
+                    rs = pst3.executeQuery();
+                    rs.next();
+                    int userID = rs.getInt("ID");
+
+                    PreparedStatement pst2 = null;
+                    pst2 = conn.prepareStatement("UPDATE Contacts SET PESEL=?, phone=?, street=?, city=? WHERE userID=?");
+                    pst2.setString(1, pesel);
+                    pst2.setString(2, phone);
+                    pst2.setString(3, street);
+                    pst2.setString(4, city);
+                    pst2.setInt(5, userID);
+                    pst2.executeUpdate();
+                    request.setAttribute("message", "Zaaktualizowano profil");
+                }
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
                 e.printStackTrace();
-
-            } finally {
-                if (conn != null) {
-                    try {
-                        conn.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (rs != null) {
-                    try {
-                        rs.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
-
-            out.print("<div class=\"container\">");
-            out.print("<div class=\"alert alert-success fade in\">");
-            out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
-            out.print("<strong>Gotowe!</strong> Dane zaaktualizowane");
-            out.print("</div>");
-            out.print("</div>");
-
         }
-        out.close();
         doGet(request, response);
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        System.out.println("doGet");
         HttpSession session = request.getSession(true);
-        
+
         if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
 
-        String username = session.getAttribute("username").toString();
-
+        String username = (String) session.getAttribute("username");
         System.out.println("username: " + username);
 
         Connection conn = null;
@@ -182,7 +159,6 @@ public class ProfileServlet extends HttpServlet {
             String street = rs.getString("street");
             String city = rs.getString("city");
 
-            System.out.println("doGet");
             System.out.println("firstName: " + firstName);
             System.out.println("lastName: " + lastName);
             System.out.println("index: " + index);
@@ -206,7 +182,7 @@ public class ProfileServlet extends HttpServlet {
             request.setAttribute("street", street);
             request.setAttribute("city", city);
 
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
             e.printStackTrace();
         }
         request.getRequestDispatcher("/profile.jsp").forward(request, response);
