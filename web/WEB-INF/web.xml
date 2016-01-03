@@ -76,8 +76,6 @@
         <servlet-name>checkPrecenses</servlet-name>
         <url-pattern>/checkPrecensesServlet</url-pattern>
     </servlet-mapping>
-    
-    
      <servlet>
         <servlet-name>updatePrecenses</servlet-name>
         <servlet-class>servlets.UpdatePrecensesServlet</servlet-class>
@@ -86,8 +84,6 @@
         <servlet-name>updatePrecenses</servlet-name>
         <url-pattern>/updatePrecensesServlet</url-pattern>
     </servlet-mapping>
-    
-    
     <servlet>
         <servlet-name>courses</servlet-name>
         <servlet-class>servlets.CoursesServlet</servlet-class>
