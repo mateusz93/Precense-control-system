@@ -26,6 +26,7 @@
             if ("Teacher".equals(session.getAttribute("type"))) {
         %>
         <div class="container">
+            <br><br><br>
             <table class="table table-striped">
                 <thead>
                     <tr>

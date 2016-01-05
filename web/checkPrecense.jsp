@@ -26,6 +26,7 @@
             if ("Teacher".equals(session.getAttribute("type"))) {
         %>
         <div class="container">
+            <br><br><br>
             <form action="updatePrecensesServlet" method="post">
                 <table class="table table-striped">
                     <thead>
