@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE HTML>
+
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -16,15 +19,15 @@
             <ul class="nav navbar-nav navbar-right">
                 <% if ("Teacher".equals(session.getAttribute("type"))) { %>
                 <li><a href="profileServlet">Profil</a></li>
-                <li><a href="teacherPrecensesServlet">Obecno?ci</a></li>
+                <li><a href="teacherPrecensesServlet">Obecności</a></li>
                 <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
-                <li><a href="teacherSavesServlet">Zapisy na zaj?cia</a></li>
+                <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>
                 <!--                        <li><a href="teacherStatsServlet">Statystyki</a></li>-->
                 <%} else { %> 
                 <li><a href="profileServlet">Profil</a></li>
-                <li><a href="precensesServlet">Obecno?ci</a></li>
+                <li><a href="precensesServlet">Obecności</a></li>
                 <li><a href="coursesServlet">Moje przedmioty</a></li>
-                <li><a href="savesServlet">Zapisy na zaj?cia</a></li>
+                <li><a href="savesServlet">Zapisy na zajęcia</a></li>
                 <!--                        <li><a href="statsServlet">Statystyki</a></li>-->
                 <% }%>
             </ul>
