@@ -52,7 +52,7 @@
                                             <input type="text" name="type" id="type" tabindex="1" class="form-control" placeholder="Typ" value="">
                                         </div>
                                         <div class="form-group">
-                                            <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Nazwa użytkownika" value="">
+                                            <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email" value="">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="userpass" id="password" tabindex="2" class="form-control" placeholder="Hasło">

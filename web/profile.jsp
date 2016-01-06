@@ -65,27 +65,27 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-3 control-label">PESEL:</label>
+                            <label class="col-lg-3 control-label">Index:</label>
                             <div class="col-lg-8">
-                                <input class="form-control" value="${pesel}" name="PESEL" type="text">
+                                <input class="form-control" readonly="readonly" value="${ID}" name="ID" type="text">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Email:</label>
                             <div class="col-lg-8">
-                                <input class="form-control" readonly="readonly" value="${email}" type="text">
+                                <input class="form-control" readonly="readonly" value="${email}" name="email" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Grupa dziekańska:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" readonly="readonly" value="${group}" name="group" type="text">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Typ:</label>
                             <div class="col-lg-8">
-                                <input class="form-control" readonly="readonly" value="${type}" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 control-label">Index:</label>
-                            <div class="col-lg-8">
-                                <input class="form-control" value="${index}" name="index" type="text">
+                                <input class="form-control" readonly="readonly" value="${type}" name="type" type="text">
                             </div>
                         </div>
                         <div class="form-group">
@@ -95,23 +95,18 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-3 control-label">Ulica:</label>
-                            <div class="col-lg-8">
-                                <input class="form-control" value="${street}" name="street" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-lg-3 control-label">Miasto:</label>
                             <div class="col-lg-8">
                                 <input class="form-control" value="${city}" name="city" type="text">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label">Login:</label>
-                            <div class="col-md-8">
-                                <input class="form-control" readonly="readonly" value="<%= session.getAttribute("username")%>" name="login" type="text">
+                            <label class="col-lg-3 control-label">Ulica:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" value="${street}" name="street" type="text">
                             </div>
                         </div>
+                        <br>
                         <div class="form-group">
                             <label class="col-md-3 control-label">Hasło:</label>
                             <div class="col-md-8">

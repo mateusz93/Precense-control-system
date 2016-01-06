@@ -22,14 +22,16 @@
             if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
                 response.sendRedirect("login.jsp");
             }
-            
-            if ("Teacher".equals(session.getAttribute("type"))) {
         %>
         <div class="container">
             <br><br><br>
+            
+            <% if ("Teacher".equals(session.getAttribute("type"))) { %>
             <form action="addCourseDateServlet" method="get">
                 <td><button type="submit" value="${courseID}" name="courseID" class="btn btn-success">Dodaj termin</button></td>
             </form>
+            <% } %>  
+            
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -48,7 +50,6 @@
                     </c:forEach>
                 </tbody>
             </table>
-        </div>
-        <% }%>    
+        </div>  
     </body>
 </html>

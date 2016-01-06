@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -23,35 +22,37 @@ public class ProfileServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        System.out.println(">>>>> doPOST");
+        HttpSession session = request.getSession(true);
+        
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
-        String pesel = request.getParameter("PESEL");
         String email = request.getParameter("email");
         String type = request.getParameter("type");
-        String index = request.getParameter("index");
+        String ID = request.getParameter("ID");
+        String group = request.getParameter("group");
         String phone = request.getParameter("phone");
         String street = request.getParameter("street");
         String city = request.getParameter("city");
-        String username = request.getParameter("login");
+        String username = session.getAttribute("username").toString();
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
         request.setAttribute("username", username);
 
-        System.out.println("doPost");
+        System.out.println("username: " + username);
         System.out.println("firstName: " + firstName);
         System.out.println("lastName: " + lastName);
-        System.out.println("index: " + index);
+        System.out.println("ID: " + ID);
+        System.out.println("group: " + group);
         System.out.println("type: " + type);
         System.out.println("password: " + password);
         System.out.println("confirmPassword: " + confirmPassword);
         System.out.println("email: " + email);
-        System.out.println("pesel: " + pesel);
         System.out.println("phone: " + phone);
         System.out.println("street: " + street);
 
-        HttpSession session = request.getSession(true);
+        
 
         if ("".equals(password) || "".equals(confirmPassword)) {
             request.setAttribute("message", "Nie podałeś hasła");
@@ -72,6 +73,7 @@ public class ProfileServlet extends HttpServlet {
                 Class.forName(driver).newInstance();
                 conn = DriverManager.getConnection(url + dbName, userName, pass);
                 pst = conn.prepareStatement("SELECT * from Users WHERE login=?");
+                System.out.println("doPost USERNAME: " + username);
                 pst.setString(1, username);
                 rs = pst.executeQuery();
                 rs.next();
@@ -80,11 +82,10 @@ public class ProfileServlet extends HttpServlet {
                 if (!password.equals(rs.getString("password"))) {
                     request.setAttribute("message", "Niepoprawne hasło");
                 } else {
-                    pst = conn.prepareStatement("UPDATE Users SET firstName=?, lastName=?, `index`=? WHERE login=?");
+                    pst = conn.prepareStatement("UPDATE Users SET firstName=?, lastName=? WHERE login=?");
                     pst.setString(1, firstName);
                     pst.setString(2, lastName);
-                    pst.setString(3, index);
-                    pst.setString(4, username);
+                    pst.setString(3, username);
                     pst.executeUpdate();
 
                     PreparedStatement pst3 = null;
@@ -95,12 +96,11 @@ public class ProfileServlet extends HttpServlet {
                     int userID = rs.getInt("ID");
 
                     PreparedStatement pst2 = null;
-                    pst2 = conn.prepareStatement("UPDATE Contacts SET PESEL=?, phone=?, street=?, city=? WHERE userID=?");
-                    pst2.setString(1, pesel);
-                    pst2.setString(2, phone);
-                    pst2.setString(3, street);
-                    pst2.setString(4, city);
-                    pst2.setInt(5, userID);
+                    pst2 = conn.prepareStatement("UPDATE Contacts SET phone=?, street=?, city=? WHERE userID=?");
+                    pst2.setString(1, phone);
+                    pst2.setString(2, street);
+                    pst2.setString(3, city);
+                    pst2.setInt(4, userID);
                     pst2.executeUpdate();
                     request.setAttribute("message", "Zaaktualizowano profil");
                 }
@@ -112,7 +112,7 @@ public class ProfileServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("doGet");
+        System.out.println(">>>>> doGet");
         HttpSession session = request.getSession(true);
 
         if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
@@ -138,12 +138,12 @@ public class ProfileServlet extends HttpServlet {
 
             PreparedStatement pst3 = null;
             pst3 = conn.prepareStatement("SELECT * from Users WHERE login=?");
+            System.out.println("doGet USERNAME: " + username);
             pst3.setString(1, username);
             rs = pst3.executeQuery();
             rs.next();
             String firstName = rs.getString("firstName");
             String lastName = rs.getString("lastName");
-            int index = rs.getInt("index");
             String type = rs.getString("type");
             String password = rs.getString("password");
             int userID = rs.getInt("ID");
@@ -153,31 +153,29 @@ public class ProfileServlet extends HttpServlet {
             pst2.setInt(1, userID);
             rs = pst2.executeQuery();
             rs.next();
+            String group = rs.getString("group");
             String email = rs.getString("Email");
-            String pesel = rs.getString("PESEL");
             String phone = rs.getString("phone");
             String street = rs.getString("street");
             String city = rs.getString("city");
 
             System.out.println("firstName: " + firstName);
             System.out.println("lastName: " + lastName);
-            System.out.println("index: " + index);
             System.out.println("type: " + type);
             System.out.println("password: " + password);
             System.out.println("userID: " + userID);
+            System.out.println("group: " + group);
             System.out.println("email: " + email);
-            System.out.println("pesel: " + pesel);
             System.out.println("phone: " + phone);
             System.out.println("street: " + street);
 
             request.setAttribute("firstName", firstName);
             request.setAttribute("lastName", lastName);
-            request.setAttribute("index", index);
             request.setAttribute("type", type);
             request.setAttribute("password", password);
-            request.setAttribute("userID", userID);
+            request.setAttribute("ID", userID);
             request.setAttribute("email", email);
-            request.setAttribute("pesel", pesel);
+            request.setAttribute("group", group);
             request.setAttribute("phone", phone);
             request.setAttribute("street", street);
             request.setAttribute("city", city);
