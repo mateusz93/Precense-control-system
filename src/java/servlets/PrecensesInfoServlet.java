@@ -34,7 +34,8 @@ public class PrecensesInfoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
@@ -62,6 +63,7 @@ public class PrecensesInfoServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //processRequest(request, response);
         HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         int courseID = Integer.parseInt(request.getParameter("info"));
 
         session.setAttribute("courseID", courseID);
@@ -127,10 +129,10 @@ public class PrecensesInfoServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //processRequest(request, response);
         HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         int courseID = Integer.parseInt(request.getParameter("info"));
         System.out.println("course ID: " + courseID);
         doGet(request, response);
-
     }
 
     /**

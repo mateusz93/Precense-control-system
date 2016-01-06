@@ -25,11 +25,13 @@ public class CheckPrecensesServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         doGet(request, response);
     }
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         int courseID = (int) session.getAttribute("courseID");
         int dateID = Integer.parseInt(request.getParameter("dateID"));
         System.out.println("Date ID: " + dateID);

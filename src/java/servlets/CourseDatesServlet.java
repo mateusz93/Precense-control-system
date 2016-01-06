@@ -25,11 +25,13 @@ public class CourseDatesServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         doGet(request, response);
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         int courseID = Integer.parseInt(request.getParameter("info"));
 
         session.setAttribute("courseID", courseID);

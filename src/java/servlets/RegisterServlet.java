@@ -17,8 +17,8 @@ import javax.servlet.http.HttpSession;
 public class RegisterServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html; charset=UTF-8");
         HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         
         if (request.getParameter("newEmail") != null) {
             request.setAttribute("newEmail", request.getParameter("newEmail"));
@@ -44,6 +44,7 @@ public class RegisterServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
         response.setContentType("text/html; charset=UTF-8");
         request.getRequestDispatcher("/register.jsp").forward(request, response);
     }

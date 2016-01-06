@@ -20,10 +20,11 @@ import javax.servlet.http.HttpSession;
 public class AddSubjectServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
-        HttpSession session = request.getSession(true);
         String username = session.getAttribute("username").toString();
         System.out.println("username: " + username);
 
@@ -104,6 +105,8 @@ public class AddSubjectServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         request.getRequestDispatcher("/addCourse.jsp").forward(request, response);
     }
 

@@ -22,8 +22,8 @@ public class ProfileServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println(">>>>> doPOST");
         HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
@@ -112,8 +112,8 @@ public class ProfileServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println(">>>>> doGet");
         HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
 
         if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
             request.getRequestDispatcher("/login.jsp").forward(request, response);

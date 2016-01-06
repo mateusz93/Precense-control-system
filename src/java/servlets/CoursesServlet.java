@@ -22,11 +22,14 @@ import javax.servlet.http.HttpSession;
 public class CoursesServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         doGet(request, response);
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -43,8 +46,6 @@ public class CoursesServlet extends HttpServlet {
             Class.forName(driver).newInstance();
             conn = DriverManager.getConnection(url + dbName, userName, password);
 
-            //get ID from studentName
-            HttpSession session = request.getSession(true);
             if (session.getAttribute("username") != null) {
                 studentName = session.getAttribute("username").toString();
             }

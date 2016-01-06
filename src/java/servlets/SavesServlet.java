@@ -26,11 +26,10 @@ import javax.servlet.http.HttpSession;
 public class SavesServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("ISO-8859-2");
-        response.setContentType("text/html");
+        HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        HttpSession session = request.getSession(true);
         String studentName = session.getAttribute("username").toString();
         System.out.println(studentName);
         System.out.println(request.getParameter("ID"));
@@ -93,7 +92,8 @@ public class SavesServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession session = request.getSession(true);
+        response.setContentType("text/html; charset=UTF-8");
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
