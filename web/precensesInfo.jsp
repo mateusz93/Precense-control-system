@@ -26,7 +26,8 @@
             if ("Student".equals(session.getAttribute("type"))) {
         %>
         <div class="container">
-            <br><br><br>        
+            <br><br>       
+            <h4><% out.print(request.getParameter("subjectName").trim()); %></h4>
             <table class="table table-striped">
                 <thead>
                     <tr>

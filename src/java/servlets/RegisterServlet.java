@@ -31,13 +31,19 @@ public class RegisterServlet extends HttpServlet {
             String password = request.getParameter("password");
             String confirmPassword = request.getParameter("confirmPassword");
 
-            if (RegisterDao.accept(firstName, lastName, type, email, username, password, confirmPassword)) {
+            if ("".equals(password) || "".equals(confirmPassword)) {
+                request.setAttribute("message", "Nie podałeś hasła!");
+            } else if ("".equals(firstName) || "".equals(lastName) || "".equals(email) || "".equals(username)) {
+                request.setAttribute("message", "Pole nie może być puste!");
+            } else if (!"Student".equals(type) && !"Teacher".equals(type)) {
+                request.setAttribute("message", "Niepoprawny typ! Dozwolone: Teacher, Student");
+            } else if (RegisterDao.accept(firstName, lastName, type, email, username, password, confirmPassword)) {
                 if (session != null) {
                     session.setAttribute("username", username);
                 }
                 request.setAttribute("message", "Konto poprawnie utworzone!");
             } else {
-                request.setAttribute("message", "Hasło niepoprawne!");
+                request.setAttribute("message", "Hasła są różne!");
             }
         }
         doGet(request, response);

@@ -46,7 +46,7 @@
                             <td><c:out value="${courses.quantity}"  /></td>
                             <td><c:out value="${courses.teacherName}"  /></td>
                     <form action="precensesInfoServlet" method="post">
-                        <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
+                        <input type="hidden" name="subjectName" value="${courses.subjectName}"/>
                         <td><button name="info" value="${courses.id}" scope="session" type="submit" class="btn btn-info">Pokaż obecności</button></td>
                     </form>
                     </tr>

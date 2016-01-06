@@ -26,6 +26,7 @@ public class CourseDatesServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         response.setContentType("text/html; charset=UTF-8");
+        request.setAttribute("subjectName", request.getParameter("subjectName"));
         doGet(request, response);
     }
 

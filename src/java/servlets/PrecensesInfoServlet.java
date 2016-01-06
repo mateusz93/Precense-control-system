@@ -131,7 +131,9 @@ public class PrecensesInfoServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         response.setContentType("text/html; charset=UTF-8");
         int courseID = Integer.parseInt(request.getParameter("info"));
+        System.out.println("subjectName: " + request.getParameter("subjectName"));
         System.out.println("course ID: " + courseID);
+        request.setAttribute("subjectName", request.getParameter("subjectName"));
         doGet(request, response);
     }
 

@@ -26,7 +26,9 @@
             if ("Teacher".equals(session.getAttribute("type"))) {
         %>
         <div class="container">
-            <br><br><br>
+            <br><br>
+            <jsp:include page="WEB-INF/alerts/allAlerts.jsp"/>
+            <h4>Dzień: <% out.print(session.getAttribute("date")); %></h4>
             <form action="updatePrecensesServlet" method="post">
                 <table class="table table-striped">
                     <thead>

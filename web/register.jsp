@@ -30,18 +30,9 @@
         </nav>
 
         <div class="container">
-            <%
-                String message = (String) request.getAttribute("message");
-                if (message != null) {
-            %> 
-            <div class="alert alert-info alert-dismissable">
-                <a class="panel-close close" data-dismiss="alert">×</a> 
-                <i class="fa fa-coffee"></i>
-                <% out.println(message); %> 
-            </div>
-            <% } %> 
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
+                    <jsp:include page="WEB-INF/alerts/allAlerts.jsp"/>
                     <div class="panel panel-login">
                         <div class="panel-heading">
                             <div class="row">

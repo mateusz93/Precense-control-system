@@ -44,7 +44,7 @@
                             <td><c:out value="${courses.type}" /></td>
                             <td><c:out value="${courses.quantity}"  /></td>
                     <form action="courseDatesServlet" method="post">
-                        <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
+                        <input type="hidden" name="subjectName" value="${courses.subjectName}"/>
                         <td><button name="info" value="${courses.id}" scope="session" type="submit" class="btn btn-info">Pokaż terminy</button></td>
                     </form>
                     </tr>

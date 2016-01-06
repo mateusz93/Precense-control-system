@@ -28,6 +28,7 @@ public class CourseInfoServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         int courseID = Integer.parseInt(request.getParameter("info"));
         System.out.println("course ID: " + courseID);
+        request.setAttribute("subjectName", request.getParameter("subjectName"));
         doGet(request, response);
     }
     

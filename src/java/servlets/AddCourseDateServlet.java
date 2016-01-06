@@ -44,18 +44,22 @@ public class AddCourseDateServlet extends HttpServlet {
             conn = DriverManager.getConnection(url + dbName, userName, password);
             
             pst = conn.prepareStatement("INSERT INTO CourseDates (courseID, startTime, finishTime, date) VALUES (?, ?, ?, ?)");
-
             pst.setInt(1, courseID);
             pst.setString(2, startTime);
             pst.setString(3, finishTime);
             pst.setString(4, date);
 
-            if (pst.executeUpdate() != 0) {
+            if ("".equals(date) || "".equals(startTime) || "".equals(finishTime)) {
+                request.setAttribute("message", "Pole nie może być puste!");
+            } else if (pst.executeUpdate() != 0) {
                 System.out.println("Zapisano do bazy!");
+                request.setAttribute("message", "Dodano nowy termin.");
             } else {
                 System.out.println("Błąd przy zapisie do bazy");
+                request.setAttribute("message", "Wystąpił błąd podczas dodawania nowego terminu!");
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
+            request.setAttribute("message", "Niepoprawny format!");
             e.printStackTrace();
         }
         doGet(request, response);

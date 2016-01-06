@@ -52,12 +52,10 @@ public class ProfileServlet extends HttpServlet {
         System.out.println("phone: " + phone);
         System.out.println("street: " + street);
 
-        
-
         if ("".equals(password) || "".equals(confirmPassword)) {
-            request.setAttribute("message", "Nie podałeś hasła");
+            request.setAttribute("message", "Nie podałeś hasła!");
         } else if (!password.equals(confirmPassword)) {
-            request.setAttribute("message", "Hasła są różne");
+            request.setAttribute("message", "Hasła są różne!");
         } else {
             Connection conn = null;
             PreparedStatement pst = null;
@@ -80,7 +78,7 @@ public class ProfileServlet extends HttpServlet {
                 System.out.println("AAAAAAAAAAAA: " + password);
                 System.out.println("AAAAAAAAAAAA: " + rs.getString("password"));
                 if (!password.equals(rs.getString("password"))) {
-                    request.setAttribute("message", "Niepoprawne hasło");
+                    request.setAttribute("message", "Niepoprawne hasło!");
                 } else {
                     pst = conn.prepareStatement("UPDATE Users SET firstName=?, lastName=? WHERE login=?");
                     pst.setString(1, firstName);
@@ -102,7 +100,7 @@ public class ProfileServlet extends HttpServlet {
                     pst2.setString(3, city);
                     pst2.setInt(4, userID);
                     pst2.executeUpdate();
-                    request.setAttribute("message", "Zaaktualizowano profil");
+                    request.setAttribute("message", "Zaaktualizowano profil!");
                 }
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
                 e.printStackTrace();

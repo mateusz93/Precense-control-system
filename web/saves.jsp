@@ -29,18 +29,7 @@
         %>
         <div class="container">
             <br><br><br>
-            <%
-                String message = (String) request.getAttribute("message");
-                if (message != null) {
-            %> 
-            <div class="alert alert-info alert-dismissable">
-                <a class="panel-close close" data-dismiss="alert">×</a> 
-                <i class="fa fa-coffee"></i>
-                <%
-                    out.println(message);
-                %> 
-            </div>
-            <% }%> 
+            <jsp:include page="WEB-INF/alerts/allAlerts.jsp"/>
             <form action="savesServlet" method="post">
                 <table class="table table-striped">
                     <thead>

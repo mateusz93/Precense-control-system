@@ -26,6 +26,7 @@ public class CheckPrecensesServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         response.setContentType("text/html; charset=UTF-8");
+        session.setAttribute("date", request.getParameter("date"));
         doGet(request, response);
     }
     

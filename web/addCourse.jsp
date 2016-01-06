@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE html>
 
 <html>
@@ -14,7 +15,7 @@
     <style type="text/css">
         <%@ include file="WEB-INF/css/menu.css" %>
     </style>
-
+    
     <body>
         <jsp:include page="WEB-INF/jsp/menu.jsp"/>
         <%
@@ -25,8 +26,9 @@
             if ("Teacher".equals(session.getAttribute("type"))) {
         %>
         <div class="container">
-            <br><br><br>
-            <h3>Dodaj nowy kurs</h3>
+            <br><br>
+            <jsp:include page="WEB-INF/alerts/allAlerts.jsp"/>
+            <h3>Nowy kurs</h3>
             <form action="addSubjectServlet" method="post">
                 <div class="form-group">
                     <label>Nazwa przedmiotu</label>
@@ -34,19 +36,23 @@
                 </div>
                 <div class="input-append btn-group">
                     <label>Wydział</label>
-                    <input type="text" name="departmentName" class="form-control">
-                    <a class="btn btn-primary dropdown-toggle right" data-toggle="dropdown" href="#">Lista wydziałów
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="#"><i class="icon-pencil"></i> 1</a></li>
-                        <li><a href="#"><i class="icon-trash"></i> 2</a></li>
-                        <li><a href="#"><i class="icon-ban-circle"></i> 3</a></li>
-                    </ul>
+                    <select class="form-control" name="departmentID">
+                        <c:forEach var="d" items="${departments}">
+                        <option value="${d.id}"><c:out value="${d.name}"/></option>
+                        </c:forEach>
+                    </select>
+                    <br>
                 </div>
                 <div class="form-group">
                     <label>Typ</label>
-                    <input type="text" name="type" class="form-control">
+                    <select class="form-control" name="type">
+                        <option value="Ćwiczenia">Ćwiczenia</option>
+                        <option value="Laboratorium">Laboratorium</option>
+                        <option value="Wykład">Wykład</option>
+                        <option value="Projekt">Projekt</option>
+                        <option value="Seminarium">Seminarium</option>
+                    </select>
+                    <br>
                 </div>
                 <div class="form-group">
                     <label>Ilość zajęć</label>

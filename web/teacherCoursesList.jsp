@@ -28,7 +28,7 @@
         <div class="container">
             <br><br><br>
             <form action="addSubjectServlet" method="get">
-                <td><button type="submit" class="btn btn-success">Dodaj</button></td>
+                <td><button type="submit" class="btn btn-success">Dodaj nowy kurs</button></td>
             </form>
             <table class="table table-striped">
                 <thead>
@@ -47,7 +47,7 @@
                             <td><c:out value="${courses.type}" /></td>
                             <td><c:out value="${courses.quantity}"  /></td>
                     <form action="courseInfoServlet" method="post">
-                        <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
+                        <input type="hidden" name="subjectName" value="${courses.subjectName}"/>
                         <td><button name="info" value="${courses.id}" scope="session" type="submit" class="btn btn-info">Szczegóły</button></td>
                     </form>
                     </tr>

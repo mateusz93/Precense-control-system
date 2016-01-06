@@ -24,7 +24,8 @@
             }
         %>
         <div class="container">
-            <br><br><br>
+            <br><br>
+            <h4><% out.print(request.getParameter("subjectName").trim()); %></h4>
             
             <% if ("Teacher".equals(session.getAttribute("type"))) { %>
             <form action="addCourseDateServlet" method="get">

@@ -27,18 +27,7 @@
         %>
         <div class="container">
             <br><br><br>
-            <%
-                String message = (String) request.getAttribute("message");
-                if (message != null) {
-            %> 
-            <div class="alert alert-info alert-dismissable">
-                <a class="panel-close close" data-dismiss="alert">×</a> 
-                <i class="fa fa-coffee"></i>
-                <%
-                    out.println(message);
-                %> 
-            </div>
-            <% }%> 
+            <jsp:include page="WEB-INF/alerts/allAlerts.jsp"/>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -58,7 +47,7 @@
                             <td><c:out value="${courses.quantity}"  /></td>
                             <td><c:out value="${courses.teacherName}"  /></td>
                     <form action="courseInfoServlet" method="post">
-                        <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
+                        <input type="hidden" name="subjectName" value="${courses.subjectName}"/>
                         <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info">Pokaż terminy</button></td>
                     </form>
                     <form action="unsubscribeSubjectServlet" method="post">

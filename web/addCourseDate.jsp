@@ -25,7 +25,8 @@
             if ("Teacher".equals(session.getAttribute("type"))) {
         %>
         <div class="container">
-            <br><br><br>
+            <br><br>
+            <jsp:include page="WEB-INF/alerts/allAlerts.jsp"/>
             <h3>Dodaj nowy termin zajęć</h3>
             <form action="addCourseDateServlet" method="post">
                 <div class="form-group">

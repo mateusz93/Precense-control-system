@@ -38,18 +38,7 @@
                 </div>
                 <!-- edit form column -->
                 <div class="col-md-9 personal-info">
-                    <%
-                        String message = (String) request.getAttribute("message");
-                        if (message != null) {
-                    %> 
-                    <div class="alert alert-info alert-dismissable">
-                        <a class="panel-close close" data-dismiss="alert">×</a> 
-                        <i class="fa fa-coffee"></i>
-                        <%
-                            out.println(message);
-                        %> 
-                    </div>
-                    <% }%> 
+                    <jsp:include page="WEB-INF/alerts/allAlerts.jsp"/>
                     <h3>Dane osobiste</h3>
                     <form class="form-horizontal" id="profile-form" action="profileServlet" method="post" role="form">
                         <div class="form-group">

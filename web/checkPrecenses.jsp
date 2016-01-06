@@ -26,7 +26,8 @@
             if ("Teacher".equals(session.getAttribute("type"))) {
         %>
         <div class="container">
-            <br><br><br>
+            <br><br>       
+            <h4><% out.print(request.getParameter("subjectName").trim()); %></h4>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -42,7 +43,7 @@
                             <td><c:out value="${dates.startTime}" /></td>
                             <td><c:out value="${dates.finishTime}" /></td>
                     <form action="checkPrecensesServlet" method="post">
-                        <c:set var="subjectName" value="${courses.subjectName}" scope="request" />
+                        <input type="hidden" name="date" value="${dates.date}"/>
                         <td><button name="dateID" value="${dates.id}" scope="request" type="submit" class="btn btn-info">Sprawdź obecność</button></td>
                     </form>
                     </tr>
