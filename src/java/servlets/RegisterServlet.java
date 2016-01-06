@@ -3,7 +3,6 @@ package servlets;
 import dao.RegisterDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,10 +17,9 @@ import javax.servlet.http.HttpSession;
 public class RegisterServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-
+        response.setContentType("text/html; charset=UTF-8");
+        HttpSession session = request.getSession(true);
+        
         if (request.getParameter("newEmail") != null) {
             request.setAttribute("newEmail", request.getParameter("newEmail"));
         } else {
@@ -33,29 +31,20 @@ public class RegisterServlet extends HttpServlet {
             String password = request.getParameter("password");
             String confirmPassword = request.getParameter("confirmPassword");
 
-            HttpSession session = request.getSession(false);
-
             if (RegisterDao.accept(firstName, lastName, type, email, username, password, confirmPassword)) {
                 if (session != null) {
                     session.setAttribute("username", username);
                 }
                 request.setAttribute("message", "Konto poprawnie utworzone!");
-
             } else {
                 request.setAttribute("message", "Hasło niepoprawne!");
             }
-
-            out.close();
-            RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
-            rd.forward(request, response);
         }
         doGet(request, response);
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        System.out.println("WSZZEDLEM");
-
+        response.setContentType("text/html; charset=UTF-8");
         request.getRequestDispatcher("/register.jsp").forward(request, response);
     }
 }

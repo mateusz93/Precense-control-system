@@ -30,17 +30,15 @@ public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+        response.setContentType("text/html; charset=UTF-8");
+        HttpSession session = request.getSession(true);
 
         String e = request.getParameter("email");
         String p = request.getParameter("userpass");
         String t = request.getParameter("type");
-
+        System.out.println("email: " + e);
+        System.out.println("userpass: " + p);
         System.out.println("Type: " + t);
-
-        HttpSession session = request.getSession(true);
         session.setAttribute("type", t);
 
         Connection conn = null;
@@ -67,31 +65,23 @@ public class LoginServlet extends HttpServlet {
             pst.setString(3, t);
             rs = pst.executeQuery();
             rs.next();
-            String username = rs.getString("login");
             
             if (LoginDao.validate(e, p, t)) {
                 if (session != null) {
-                    session.setAttribute("username", username);
+                    session.setAttribute("username", rs.getString("login"));
                 }
-                RequestDispatcher rd = request.getRequestDispatcher("redirect.jsp");
-                rd.forward(request, response);
+                request.getRequestDispatcher("/redirect.jsp").forward(request, response);
             } else {
-                out.print("<div class=\"container\">");
-                out.print("<div class=\"alert alert-danger fade in\">");
-                out.print("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
-                out.print("<strong>Bledny email lub haslo!</strong>");
-                out.print("</div>");
-                out.print("</div>");
-                request.getRequestDispatcher("login.jsp").include(request, response);
+                request.setAttribute("message", "Błędny email lub hasło!");
+                doGet(request, response);
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException exception) {
             exception.printStackTrace();
         }
-        out.close();
-        //  response.sendRedirect("/WebApplication/login.jsp");
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        response.setContentType("text/html; charset=UTF-8");
+        request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 }
