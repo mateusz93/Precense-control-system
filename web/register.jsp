@@ -50,7 +50,10 @@
                                 <div class="col-lg-12">
                                     <form id="login-form" action="loginServlet" method="post" role="form" style="display: none;">
                                         <div class="form-group">
-                                            <input type="text" name="type" id="type" tabindex="1" class="form-control" placeholder="Typ" value="">
+                                             <select class="form-control" name="type">
+                                                <option value="Student">Student</option>
+                                                <option value="Teacher">Nauczyciel</option>
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Nazwa użytkownika" value="">
@@ -74,7 +77,10 @@
                                             <input type="text" name="lastName" id="lastName" tabindex="1" class="form-control" placeholder="Nazwisko" value="">
                                         </div>
                                         <div class="form-group">
-                                            <input type="text" name="type" id="type" tabindex="1" class="form-control" placeholder="Typ" value="">
+                                             <select class="form-control" name="type">
+                                                <option value="Student">Student</option>
+                                                <option value="Teacher">Nauczyciel</option>
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Nazwa użytkownika" value="">
