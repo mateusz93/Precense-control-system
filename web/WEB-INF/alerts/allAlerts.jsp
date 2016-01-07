@@ -142,6 +142,16 @@
 </div>  
     
 <%}
+    if ("Czas rozpoczącia nie może być późniejszy niż czas zakończenia!".equals(message)) { %> 
+<div class="alert alert-danger alert-dismissable">
+    <a class="panel-close close" data-dismiss="alert">×</a> 
+    <i class="fa fa-coffee"></i>
+    <%
+        out.print(message);
+    %> 
+</div>   
+
+<%}
     if ("Wypisano z kursu".equals(message)) { %> 
 <div class="alert alert-info alert-dismissable">
     <a class="panel-close close" data-dismiss="alert">×</a> 

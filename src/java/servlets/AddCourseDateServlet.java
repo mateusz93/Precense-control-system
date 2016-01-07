@@ -65,7 +65,9 @@ public class AddCourseDateServlet extends HttpServlet {
                     pst.setString(3, date);
                     pst.setInt(4, courseDateID);
 
-                    if ("".equals(date) || "".equals(startTime) || "".equals(finishTime)) {
+                    if (!validateTime(startTime, finishTime)) {
+                        request.setAttribute("message", "Czas rozpoczącia nie może być późniejszy niż czas zakończenia!");
+                    } else if ("".equals(date) || "".equals(startTime) || "".equals(finishTime)) {
                         request.setAttribute("message", "Pole nie może być puste!");
                     } else if (pst.executeUpdate() != 0) {
                         System.out.println("Zapisano do bazy!");
@@ -82,7 +84,9 @@ public class AddCourseDateServlet extends HttpServlet {
                     pst.setString(3, finishTime);
                     pst.setString(4, date);
 
-                    if ("".equals(date) || "".equals(startTime) || "".equals(finishTime)) {
+                    if (!validateTime(startTime, finishTime)) {
+                        request.setAttribute("message", "Czas rozpoczącia nie może być późniejszy niż czas zakończenia!");
+                    } else if ("".equals(date) || "".equals(startTime) || "".equals(finishTime)) {
                         request.setAttribute("message", "Pole nie może być puste!");
                     } else if (pst.executeUpdate() != 0) {
                         System.out.println("Zapisano do bazy!");
@@ -107,5 +111,27 @@ public class AddCourseDateServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         response.setContentType("text/html; charset=UTF-8");
         request.getRequestDispatcher("/addCourseDate.jsp").forward(request, response);
+    }
+    
+    private boolean validateTime(String startTime, String finishTime) {
+        int startTimeHH, startTimeMM, startTimeSS, finishTimeHH, finishTimeMM, finishTimeSS;
+        startTimeHH = Integer.parseInt(startTime.substring(0, 2));
+        startTimeMM = Integer.parseInt(startTime.substring(3, 5));
+        startTimeSS = Integer.parseInt(startTime.substring(6, 8));
+        
+        finishTimeHH = Integer.parseInt(finishTime.substring(0, 2));
+        finishTimeMM = Integer.parseInt(finishTime.substring(3, 5));
+        finishTimeSS = Integer.parseInt(finishTime.substring(6, 8));
+        
+        if (startTimeHH > finishTimeHH) {
+            return false;
+        }
+        if (startTimeMM > finishTimeMM) {
+            return false;
+        }
+        if (startTimeSS > finishTimeSS) {
+            return false;
+        }
+        return true;
     }
 }
