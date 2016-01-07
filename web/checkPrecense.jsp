@@ -28,7 +28,7 @@
         <div class="container">
             <br><br>
             <jsp:include page="WEB-INF/alerts/allAlerts.jsp"/>
-            <h4>Dzień: <% out.print(session.getAttribute("date")); %></h4>
+            <h4>Dzień: <% out.print(request.getParameter("date")); %></h4>
             <form action="updatePrecensesServlet" method="post">
                 <table class="table table-striped">
                     <thead>
@@ -92,6 +92,8 @@
                                           </label>
                                     </c:if>
                                 </td>
+                                <input type="hidden" name="dateID" value="${dateID}"/>
+                                <input type="hidden" name="date" value="${date}"/>
                             </tr>
                         </c:forEach>
                     </tbody>

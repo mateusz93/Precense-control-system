@@ -67,7 +67,8 @@ public class UpdatePrecensesServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         response.setContentType("text/html; charset=UTF-8");
         request.setAttribute("message", "Zaaktualizowano listę obecności");
-        request.getRequestDispatcher("/checkPrecense.jsp").forward(request, response);
+        request.getRequestDispatcher("/checkPrecensesServlet").forward(request, response);
+        //request.getRequestDispatcher("/checkPrecense.jsp").forward(request, response);
     }
 
     /**
