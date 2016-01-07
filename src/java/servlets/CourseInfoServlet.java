@@ -29,6 +29,7 @@ public class CourseInfoServlet extends HttpServlet {
         int courseID = Integer.parseInt(request.getParameter("info"));
         System.out.println("course ID: " + courseID);
         request.setAttribute("subjectName", request.getParameter("subjectName"));
+        request.setAttribute("info", request.getParameter("info"));
         doGet(request, response);
     }
     
@@ -64,6 +65,7 @@ public class CourseInfoServlet extends HttpServlet {
                 date.setDate(rs.getDate("date"));
                 date.setStartTime(rs.getTime("startTime"));
                 date.setFinishTime(rs.getTime("finishTime"));
+                date.setId(rs.getInt("ID"));
                 datesList.add(date);
             }
             request.setAttribute("courseID", courseID);

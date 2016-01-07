@@ -31,17 +31,17 @@
             <form action="addCourseDateServlet" method="post">
                 <div class="form-group">
                     <label>Data</label>
-                    <input type="text" placeholder="Format: YYYY-MM-DD" name="date" class="form-control">
+                    <input type="text" placeholder="Format: YYYY-MM-DD" name="date" value="${date}" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Czas rozpoczęcia</label>
-                    <input type="text" placeholder="Format: GG:MM:SS" name="startTime" class="form-control">
+                    <input type="text" placeholder="Format: GG:MM:SS" name="startTime" value="${startTime}" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Czas zakończenia</label>
-                    <input type="text" placeholder="Format: GG:MM:SS" name="finishTime" class="form-control">
+                    <input type="text" placeholder="Format: GG:MM:SS" name="finishTime" value="${finishTime}" class="form-control">
                 </div>
-                <td><button type="submit"  class="btn btn-success">Zatwierdź</button></td>
+                <td><button type="submit" name="courseDateID" value="${ID}" class="btn btn-success">Zatwierdź</button></td>
             </form>
         </div>
         <% }%>

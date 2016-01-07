@@ -43,21 +43,43 @@ public class AddCourseDateServlet extends HttpServlet {
             Class.forName(driver).newInstance();
             conn = DriverManager.getConnection(url + dbName, userName, password);
             
-            pst = conn.prepareStatement("INSERT INTO CourseDates (courseID, startTime, finishTime, date) VALUES (?, ?, ?, ?)");
-            pst.setInt(1, courseID);
-            pst.setString(2, startTime);
-            pst.setString(3, finishTime);
-            pst.setString(4, date);
-
-            if ("".equals(date) || "".equals(startTime) || "".equals(finishTime)) {
-                request.setAttribute("message", "Pole nie może być puste!");
-            } else if (pst.executeUpdate() != 0) {
-                System.out.println("Zapisano do bazy!");
-                request.setAttribute("message", "Dodano nowy termin.");
+            if (request.getParameter("courseDateID") != null) {
+                int courseDateID = Integer.parseInt(request.getParameter("courseDateID"));
+                pst = conn.prepareStatement("UPDATE CourseDates SET startTime=?, finishTime=?, date=? WHERE ID=?");
+                pst.setString(1, startTime);
+                pst.setString(2, finishTime);
+                pst.setString(3, date);
+                pst.setInt(4, courseDateID);
+                
+                if ("".equals(date) || "".equals(startTime) || "".equals(finishTime)) {
+                    request.setAttribute("message", "Pole nie może być puste!");
+                } else if (pst.executeUpdate() != 0) {
+                    System.out.println("Zapisano do bazy!");
+                    request.setAttribute("message", "Zaaktualizowano termin zajęć");
+                } else {
+                    System.out.println("Błąd przy zapisie do bazy");
+                    request.setAttribute("message", "Wystąpił błąd podczas edycji terminu zajęć!");
+                }
+                
             } else {
-                System.out.println("Błąd przy zapisie do bazy");
-                request.setAttribute("message", "Wystąpił błąd podczas dodawania nowego terminu!");
+                pst = conn.prepareStatement("INSERT INTO CourseDates (courseID, startTime, finishTime, date) VALUES (?, ?, ?, ?)");
+                pst.setInt(1, courseID);
+                pst.setString(2, startTime);
+                pst.setString(3, finishTime);
+                pst.setString(4, date);
+
+                if ("".equals(date) || "".equals(startTime) || "".equals(finishTime)) {
+                    request.setAttribute("message", "Pole nie może być puste!");
+                } else if (pst.executeUpdate() != 0) {
+                    System.out.println("Zapisano do bazy!");
+                    request.setAttribute("message", "Dodano nowy termin.");
+                } else {
+                    System.out.println("Błąd przy zapisie do bazy");
+                    request.setAttribute("message", "Wystąpił błąd podczas dodawania nowego terminu!");
+                }
             }
+            
+            
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {
             request.setAttribute("message", "Niepoprawny format!");
             e.printStackTrace();

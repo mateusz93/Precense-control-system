@@ -25,6 +25,7 @@
         %>
         <div class="container">
             <br><br>
+            <jsp:include page="WEB-INF/alerts/allAlerts.jsp"/>
             <h4><% out.print(request.getParameter("subjectName").trim()); %></h4>
             
             <% if ("Teacher".equals(session.getAttribute("type"))) { %>
@@ -44,9 +45,17 @@
                 <tbody>
                     <c:forEach var="dates" items="${datesList}">
                         <tr>
-                            <td><c:out value="${dates.date}"  /></td>
-                            <td><c:out value="${dates.startTime}" /></td>
-                            <td><c:out value="${dates.finishTime}" /></td>
+                            <td class="col-md-2"><c:out value="${dates.date}"  /></td>
+                            <td class="col-md-2"><c:out value="${dates.startTime}" /></td>
+                            <td class="col-md-2"><c:out value="${dates.finishTime}" /></td>
+                            <form action="editCourseDateServlet" method="post">
+                                <td class="col-md-1"><button name="editID" value="${dates.id}" type="submit" class="btn btn-warning">Edytuj</button></td>
+                            </form>
+                            <form action="deleteCourseDateServlet" method="post">
+                                <input type="hidden" name="subjectName" value="${subjectName}"/>
+                                <input type="hidden" name="info" value="${info}"/>
+                                <td class="col-md-1"><button name="deleteID" value="${dates.id}" type="submit" class="btn btn-danger">Usuń</button></td>
+                            </form>
                         </tr>
                     </c:forEach>
                 </tbody>

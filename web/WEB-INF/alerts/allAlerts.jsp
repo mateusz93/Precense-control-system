@@ -142,6 +142,16 @@
 </div>
 
 <%}
+    if ("Usunięto termin kursu".equals(message)) { %> 
+<div class="alert alert-info alert-dismissable">
+    <a class="panel-close close" data-dismiss="alert">×</a> 
+    <i class="fa fa-coffee"></i>
+    <%
+        out.print(message);
+    %> 
+</div>
+
+<%}
     if ("Dodano nowy termin.".equals(message)) { %> 
 <div class="alert alert-success alert-dismissable">
     <a class="panel-close close" data-dismiss="alert">×</a> 
@@ -160,6 +170,18 @@
         out.print(message);
     %> 
 </div>
+
+<%}
+    if ("Wystąpił błąd podczas edycji terminu zajęć!".equals(message)) { %> 
+<div class="alert alert-danger alert-dismissable">
+    <a class="panel-close close" data-dismiss="alert">×</a> 
+    <i class="fa fa-coffee"></i>
+    <%
+        out.print(message);
+    %> 
+</div>
+
+    
 <%}
     if ("Zaaktualizowano listę obecności".equals(message)) { %> 
 <div class="alert alert-info alert-dismissable">
@@ -169,4 +191,16 @@
         out.print(message);
     %> 
 </div>
+    
+<%}
+    if ("Zaaktualizowano termin zajęć".equals(message)) { %> 
+<div class="alert alert-info alert-dismissable">
+    <a class="panel-close close" data-dismiss="alert">×</a> 
+    <i class="fa fa-coffee"></i>
+    <%
+        out.print(message);
+    %> 
+</div>
+    
+    
 <%}%> 
