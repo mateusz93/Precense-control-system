@@ -43,11 +43,14 @@ public class DeleteCourseDateServlet extends HttpServlet {
             conn = DriverManager.getConnection(url + dbName, userName, password);
             
             int courseDateID = Integer.parseInt(request.getParameter("deleteID"));
-            
+            System.out.println("courseDateID: " + courseDateID);
+            pst = conn.prepareStatement("DELETE FROM StudentPrecenses WHERE courseDateID=?");
+            pst.setInt(1, courseDateID);
+            pst.executeUpdate();
             pst = conn.prepareStatement("DELETE FROM CourseDates WHERE ID=?");
             pst.setInt(1, courseDateID);
             if (pst.executeUpdate() != 0) {
-                request.setAttribute("message", "Usunięto termin kursu");
+                request.setAttribute("message", "Usunięto termin kursu i związane z nim obecności");
             }
             request.setAttribute("subjectName", request.getParameter("subjectName"));
         } catch (ClassNotFoundException ex) {

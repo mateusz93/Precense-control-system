@@ -22,6 +22,16 @@
 </div>
 
 <%}
+    if ("Dodałeś już maksymalną ilość terminów!".equals(message)) { %> 
+<div class="alert alert-danger alert-dismissable">
+    <a class="panel-close close" data-dismiss="alert">×</a> 
+    <i class="fa fa-coffee"></i>
+    <%
+        out.print(message);
+    %> 
+</div>
+
+<%}
     if ("Pole nie może być puste!".equals(message)) { %> 
 <div class="alert alert-danger alert-dismissable">
     <a class="panel-close close" data-dismiss="alert">×</a> 
@@ -142,7 +152,7 @@
 </div>
 
 <%}
-    if ("Usunięto termin kursu".equals(message)) { %> 
+    if ("Usunięto termin kursu i związane z nim obecności".equals(message)) { %> 
 <div class="alert alert-info alert-dismissable">
     <a class="panel-close close" data-dismiss="alert">×</a> 
     <i class="fa fa-coffee"></i>
