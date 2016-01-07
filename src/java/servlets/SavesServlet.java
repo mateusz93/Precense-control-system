@@ -97,6 +97,8 @@ public class SavesServlet extends HttpServlet {
         Connection conn = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
+        PreparedStatement pst2 = null;
+        ResultSet rs2 = null;
 
         String url = "jdbc:mysql://localhost:3306/";
         String dbName = "data";
@@ -126,7 +128,22 @@ public class SavesServlet extends HttpServlet {
                 save.setType(rs.getString("type"));
                 save.setDescription(rs.getString("description"));
                 save.setId(rs.getInt("ID"));
-                subjectList.add(save);
+                
+                pst2 = conn.prepareStatement("SELECT id from Users WHERE login=?");
+                pst2.setString(1, session.getAttribute("username").toString());
+                rs2 = pst2.executeQuery();
+                int studentID;
+                rs2.next();
+                studentID = rs2.getInt("ID");
+                System.out.println("studentID: " + studentID);
+                System.out.println("courseID: " + save.getId());
+                pst2 = conn.prepareStatement("SELECT * from StudentCourses WHERE studentID=? AND teacherCourseID=?");
+                pst2.setInt(1, studentID);
+                pst2.setInt(2, save.getId());
+                rs2 = pst2.executeQuery();
+                if (!rs2.next()) {
+                    subjectList.add(save);
+                }
             }
             for(Save s : subjectList) {
                 System.out.println("Nazwa: " + s.getSubjectName());
@@ -137,8 +154,6 @@ public class SavesServlet extends HttpServlet {
                 System.out.println("Opis: " + s.getDescription());
                 
             }
-            
-            
             request.setAttribute("subjectList", subjectList);
         } catch (Exception e) {
             e.printStackTrace();
