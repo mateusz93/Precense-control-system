@@ -83,9 +83,6 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Nazwa użytkownika" value="">
-                                        </div>
-                                        <div class="form-group">
                                             <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email" value="${newEmail}">
                                         </div>
                                         <div class="form-group">

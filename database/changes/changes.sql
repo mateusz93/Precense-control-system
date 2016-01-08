@@ -47,3 +47,7 @@ DROP INDEX `PESEL_UNIQUE`;
 
 ALTER TABLE `data`.`Users` 
 AUTO_INCREMENT = 100000 ;
+
+ALTER TABLE `data`.`Users` 
+CHANGE COLUMN `login` `login` VARCHAR(60) NOT NULL ;
+
