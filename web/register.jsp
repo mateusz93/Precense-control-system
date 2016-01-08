@@ -49,55 +49,10 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <form id="login-form" action="loginServlet" method="post" role="form" style="display: none;">
-                                        <div class="form-group">
-                                             <select class="form-control" name="type">
-                                                <option value="Student">Student</option>
-                                                <option value="Teacher">Nauczyciel</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Nazwa użytkownika" value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" name="userpass" id="password" tabindex="2" class="form-control" placeholder="Hasło">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-6 col-sm-offset-3">
-                                                    <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Zaloguj">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <jsp:include page="WEB-INF/jsp/loginForm.jsp"/>
                                     </form>
                                     <form id="register-form" action="registerServlet" method="post" role="form" style="display: block;">
-                                        <div class="form-group">
-                                            <input type="text" name="firstName" id="firstName" tabindex="1" class="form-control" placeholder="Imię" value="">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" name="lastName" id="lastName" tabindex="1" class="form-control" placeholder="Nazwisko" value="">
-                                        </div>
-                                        <div class="form-group">
-                                             <select class="form-control" name="type">
-                                                <option value="Student">Student</option>
-                                                <option value="Teacher">Nauczyciel</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email" value="${newEmail}">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Hasło">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" name="confirmPassword" id="confirmPassword" tabindex="2" class="form-control" placeholder="Potwierdź hasło">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-6 col-sm-offset-3">
-                                                    <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Zarejestruj teraz">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <jsp:include page="WEB-INF/jsp/registerForm.jsp"/>
                                     </form>
                                 </div>
                             </div>
