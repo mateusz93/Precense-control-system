@@ -34,7 +34,7 @@ public class LoginDao {
             rs.next();
             int userID = rs.getInt("userID");
                         
-            pst = conn.prepareStatement("select * from Users where ID=? and password=? and type=?");
+            pst = conn.prepareStatement("select * from Users where ID=? and password=? and type=? and Status='ACTIVE'");
             pst.setInt(1, userID);
             pst.setString(2, pass);
             pst.setString(3, type);

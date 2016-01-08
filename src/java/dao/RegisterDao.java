@@ -33,7 +33,7 @@ public class RegisterDao {
         try {
             Class.forName(driver).newInstance();
             conn = DriverManager.getConnection(url + dbName, userName, pass);
-            pst = conn.prepareStatement("insert into Users (login, firstName, lastName, type, password) values (?, ?, ?, ?, ?)");
+            pst = conn.prepareStatement("insert into Users (login, firstName, lastName, type, password, Status) values (?, ?, ?, ?, ?, 'INACTIVE')");
             pst.setString(1, username);
             pst.setString(2, firstName);
             pst.setString(3, lastName);
