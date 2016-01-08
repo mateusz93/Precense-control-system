@@ -35,6 +35,8 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("message", "Nie podałeś hasła!");
             } else if ("".equals(firstName) || "".equals(lastName) || "".equals(email) || "".equals(username)) {
                 request.setAttribute("message", "Pole nie może być puste!");
+            } else if (!validatePassword(password)) { 
+                request.setAttribute("message", "Hasło musi składać się z 8-30 znaków, wielkiej i małej litery, cyfry i znaku specjalnego [!@#$%^&+=]");
             } else if (!"Student".equals(type) && !"Teacher".equals(type)) {
                 request.setAttribute("message", "Niepoprawny typ! Dozwolone: Teacher, Student");
             } else if (RegisterDao.accept(firstName, lastName, type, email, username, password, confirmPassword)) {
@@ -54,4 +56,9 @@ public class RegisterServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         request.getRequestDispatcher("/register.jsp").forward(request, response);
     }
+    
+    private boolean validatePassword(String password) {
+        String pattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,30}$";
+        return password.matches(pattern);
+    } 
 }

@@ -10,7 +10,7 @@
         out.print(message);
     %> 
 </div>
-
+    
 <%}
     if ("Nie podałeś hasła!".equals(message)) { %> 
 <div class="alert alert-danger alert-dismissable">
@@ -30,6 +30,16 @@
         out.print(message);
     %> 
 </div>
+
+<%}
+    if ("Hasło musi składać się z 8-30 znaków, wielkiej i małej litery, cyfry i znaku specjalnego [!@#$%^&+=]".equals(message)) { %> 
+<div class="alert alert-danger alert-dismissable">
+    <a class="panel-close close" data-dismiss="alert">×</a> 
+    <i class="fa fa-coffee"></i>
+    <%
+        out.print(message);
+    %> 
+</div>  
 
 <%}
     if ("Pole nie może być puste!".equals(message)) { %> 
