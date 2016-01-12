@@ -48,6 +48,7 @@
                             <td class="col-md-2"><c:out value="${dates.date}"  /></td>
                             <td class="col-md-2"><c:out value="${dates.startTime}" /></td>
                             <td class="col-md-2"><c:out value="${dates.finishTime}" /></td>
+                            <% if ("Teacher".equals(session.getAttribute("type"))) { %>
                             <form action="editCourseDateServlet" method="post">
                                 <td class="col-md-1"><button name="editID" value="${dates.id}" type="submit" class="btn btn-warning">Edytuj</button></td>
                             </form>
@@ -56,6 +57,7 @@
                                 <input type="hidden" name="info" value="${info}"/>
                                 <td class="col-md-1"><button name="deleteID" value="${dates.id}" type="submit" class="btn btn-danger">Usuń</button></td>
                             </form>
+                            <% } %>
                         </tr>
                     </c:forEach>
                 </tbody>
