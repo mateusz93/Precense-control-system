@@ -32,6 +32,16 @@
 </div>
 
 <%}
+    if ("Data zakończenia musi być późniejsza niż data rozpoczęcia!".equals(message)) { %> 
+<div class="alert alert-danger alert-dismissable">
+    <a class="panel-close close" data-dismiss="alert">×</a> 
+    <i class="fa fa-coffee"></i>
+    <%
+        out.print(message);
+    %> 
+</div>
+    
+<%}
     if ("Hasło musi składać się z 8-30 znaków, wielkiej i małej litery, cyfry i znaku specjalnego [!@#$%^&+=]".equals(message)) { %> 
 <div class="alert alert-danger alert-dismissable">
     <a class="panel-close close" data-dismiss="alert">×</a> 
@@ -93,6 +103,16 @@
 
 <%}
     if ("Zaaktualizowano profil!".equals(message)) { %> 
+<div class="alert alert-success alert-dismissable">
+    <a class="panel-close close" data-dismiss="alert">×</a> 
+    <i class="fa fa-coffee"></i>
+    <%
+        out.print(message);
+    %> 
+</div>
+
+<%}
+    if ("Dodano nowe terminy zajęć".equals(message)) { %> 
 <div class="alert alert-success alert-dismissable">
     <a class="panel-close close" data-dismiss="alert">×</a> 
     <i class="fa fa-coffee"></i>

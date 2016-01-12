@@ -31,6 +31,7 @@
             <% if ("Teacher".equals(session.getAttribute("type"))) { %>
             <form action="addCourseDateServlet" method="get">
                 <td><button type="submit" value="${courseID}" name="courseID" class="btn btn-success">Dodaj termin</button></td>
+                <td><button type="submit" value="${courseID}" name="courseID2" class="btn btn-success">Dodaj kilka terminów</button></td>
             </form>
             <% } %>  
             

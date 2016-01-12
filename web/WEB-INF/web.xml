@@ -45,6 +45,14 @@
         <url-pattern>/addCourseDateServlet</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>addSeveralCourseDates</servlet-name>
+        <servlet-class>servlets.AddSeveralCourseDatesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addSeveralCourseDates</servlet-name>
+        <url-pattern>/addSeveralCourseDatesServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>editCourseDate</servlet-name>
         <servlet-class>servlets.EditCourseDateServlet</servlet-class>
     </servlet>
