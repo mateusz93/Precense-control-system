@@ -15,7 +15,7 @@
     <input type="text" name="lastName" id="lastName" tabindex="1" class="form-control" placeholder="Nazwisko" value="">
 </div>
 <div class="form-group">
-    <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email" value="${request.getParameter("email")}">
+    <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email" value="${newEmail}">
 </div>
 <div class="form-group">
     <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Hasło">
