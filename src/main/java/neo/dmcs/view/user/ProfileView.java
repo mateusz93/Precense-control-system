@@ -7,7 +7,7 @@ public class ProfileView {
 
     private String firstName;
     private String lastName;
-    private String ID;
+    private int ID;
     private String email;
     private String group;
     private String type;
@@ -33,11 +33,11 @@ public class ProfileView {
         this.lastName = lastName;
     }
 
-    public String getID() {
+    public int getID() {
         return ID;
     }
 
-    public void setID(String ID) {
+    public void setID(int ID) {
         this.ID = ID;
     }
 

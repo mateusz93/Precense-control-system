@@ -1,14 +1,17 @@
 package neo.dmcs.controller.security;
 
+import neo.dmcs.dao.ContactDao;
+import neo.dmcs.dao.UserDao;
 import neo.dmcs.exception.*;
+import neo.dmcs.model.Contact;
+import neo.dmcs.model.User;
+import neo.dmcs.service.LoginService;
 import neo.dmcs.service.RegisterService;
 import neo.dmcs.view.security.LoginView;
-import neo.dmcs.service.LoginService;
 import neo.dmcs.view.security.RegisterView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.ResourceBundle;
 
 /**
@@ -34,6 +38,10 @@ public class LoginController {
     private RegisterService registerService;
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private ContactDao contactDao;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView logIn() {
@@ -41,10 +49,14 @@ public class LoginController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView login(@ModelAttribute("loginForm") LoginView form) {
+    public ModelAndView login(@ModelAttribute("loginForm") LoginView form, HttpSession session) {
         ModelAndView mvc = new ModelAndView("index");
+
         try {
             loginService.validate(form);
+            Contact contact = contactDao.findByEmail(form.getEmail());
+            User user = userDao.findByContact(contact);
+            session.setAttribute("username", user.getLogin());
         } catch (IncorrectEmailException e) {
             logger.error(e.getMessage());
             mvc.addObject("message", "Niepoprawn");
@@ -72,10 +84,13 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/logIn", method = RequestMethod.POST)
-    public ModelAndView loginForm(@ModelAttribute("loginForm") LoginView form) {
+    public ModelAndView loginForm(@ModelAttribute("loginForm") LoginView form, HttpSession session) {
         ModelAndView mvc = new ModelAndView("index");
         try {
             loginService.validate(form);
+            Contact contact = contactDao.findByEmail(form.getEmail());
+            User user = userDao.findByContact(contact);
+            session.setAttribute("username", user.getLogin());
         } catch (IncorrectEmailException e) {
             logger.error(e.getMessage());
             mvc.addObject("message", "EEEEEEEEEEE");
@@ -132,6 +147,15 @@ public class LoginController {
         mvc.addObject("message", resourceBundle.getString("Konto poprawnie utworzone!"));
         return mvc;
     }
+
+    @RequestMapping(value = "/logOut", method = RequestMethod.GET)
+    public ModelAndView logout(HttpSession session) {
+        ModelAndView mvc = new ModelAndView();
+        session.setAttribute("username", "");
+        mvc.setViewName("index");
+        return mvc;
+    }
+
 
     private void setFields(RegisterView form, ModelAndView mvc) {
         mvc.addObject("newEmail", form.getEmail());

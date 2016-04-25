@@ -105,7 +105,7 @@ public class User {
         this.status = status;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "contactID")
     public Contact getContact() {
         return contact;

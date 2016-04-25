@@ -14,9 +14,9 @@
     </head>
 
     <body>
-        <jsp:include page="WEB-INF/jsp/menu.jsp"/>
+        <jsp:include page="../menu.jsp"/>
         <%
-            if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
+            if ((session.getAttribute("username") == null) || ("".equals(session.getAttribute("username")))) {
                 response.sendRedirect("login.jsp");
             }
         %>

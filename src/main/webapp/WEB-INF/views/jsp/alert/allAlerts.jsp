@@ -5,14 +5,14 @@
 <!DOCTYPE HTML>
 
 <% Locale locale = request.getLocale();
-ResourceBundle resource = ResourceBundle.getBundle("strings_pl.properties");
+ResourceBundle resource = ResourceBundle.getBundle("strings_pl");
 
 String message = (String) request.getAttribute("message");
 String messageType = (String) request.getAttribute("messageType");
 
 if (!"".equals(message) && message != null) {
     if (locale != null && "en".equalsIgnoreCase(locale.getLanguage())) {
-        resource = ResourceBundle.getBundle("strings_en.properties");
+        resource = ResourceBundle.getBundle("strings_en");
     }
 
     if ("success".equalsIgnoreCase(messageType)) { %>
