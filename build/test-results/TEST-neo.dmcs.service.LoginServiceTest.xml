@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="neo.dmcs.service.LoginServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2016-04-20T20:04:51" hostname="mateusz-R522" time="2.011">
+  <properties/>
+  <testcase name="shouldThrowUserNotActivedException" classname="neo.dmcs.service.LoginServiceTest" time="1.071"/>
+  <testcase name="shouldThrowIncorrectEmailException" classname="neo.dmcs.service.LoginServiceTest" time="0.136"/>
+  <testcase name="shouldThrowIncorrectPasswordException" classname="neo.dmcs.service.LoginServiceTest" time="0.189"/>
+  <testcase name="lastLoginTest" classname="neo.dmcs.service.LoginServiceTest" time="0.313"/>
+  <testcase name="shouldThrowIncorrectUserTypeException" classname="neo.dmcs.service.LoginServiceTest" time="0.177"/>
+  <testcase name="shouldThrowFieldEmptyException" classname="neo.dmcs.service.LoginServiceTest" time="0.121"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[[Test worker] INFO org.springframework.test.context.support.DefaultTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+[Test worker] INFO org.springframework.test.context.support.DefaultTestContextBootstrapper - Could not instantiate TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener]. Specify custom listener classes or make the default listener classes (and their required dependencies) available. Offending class: [javax/servlet/ServletContext]
+[Test worker] INFO org.springframework.test.context.support.DefaultTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@562942, org.springframework.test.context.support.DependencyInjectionTestExecutionListener@18ce9b5, org.springframework.test.context.support.DirtiesContextTestExecutionListener@d5e106, org.springframework.test.context.transaction.TransactionalTestExecutionListener@183112b, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@2a3fa0]
+[Test worker] INFO org.springframework.beans.factory.xml.XmlBeanDefinitionReader - Loading XML bean definitions from class path resource [spring-test-config.xml]
+[Test worker] INFO org.springframework.context.support.GenericApplicationContext - Refreshing org.springframework.context.support.GenericApplicationContext@17f138d: startup date [Wed Apr 20 22:04:42 CEST 2016]; root of context hierarchy
+[Test worker] INFO org.springframework.jdbc.datasource.DriverManagerDataSource - Loaded JDBC driver: com.mysql.jdbc.Driver
+[Test worker] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Building JPA container EntityManagerFactory for persistence unit 'data'
+Apr 20, 2016 10:04:43 PM org.hibernate.jpa.internal.util.LogHelper logPersistenceUnitInformation
+INFO: HHH000204: Processing PersistenceUnitInfo [
+	name: data
+	...]
+Apr 20, 2016 10:04:44 PM org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate Core {5.1.0.Final}
+Apr 20, 2016 10:04:44 PM org.hibernate.cfg.Environment <clinit>
+INFO: HHH000206: hibernate.properties not found
+Apr 20, 2016 10:04:44 PM org.hibernate.cfg.Environment buildBytecodeProvider
+INFO: HHH000021: Bytecode provider name : javassist
+Apr 20, 2016 10:04:44 PM org.hibernate.annotations.common.reflection.java.JavaReflectionManager <clinit>
+INFO: HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+Apr 20, 2016 10:04:45 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+Apr 20, 2016 10:04:49 PM org.hibernate.hql.internal.QueryTranslatorFactoryInitiator initiateService
+INFO: HHH000397: Using ASTQueryTranslatorFactory
+]]></system-err>
+</testsuite>
