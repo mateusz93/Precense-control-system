@@ -19,14 +19,16 @@ if (!"".equals(message) && message != null) {
         <div class="alert alert-success alert-dismissable">
             <a class="panel-close close" data-dismiss="alert">×</a>
             <i class="fa fa-coffee"></i>
-            <% out.print(resource.getString(message)); %>
+            <% String messageText = resource.getString(message);
+               out.print(new String(messageText.getBytes("ISO-8859-1"), "UTF-8")); %>
         </div>
     <% }
     if ("info".equalsIgnoreCase(messageType)) { %>
         <div class="alert alert-info alert-dismissable">
             <a class="panel-close close" data-dismiss="alert">×</a>
             <i class="fa fa-coffee"></i>
-            <% out.print(resource.getString(message)); %>
+            <% String messageText = resource.getString(message);
+               out.print(new String(messageText.getBytes("ISO-8859-1"), "UTF-8")); %>
         </div>
 
     <% }
@@ -34,7 +36,8 @@ if (!"".equals(message) && message != null) {
         <div class="alert alert-warning alert-dismissable">
             <a class="panel-close close" data-dismiss="alert">×</a>
             <i class="fa fa-coffee"></i>
-            <% out.print(resource.getString(message)); %>
+            <% String messageText = resource.getString(message);
+               out.print(new String(messageText.getBytes("ISO-8859-1"), "UTF-8")); %>
         </div>
 
     <% }
@@ -42,7 +45,8 @@ if (!"".equals(message) && message != null) {
         <div class="alert alert-danger alert-dismissable">
             <a class="panel-close close" data-dismiss="alert">×</a>
             <i class="fa fa-coffee"></i>
-            <% out.print(resource.getString(message)); %>
+            <% String messageText = resource.getString(message);
+               out.print(new String(messageText.getBytes("ISO-8859-1"), "UTF-8")); %>
         </div>
 
     <% }
