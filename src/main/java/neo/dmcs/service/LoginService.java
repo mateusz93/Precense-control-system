@@ -2,7 +2,7 @@ package neo.dmcs.service;
 
 import neo.dmcs.dao.ContactDao;
 import neo.dmcs.dao.UserDao;
-import neo.dmcs.enums.UserEnum;
+import neo.dmcs.enums.UserStatus;
 import neo.dmcs.exception.*;
 import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
@@ -18,7 +18,6 @@ import javax.persistence.NoResultException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.ResourceBundle;
 
 /**
  * @Author Mateusz Wieczorek, 30.03.16.
@@ -27,7 +26,6 @@ import java.util.ResourceBundle;
 public class LoginService {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
-    private final ResourceBundle resourceBundle = ResourceBundle.getBundle("strings");
 
     @Autowired
     private UserDao usersDao;
@@ -57,7 +55,7 @@ public class LoginService {
             throw new IncorrectUserTypeException();
         }
 
-        if (user.getStatus().equals(UserEnum.Status.INACTIVE.name())) {
+        if (user.getStatus().equals(UserStatus.INACTIVE.name())) {
             throw new UserNotActivedException();
         }
 

@@ -8,7 +8,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="http://localhost:8080/WebApp/resources/css/profile.css"/>
+        <link rel="stylesheet" href="/resources/css/profile.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
@@ -37,7 +37,7 @@
                 <div class="col-md-9 personal-info">
                     <jsp:include page="../alert/allAlerts.jsp"/>
                     <h3>Dane osobiste</h3>
-                    <form class="form-horizontal" id="profile-form" action="profileServlet" method="post" role="form">
+                    <form class="form-horizontal" id="profile-form" action="/profile" commandName="profileForm" method="post" role="form">
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Imię:</label>
                             <div class="col-lg-8">

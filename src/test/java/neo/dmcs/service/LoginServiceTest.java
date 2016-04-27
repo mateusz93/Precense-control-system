@@ -2,7 +2,8 @@ package neo.dmcs.service;
 
 import neo.dmcs.dao.ContactDao;
 import neo.dmcs.dao.UserDao;
-import neo.dmcs.enums.UserEnum;
+import neo.dmcs.enums.UserStatus;
+import neo.dmcs.enums.UserType;
 import neo.dmcs.exception.*;
 import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
@@ -46,7 +47,7 @@ public class LoginServiceTest {
 
         user = new neo.dmcs.model.User();
         user.setContact(contact);
-        user.setStatus(UserEnum.Status.ACTIVE.name());
+        user.setStatus(UserStatus.ACTIVE.name());
         try {
             user.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
         } catch (NoSuchAlgorithmException e) {
@@ -55,7 +56,7 @@ public class LoginServiceTest {
         user.setFirstName("zxcvbnm");
         user.setLastName("fghjkajshdh");
         user.setLogin("zxcvbnmfghjkajshdh123");
-        user.setType(UserEnum.Type.Student.name());
+        user.setType(UserType.Student.name());
         user.setLastLogin(new Timestamp((new Date()).getTime() - 100000000));
 
         userDao.save(user);
@@ -72,20 +73,20 @@ public class LoginServiceTest {
         LoginView loginView = new LoginView();
         loginView.setEmail("q23463utd4hu234hsdt2bt7@wp.plasd");
         loginView.setPassword("o4b2ci7bc4t4ugbjwsadfsdfvdfg");
-        loginView.setType(UserEnum.Type.Student.name());
+        loginView.setType(UserType.Student.name());
 
         loginService.validate(loginView);
     }
 
     @Test(expected=UserNotActivedException.class)
     public void shouldThrowUserNotActivedException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivedException {
-        user.setStatus(UserEnum.Status.INACTIVE.name());
+        user.setStatus(UserStatus.INACTIVE.name());
         userDao.update(user);
 
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         loginView.setPassword("zxcvbnmZ123$");
-        loginView.setType(UserEnum.Type.Student.name());
+        loginView.setType(UserType.Student.name());
 
         loginService.validate(loginView);
     }
@@ -96,7 +97,7 @@ public class LoginServiceTest {
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         loginView.setPassword("o4b2ci7bc4t4ugbjwsadfsdfvdfg");
-        loginView.setType(UserEnum.Type.Student.name());
+        loginView.setType(UserType.Student.name());
 
         loginService.validate(loginView);
     }
@@ -107,7 +108,7 @@ public class LoginServiceTest {
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         loginView.setPassword("zxcvbnmZ123$");
-        loginView.setType(UserEnum.Type.Teacher.name());
+        loginView.setType(UserType.Teacher.name());
 
         loginService.validate(loginView);
     }
@@ -118,7 +119,7 @@ public class LoginServiceTest {
         LoginView loginView = new LoginView();
         loginView.setEmail(" ");
         loginView.setPassword("zxcvbnmZ123$");
-        loginView.setType(UserEnum.Type.Teacher.name());
+        loginView.setType(UserType.Teacher.name());
 
         loginService.validate(loginView);
     }
@@ -131,7 +132,7 @@ public class LoginServiceTest {
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         loginView.setPassword("zxcvbnmZ123$");
-        loginView.setType(UserEnum.Type.Student.name());
+        loginView.setType(UserType.Student.name());
 
         loginService.validate(loginView);
 

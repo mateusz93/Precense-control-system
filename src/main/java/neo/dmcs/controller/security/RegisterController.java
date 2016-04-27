@@ -1,23 +1,22 @@
 package neo.dmcs.controller.security;
 
-import neo.dmcs.exception.*;
+import neo.dmcs.enums.MessageType;
+import neo.dmcs.exception.DifferentPasswordsException;
+import neo.dmcs.exception.EmailExistsException;
+import neo.dmcs.exception.FieldEmptyException;
+import neo.dmcs.exception.IncorrectPasswordException;
 import neo.dmcs.service.LoginService;
 import neo.dmcs.service.RegisterService;
-import neo.dmcs.view.security.LoginView;
 import neo.dmcs.view.security.RegisterView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.ResourceBundle;
 
 /**
  * @Author Mateusz Wieczorek, 08.04.16.
@@ -31,7 +30,6 @@ public class RegisterController {
     // http://www.mkyong.com/spring-mvc/spring-mvc-form-check-if-a-field-has-an-error/
 
     private final Logger logger = LoggerFactory.getLogger(RegisterController.class);
-    private final ResourceBundle resourceBundle = ResourceBundle.getBundle("strings");
 
     @Autowired
     private RegisterService registerService;
@@ -40,74 +38,48 @@ public class RegisterController {
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView register(@ModelAttribute("newEmail") String email, Model model) {
+    public ModelAndView register(@ModelAttribute("newEmail") String email) {
         ModelAndView mvc = new ModelAndView("security/register");
-        //mvc.setViewName("security/register");
         mvc.addObject("newEmail", email);
         return mvc;
     }
 
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-    public ModelAndView registerUser(@ModelAttribute("registerForm") RegisterView form, Model model) {
+    public ModelAndView registerUser(@ModelAttribute("registerForm") RegisterView form) {
         ModelAndView mvc = new ModelAndView("security/register");
         try {
             registerService.accept(form);
         } catch (FieldEmptyException e) {
             logger.error(e.getMessage());
             setFields(form, mvc);
-            mvc.addObject("message", "EEEEEEEEEEE");
+            mvc.addObject("message", "emptyField");
+            mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (DifferentPasswordsException e) {
             logger.error(e.getMessage());
             setFields(form, mvc);
-            mvc.addObject("message", "EEEEEEEEE");
+            mvc.addObject("message", "register.differentPasswords");
+            mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (IncorrectPasswordException e) {
             logger.error(e.getMessage());
             setFields(form, mvc);
-            mvc.addObject("message", "EEEEEEEEE");
+            mvc.addObject("message", "register.incorrectPassword");
+            mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (EmailExistsException e) {
             logger.error(e.getMessage());
             setFields(form, mvc);
-            mvc.addObject("message", "EEEEEEEEEEE");
+            mvc.addObject("message", "register.emailUsed");
+            mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         }
 
         logger.debug("Form accepted");
         cleanFields(form, mvc);
-        mvc.addObject("message", resourceBundle.getString("register.userCreated"));
+        mvc.addObject("message", "register.userCreated");
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
 
-        return mvc;
-    }
-
-    @RequestMapping(value = "/logIn", method = RequestMethod.POST)
-    public ModelAndView loginForm(@ModelAttribute("loginForm") LoginView form) {
-        ModelAndView mvc = new ModelAndView("index");
-        try {
-            loginService.validate(form);
-        } catch (IncorrectEmailException e) {
-            logger.error(e.getMessage());
-            mvc.addObject("message", "EEEEEEEEE");
-            return mvc;
-        } catch (IncorrectPasswordException e) {
-            logger.error(e.getMessage());
-            mvc.addObject("message", "EEEEEEEEEEE");
-            return mvc;
-        } catch (IncorrectUserTypeException e) {
-            logger.error(e.getMessage());
-            mvc.addObject("message", "EEEEEEEE");
-            return mvc;
-        } catch (UserNotActivedException e) {
-            logger.error(e.getMessage());
-            mvc.addObject("message", "EEEEEEEEEE");
-            return mvc;
-        } catch (FieldEmptyException e) {
-            logger.error(e.getMessage());
-            mvc.addObject("message", "EEEEEEEEEEE");
-            return mvc;
-        }
-        mvc.addObject("message", "");
         return mvc;
     }
 

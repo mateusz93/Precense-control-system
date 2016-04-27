@@ -40,12 +40,12 @@ dependencies {
 
 // Embeded Jetty for testing
 jettyRun{
-    contextPath = "WebApp"
+    contextPath = ""
     httpPort = 8080
 }
 
 jettyRunWar{
-    contextPath = "WebApp"
+    contextPath = ""
     httpPort = 8080
 }
 

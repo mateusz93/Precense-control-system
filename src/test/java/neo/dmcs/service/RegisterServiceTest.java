@@ -2,12 +2,12 @@ package neo.dmcs.service;
 
 import neo.dmcs.dao.ContactDao;
 import neo.dmcs.dao.UserDao;
-import neo.dmcs.enums.UserEnum;
+import neo.dmcs.enums.UserStatus;
+import neo.dmcs.enums.UserType;
 import neo.dmcs.exception.*;
 import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
 import neo.dmcs.util.Encryptor;
-import neo.dmcs.view.security.LoginView;
 import neo.dmcs.view.security.RegisterView;
 import org.junit.After;
 import org.junit.Before;
@@ -47,7 +47,7 @@ public class RegisterServiceTest {
 
         user = new neo.dmcs.model.User();
         user.setContact(contact);
-        user.setStatus(UserEnum.Status.ACTIVE.name());
+        user.setStatus(UserStatus.ACTIVE.name());
         try {
             user.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
         } catch (NoSuchAlgorithmException e) {
@@ -56,7 +56,7 @@ public class RegisterServiceTest {
         user.setFirstName("zxcvbnm");
         user.setLastName("fghjkajshdh");
         user.setLogin("zxcvbnmfghjkajshdh");
-        user.setType(UserEnum.Type.Student.name());
+        user.setType(UserType.Student.name());
         user.setLastLogin(new Timestamp((new Date()).getTime() - 100000000));
 
         userDao.save(user);
@@ -85,7 +85,7 @@ public class RegisterServiceTest {
         registerView.setPassword("zxcvbnm");
         registerView.setConfirmPassword("fghfgh");
         registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserEnum.Type.Student.name());
+        registerView.setType(UserType.Student.name());
 
         registerService.accept(registerView);
     }
@@ -99,7 +99,7 @@ public class RegisterServiceTest {
         registerView.setPassword("zxcv");
         registerView.setConfirmPassword("zxcv");
         registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserEnum.Type.Student.name());
+        registerView.setType(UserType.Student.name());
 
         registerService.accept(registerView);
     }
@@ -113,7 +113,7 @@ public class RegisterServiceTest {
         registerView.setPassword("zxcvqazqaz");
         registerView.setConfirmPassword("zxcvqazqaz");
         registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserEnum.Type.Student.name());
+        registerView.setType(UserType.Student.name());
 
         registerService.accept(registerView);
     }
@@ -127,7 +127,7 @@ public class RegisterServiceTest {
         registerView.setPassword("Zxcvbnm");
         registerView.setConfirmPassword("Zxcvbnm");
         registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserEnum.Type.Student.name());
+        registerView.setType(UserType.Student.name());
 
         registerService.accept(registerView);
     }
@@ -141,7 +141,7 @@ public class RegisterServiceTest {
         registerView.setPassword("Zxcvbnm123");
         registerView.setConfirmPassword("Zxcvbnm123");
         registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserEnum.Type.Student.name());
+        registerView.setType(UserType.Student.name());
 
         registerService.accept(registerView);
     }
@@ -155,7 +155,7 @@ public class RegisterServiceTest {
         registerView.setPassword("zxcvbnm123");
         registerView.setConfirmPassword("zxcvbnm123");
         registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserEnum.Type.Student.name());
+        registerView.setType(UserType.Student.name());
 
         registerService.accept(registerView);
     }
@@ -169,7 +169,7 @@ public class RegisterServiceTest {
         registerView.setPassword("zxcvbnm123$");
         registerView.setConfirmPassword("zxcvbnm123$");
         registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserEnum.Type.Student.name());
+        registerView.setType(UserType.Student.name());
 
         registerService.accept(registerView);
     }
@@ -183,7 +183,7 @@ public class RegisterServiceTest {
         registerView.setPassword("Zxcvbnm123$");
         registerView.setConfirmPassword("Zxcvbnm123$");
         registerView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
-        registerView.setType(UserEnum.Type.Student.name());
+        registerView.setType(UserType.Student.name());
 
         registerService.accept(registerView);
     }
@@ -197,7 +197,7 @@ public class RegisterServiceTest {
         registerView.setPassword("Zxcvbnm123$");
         registerView.setConfirmPassword("Zxcvbnm123$");
         registerView.setEmail("kjasdhahdakjhdkjashsdfbbbbhdka@wp.pl");
-        registerView.setType(UserEnum.Type.Student.name());
+        registerView.setType(UserType.Student.name());
 
         registerService.accept(registerView);
 

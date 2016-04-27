@@ -9,22 +9,22 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <% if (("".equals(session.getAttribute("username")))) { %>
-            <a class="navbar-brand" href="/WebApp/login" action="login">Zaloguj</a>
+            <% if ("".equals(session.getAttribute("username")) || session.getAttribute("username") == null) { %>
+            <a class="navbar-brand" href="/login" action="login">Zaloguj</a>
             <%} else { %> 
-            <a class="navbar-brand" href="/WebApp/login/logOut" action="logout">Wyloguj</a>
+            <a class="navbar-brand" href="/login/logOut" action="logout">Wyloguj</a>
             <% } %>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <% if ("Teacher".equals(session.getAttribute("type"))) { %>
-                <li><a href="/WebApp/profile">Profil</a></li>
+                <li><a href="/profile">Profil</a></li>
                 <li><a href="teacherPrecensesServlet">Obecności</a></li>
                 <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
 <!--                <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>-->
                 <!--                        <li><a href="teacherStatsServlet">Statystyki</a></li>-->
                 <%} else { %> 
-                <li><a href="/WebApp/profile">Profil</a></li>
+                <li><a href="/profile">Profil</a></li>
                 <li><a href="precensesServlet">Obecności</a></li>
                 <li><a href="coursesServlet">Moje przedmioty</a></li>
                 <li><a href="savesServlet">Zapisy na zajęcia</a></li>

@@ -2,7 +2,7 @@ package neo.dmcs.service;
 
 import neo.dmcs.dao.ContactDao;
 import neo.dmcs.dao.UserDao;
-import neo.dmcs.enums.UserEnum;
+import neo.dmcs.enums.UserStatus;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.EmailExistsException;
 import neo.dmcs.exception.FieldEmptyException;
@@ -10,6 +10,7 @@ import neo.dmcs.exception.IncorrectPasswordException;
 import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
 import neo.dmcs.util.Encryptor;
+import neo.dmcs.util.PasswordValidator;
 import neo.dmcs.view.security.RegisterView;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ResourceBundle;
 
 /**
  * @Author Mateusz Wieczorek, 30.03.16.
@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
 public class RegisterService {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
-    private ResourceBundle resourceBundle = ResourceBundle.getBundle("strings");
 
     @Autowired
     private UserDao usersDao;
@@ -55,7 +54,7 @@ public class RegisterService {
             user.setType(form.getType());
             user.setLogin(username);
             user.setPassword(Encryptor.encryption(form.getPassword()));
-            user.setStatus(UserEnum.Status.INACTIVE.toString());
+            user.setStatus(UserStatus.INACTIVE.toString());
             user.setContact(contact);
             return user;
         } catch (NoSuchAlgorithmException e) {
@@ -94,8 +93,7 @@ public class RegisterService {
             throw new DifferentPasswordsException();
         }
 
-        String pattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,30}$";
-        if (!form.getPassword().matches(pattern)) {
+        if (!PasswordValidator.validate(form.getPassword())) {
             throw new IncorrectPasswordException();
         }
     }
