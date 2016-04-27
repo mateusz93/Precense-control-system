@@ -91,83 +91,13 @@ public class RegisterServiceTest {
     }
 
     @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException01() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
+    public void shouldThrowIncorrectPasswordException() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
 
         RegisterView registerView = new RegisterView();
         registerView.setFirstName("jhgvhgvh");
         registerView.setLastName("hb");
         registerView.setPassword("zxcv");
         registerView.setConfirmPassword("zxcv");
-        registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserType.Student.name());
-
-        registerService.accept(registerView);
-    }
-
-    @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException02() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
-
-        RegisterView registerView = new RegisterView();
-        registerView.setFirstName("jhgvhgvh");
-        registerView.setLastName("hb");
-        registerView.setPassword("zxcvqazqaz");
-        registerView.setConfirmPassword("zxcvqazqaz");
-        registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserType.Student.name());
-
-        registerService.accept(registerView);
-    }
-
-    @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException03() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
-
-        RegisterView registerView = new RegisterView();
-        registerView.setFirstName("jhgvhgvh");
-        registerView.setLastName("hb");
-        registerView.setPassword("Zxcvbnm");
-        registerView.setConfirmPassword("Zxcvbnm");
-        registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserType.Student.name());
-
-        registerService.accept(registerView);
-    }
-
-    @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException04() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
-
-        RegisterView registerView = new RegisterView();
-        registerView.setFirstName("jhgvhgvh");
-        registerView.setLastName("hb");
-        registerView.setPassword("Zxcvbnm123");
-        registerView.setConfirmPassword("Zxcvbnm123");
-        registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserType.Student.name());
-
-        registerService.accept(registerView);
-    }
-
-    @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException05() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
-
-        RegisterView registerView = new RegisterView();
-        registerView.setFirstName("jhgvhgvh");
-        registerView.setLastName("hb");
-        registerView.setPassword("zxcvbnm123");
-        registerView.setConfirmPassword("zxcvbnm123");
-        registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserType.Student.name());
-
-        registerService.accept(registerView);
-    }
-
-    @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException06() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
-
-        RegisterView registerView = new RegisterView();
-        registerView.setFirstName("jhgvhgvh");
-        registerView.setLastName("hb");
-        registerView.setPassword("zxcvbnm123$");
-        registerView.setConfirmPassword("zxcvbnm123$");
         registerView.setEmail("jhasgdjas@weq.pl");
         registerView.setType(UserType.Student.name());
 

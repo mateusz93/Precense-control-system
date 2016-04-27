@@ -7,7 +7,6 @@ public class ProfileView {
 
     private String firstName;
     private String lastName;
-    private int ID;
     private String email;
     private String group;
     private String type;
@@ -31,14 +30,6 @@ public class ProfileView {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 
     public String getEmail() {
