@@ -7,5 +7,6 @@ public interface StudentCourseDao extends GenericDao<StudentCourse, Integer> {
 
     List<StudentCourse> findByTeacherCourseId(int id);
     List<StudentCourse> findByStudentId(int id);
+    List<StudentCourse> findByStudentIdAndTeacherCourseId(int studentId, int teacherCourseId);
     List<StudentCourse> findAll();
 }

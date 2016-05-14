@@ -1,4 +1,4 @@
-package neo.dmcs.controller.security;
+package neo.dmcs.controller;
 
 import neo.dmcs.dao.ContactDao;
 import neo.dmcs.dao.UserDao;

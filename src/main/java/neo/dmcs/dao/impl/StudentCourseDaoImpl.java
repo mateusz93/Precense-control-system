@@ -31,6 +31,12 @@ public class StudentCourseDaoImpl extends GenericDaoImpl<StudentCourse, Integer>
     }
 
     @Override
+    public List<StudentCourse> findByStudentIdAndTeacherCourseId(int studentId, int teacherCourseId) {
+        return em.createNamedQuery(StudentCourse.FIND_BY_STUDENT_ID_AND_TEACHER_COURSE_ID, StudentCourse.class).setParameter("studentId", studentId).setParameter("teacherCourseId", teacherCourseId).getResultList();
+    }
+
+
+    @Override
     public List<StudentCourse> findAll() {
         return em.createNamedQuery(StudentCourse.FIND_ALL, StudentCourse.class).getResultList();
     }

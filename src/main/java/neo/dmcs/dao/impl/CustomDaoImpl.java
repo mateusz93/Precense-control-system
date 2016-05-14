@@ -1,8 +1,6 @@
 package neo.dmcs.dao.impl;
 
 import neo.dmcs.dao.CustomDao;
-import neo.dmcs.view.course.StudentCourseView;
-import neo.dmcs.view.course.TeacherCourseView;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
@@ -48,6 +46,12 @@ public class CustomDaoImpl implements CustomDao {
             "JOIN User ON User.ID = TeacherCourse.teacherID " +
             "WHERE User.ID =:userID";
 
+    private final String TeacherCourses = "SELECT TeacherCourse.ID, Subject.Name, concat(Department.Name, '') AS departmentName, " +
+            "TeacherCourse.type, TeacherCourse.coursesQuantity, concat(User.firstName, ' ', User.lastName) AS teacherName, Subject.description FROM TeacherCourse " +
+            "JOIN Subject ON Subject.ID = TeacherCourse.subjectID " +
+            "JOIN Department ON Department.ID = Subject.departmentID " +
+            "JOIN User ON User.ID = TeacherCourse.teacherID";
+
     @PersistenceContext(name = "data")
     private EntityManager em;
 
@@ -69,5 +73,10 @@ public class CustomDaoImpl implements CustomDao {
     @Override
     public List<Object[]> findStudentCoursesByUserId(int id) {
         return em.createNativeQuery(StudentCoursesByStudentId).setParameter("userID", id).getResultList();
+    }
+
+    @Override
+    public List<Object[]> findTeacherCourses() {
+        return em.createNativeQuery(TeacherCourses).getResultList();
     }
 }

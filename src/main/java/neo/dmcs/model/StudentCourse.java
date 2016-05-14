@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @NamedQueries({
+        @NamedQuery(name = StudentCourse.FIND_BY_STUDENT_ID_AND_TEACHER_COURSE_ID, query = "from StudentCourse s where s.teacherCourseId = :teacherCourseId and s.studentId = :studentId"),
         @NamedQuery(name = StudentCourse.FIND_BY_TEACHER_COURSE_ID, query = "from StudentCourse s where s.teacherCourseId = :id"),
         @NamedQuery(name = StudentCourse.FIND_BY_STUDENT_ID, query = "from StudentCourse s where s.studentId = :id"),
         @NamedQuery(name = StudentCourse.FIND_ALL, query = "from StudentCourse")
@@ -19,6 +20,7 @@ public class StudentCourse {
     private int studentId;
     private Timestamp saveTime;
 
+    public static final String FIND_BY_STUDENT_ID_AND_TEACHER_COURSE_ID = "StudentCourseFindByStudentIdAndTeacherCourseId";
     public static final String FIND_BY_TEACHER_COURSE_ID = "StudentCourseFindByTeacherCourseId";
     public static final String FIND_BY_STUDENT_ID = "StudentCourseFindByStudentId";
     public static final String FIND_ALL = "StudentCourseFindAll";

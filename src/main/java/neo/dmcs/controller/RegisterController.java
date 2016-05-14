@@ -1,4 +1,4 @@
-package neo.dmcs.controller.security;
+package neo.dmcs.controller;
 
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.exception.DifferentPasswordsException;

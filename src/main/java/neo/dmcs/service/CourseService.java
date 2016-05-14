@@ -30,7 +30,7 @@ public class CourseService {
     }
 
     public List<TeacherCourseView> getTeacherCoursesList(User user) {
-        List<Object[]> objects = customDao.findTeacherPrecensesByUserId(user.getId());
+        List<Object[]> objects = customDao.findTeacherCoursesByUserId(user.getId());
         return getTeacherCastedResult(objects);
     }
 

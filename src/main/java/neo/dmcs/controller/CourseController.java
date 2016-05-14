@@ -1,12 +1,12 @@
-package neo.dmcs.controller.presence;
+package neo.dmcs.controller;
 
 import neo.dmcs.dao.CustomDao;
 import neo.dmcs.dao.UserDao;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.User;
-import neo.dmcs.service.PrecenseService;
-import neo.dmcs.view.precense.StudentPrecensesView;
-import neo.dmcs.view.precense.TeacherPrecensesView;
+import neo.dmcs.service.CourseService;
+import neo.dmcs.view.course.StudentCourseView;
+import neo.dmcs.view.course.TeacherCourseView;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,17 +17,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by mateusz on 25.03.16.
  */
 @Controller
-@RequestMapping("/precenses")
-public class PresenceController {
+@RequestMapping("/courses")
+public class CourseController {
 
-    private final Logger logger = LoggerFactory.getLogger(PresenceController.class);
+    private final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
     @Autowired
     private UserDao userDao;
@@ -36,10 +35,10 @@ public class PresenceController {
     private CustomDao customDao;
 
     @Autowired
-    private PrecenseService precenseService;
+    private CourseService courseService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView precense(HttpSession httpSession) {
+    public ModelAndView course(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
         String username = (String) httpSession.getAttribute("username");
         if (!isLogged(username)) {
@@ -60,19 +59,18 @@ public class PresenceController {
     }
 
     private void prepareStudentView(ModelAndView mvc, User user) {
-        List<StudentPrecensesView> precensesList = precenseService.getStudentPrecenses(user);
-        mvc.setViewName("precense/studentPrecenses");
-        mvc.addObject("coursesList", precensesList);
+        List<StudentCourseView> coursesList = courseService.getStudentCoursesList(user);
+        mvc.setViewName("course/studentCoursesList");
+        mvc.addObject("coursesList", coursesList);
     }
 
     private void prepareTeacherView(ModelAndView mvc, User user) {
-        List<TeacherPrecensesView> precensesList = precenseService.getTeacherPrecenses(user);
-        mvc.setViewName("precense/teacherPrecenses");
-        mvc.addObject("coursesList", precensesList);
+        List<TeacherCourseView> coursesList = courseService.getTeacherCoursesList(user);
+        mvc.setViewName("course/teacherCoursesList");
+        mvc.addObject("coursesList", coursesList);
     }
 
     private boolean isLogged(String username) {
         return StringUtils.isNotBlank(username);
     }
-
 }
