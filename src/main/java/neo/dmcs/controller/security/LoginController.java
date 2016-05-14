@@ -53,26 +53,31 @@ public class LoginController {
             logger.error(e.getMessage());
             mvc.addObject("message", "emptyField");
             mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/login");
             return mvc;
         } catch (IncorrectEmailException e) {
             logger.error(e.getMessage());
             mvc.addObject("message", "login.incorrectEmail");
             mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/login");
             return mvc;
         } catch (IncorrectUserTypeException e) {
             logger.error(e.getMessage());
             mvc.addObject("message", "login.incorrectUserType");
             mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/login");
             return mvc;
         } catch (UserNotActivedException e) {
             logger.error(e.getMessage());
             mvc.addObject("message", "login.userNotActive");
             mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/login");
             return mvc;
         } catch (IncorrectPasswordException e) {
             logger.error(e.getMessage());
             mvc.addObject("message", "register.incorrectPassword");
             mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/login");
             return mvc;
         }
         return mvc;

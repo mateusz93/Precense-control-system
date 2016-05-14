@@ -54,24 +54,28 @@ public class RegisterController {
             setFields(form, mvc);
             mvc.addObject("message", "emptyField");
             mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/register");
             return mvc;
         } catch (DifferentPasswordsException e) {
             logger.error(e.getMessage());
             setFields(form, mvc);
             mvc.addObject("message", "register.differentPasswords");
             mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/register");
             return mvc;
         } catch (IncorrectPasswordException e) {
             logger.error(e.getMessage());
             setFields(form, mvc);
             mvc.addObject("message", "register.incorrectPassword");
             mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/register");
             return mvc;
         } catch (EmailExistsException e) {
             logger.error(e.getMessage());
             setFields(form, mvc);
             mvc.addObject("message", "register.emailUsed");
             mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/register");
             return mvc;
         }
 
