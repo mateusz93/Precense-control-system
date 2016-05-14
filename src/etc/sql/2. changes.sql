@@ -79,4 +79,12 @@ ALTER TABLE `data`.`User`
 ADD CONSTRAINT `fk_contact`
   FOREIGN KEY (`contactID`) REFERENCES `data`.`Contact` (`ID`)
   ON DELETE CASCADE
-  ON UPDATE NO ACTION;
+  ON UPDATE CASCADE;
+
+ALTER TABLE `data`.`Subject`
+ADD CONSTRAINT `fk_department`
+  FOREIGN KEY (`departmentID`)
+  REFERENCES `data`.`Department` (`ID`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+

@@ -53,5 +53,6 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <bean id="loginService" class="neo.dmcs.service.LoginService" />
     <bean id="registerService" class="neo.dmcs.service.RegisterService" />
+    <bean id="profileService" class="neo.dmcs.service.ProfileService" />
 
 </beans>
