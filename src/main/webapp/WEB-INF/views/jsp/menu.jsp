@@ -17,19 +17,15 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
-                <% if ("Teacher".equals(session.getAttribute("type"))) { %>
+
                 <li><a href="/profile">Profil</a></li>
                 <li><a href="/precenses">Obecności</a></li>
-                <li><a href="teacherCoursesServlet">Moje przedmioty</a></li>
-<!--                <li><a href="teacherSavesServlet">Zapisy na zajęcia</a></li>-->
-                <!--                        <li><a href="teacherStatsServlet">Statystyki</a></li>-->
-                <%} else { %> 
-                <li><a href="/profile">Profil</a></li>
-                <li><a href="/precenses">Obecności</a></li>
-                <li><a href="coursesServlet">Moje przedmioty</a></li>
-                <li><a href="savesServlet">Zapisy na zajęcia</a></li>
-                <!--                        <li><a href="statsServlet">Statystyki</a></li>-->
-                <% }%>
+                <li><a href="/courses">Moje przedmioty</a></li>
+            <!--<li><a href="statsServlet">Statystyki</a></li>-->
+
+                <% if ("Student".equals(session.getAttribute("type"))) { %>
+                    <li><a href="/saves">Zapisy na zajęcia</a></li>
+                <%} %>
             </ul>
         </div>
     </div>

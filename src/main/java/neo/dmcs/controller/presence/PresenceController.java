@@ -38,7 +38,7 @@ public class PresenceController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView precense(HttpSession httpSession) {
-        ModelAndView mvc = new ModelAndView("precense/teacherPrecenses");
+        ModelAndView mvc = new ModelAndView();
         String username = (String) httpSession.getAttribute("username");
         if (!StringUtils.isNotBlank(username)) {
             mvc.setViewName("security/login");
@@ -59,11 +59,13 @@ public class PresenceController {
 
     private void prepareStudentView(ModelAndView mvc, User user) {
         List<StudentPrecensesView> precensesList = customDao.findStudentPrecensesByUserId(user.getId());
+        mvc.setViewName("precense/studentPrecenses");
         mvc.addObject("coursesList", precensesList);
     }
 
     private void prepareTeacherView(ModelAndView mvc, User user) {
         List<TeacherPrecensesView> precensesList = customDao.findTeacherPrecensesByUserId(user.getId());
+        mvc.setViewName("precense/teacherPrecenses");
         mvc.addObject("coursesList", precensesList);
     }
 
