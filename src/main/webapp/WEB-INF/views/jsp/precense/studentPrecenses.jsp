@@ -38,7 +38,7 @@
                             <td><c:out value="${courses.teacherName}"  /></td>
                     <form action="precensesInfoServlet" method="post">
                         <input type="hidden" name="subjectName" value="${courses.subjectName}"/>
-                        <td><button name="info" value="${courses.id}" scope="session" type="submit" class="btn btn-info">Pokaż obecności</button></td>
+                        <td><button name="info" value="${courses.courseId}" scope="session" type="submit" class="btn btn-info">Pokaż obecności</button></td>
                     </form>
                     </tr>
                 </c:forEach>

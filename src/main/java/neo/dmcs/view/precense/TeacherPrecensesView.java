@@ -9,7 +9,7 @@ public class TeacherPrecensesView {
     private String subjectName;
     private String departmentName;
     private String type;
-    private String quantity;
+    private int quantity;
 
     public int getId() {
         return id;
@@ -43,11 +43,11 @@ public class TeacherPrecensesView {
         this.type = type;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 }

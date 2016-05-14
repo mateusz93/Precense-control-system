@@ -15,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +42,7 @@ public class PresenceController {
     public ModelAndView precense(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
         String username = (String) httpSession.getAttribute("username");
-        if (!StringUtils.isNotBlank(username)) {
+        if (!isLogged(username)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -58,15 +60,19 @@ public class PresenceController {
     }
 
     private void prepareStudentView(ModelAndView mvc, User user) {
-        List<StudentPrecensesView> precensesList = customDao.findStudentPrecensesByUserId(user.getId());
+        List<StudentPrecensesView> precensesList = precenseService.getStudentPrecenses(user);
         mvc.setViewName("precense/studentPrecenses");
         mvc.addObject("coursesList", precensesList);
     }
 
     private void prepareTeacherView(ModelAndView mvc, User user) {
-        List<TeacherPrecensesView> precensesList = customDao.findTeacherPrecensesByUserId(user.getId());
+        List<TeacherPrecensesView> precensesList = precenseService.getTeacherPrecenses(user);
         mvc.setViewName("precense/teacherPrecenses");
         mvc.addObject("coursesList", precensesList);
+    }
+
+    private boolean isLogged(String username) {
+        return StringUtils.isNotBlank(username);
     }
 
 }

@@ -1,10 +1,8 @@
 package neo.dmcs.dao.impl;
 
 import neo.dmcs.dao.CustomDao;
-import neo.dmcs.view.course.CourseView;
 import neo.dmcs.view.course.StudentCourseView;
-import neo.dmcs.view.precense.StudentPrecensesView;
-import neo.dmcs.view.precense.TeacherPrecensesView;
+import neo.dmcs.view.course.TeacherCourseView;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
@@ -54,22 +52,22 @@ public class CustomDaoImpl implements CustomDao {
     private EntityManager em;
 
     @Override
-    public List<TeacherPrecensesView> findTeacherPrecensesByUserId(int id) {
+    public List<Object[]> findTeacherPrecensesByUserId(int id) {
         return em.createNativeQuery(TeacherPrecensesByTeacherId).setParameter("userID", id).getResultList();
     }
 
     @Override
-    public List<StudentPrecensesView> findStudentPrecensesByUserId(int id) {
+    public List<Object[]> findStudentPrecensesByUserId(int id) {
         return em.createNativeQuery(StudentPrecensesByStudentId).setParameter("userID", id).getResultList();
     }
 
     @Override
-    public List<CourseView> findTeacherCoursesByUserId(int id) {
+    public List<Object[]> findTeacherCoursesByUserId(int id) {
         return em.createNativeQuery(TeacherCoursesByTeacherId).setParameter("userID", id).getResultList();
     }
 
     @Override
-    public List<StudentCourseView> findStudentCoursesByUserId(int id) {
+    public List<Object[]> findStudentCoursesByUserId(int id) {
         return em.createNativeQuery(StudentCoursesByStudentId).setParameter("userID", id).getResultList();
     }
 }
