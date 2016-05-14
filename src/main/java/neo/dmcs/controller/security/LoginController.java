@@ -49,6 +49,7 @@ public class LoginController {
             Contact contact = contactDao.findByEmail(form.getEmail());
             User user = userDao.findByContact(contact);
             session.setAttribute("username", user.getLogin());
+            session.setAttribute("userType", user.getType());
         } catch (FieldEmptyException e) {
             logger.error(e.getMessage());
             mvc.addObject("message", "emptyField");
@@ -88,6 +89,7 @@ public class LoginController {
     public ModelAndView logout(HttpSession session) {
         ModelAndView mvc = new ModelAndView("index");
         session.removeAttribute("username");
+        session.removeAttribute("userType");
         session.invalidate();
         return mvc;
     }

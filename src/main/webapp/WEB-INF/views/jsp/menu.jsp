@@ -23,7 +23,7 @@
                 <li><a href="/courses">Moje przedmioty</a></li>
             <!--<li><a href="statsServlet">Statystyki</a></li>-->
 
-                <% if ("Student".equals(session.getAttribute("type"))) { %>
+                <% if ("Student".equals(session.getAttribute("userType"))) { %>
                     <li><a href="/saves">Zapisy na zajęcia</a></li>
                 <%} %>
             </ul>
