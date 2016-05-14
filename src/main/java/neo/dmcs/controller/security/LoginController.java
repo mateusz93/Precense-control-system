@@ -15,15 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpSession;
 
 /**
  * @Author Mateusz Wieczorek, 30.03.16.
  */
 @Controller
-@SessionAttributes("username")
 @RequestMapping("/login")
 public class LoginController {
 
@@ -82,12 +81,9 @@ public class LoginController {
 
     @RequestMapping(value = "/logOut", method = RequestMethod.GET)
     public ModelAndView logout(HttpSession session) {
-        ModelAndView mvc = new ModelAndView();
-
-        //TODO do zrobienia wylogowywanie!
-
+        ModelAndView mvc = new ModelAndView("index");
         session.removeAttribute("username");
-        mvc.setViewName("index");
+        session.invalidate();
         return mvc;
     }
 
