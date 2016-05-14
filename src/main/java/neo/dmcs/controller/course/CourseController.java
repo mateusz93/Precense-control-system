@@ -5,8 +5,8 @@ import neo.dmcs.dao.UserDao;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.User;
 import neo.dmcs.service.CourseService;
-import neo.dmcs.view.course.CourseView;
 import neo.dmcs.view.course.StudentCourseView;
+import neo.dmcs.view.course.TeacherCourseView;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class CourseController {
     public ModelAndView course(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
         String username = (String) httpSession.getAttribute("username");
-        if (!StringUtils.isNotBlank(username)) {
+        if (!isLogged(username)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -59,15 +59,18 @@ public class CourseController {
     }
 
     private void prepareStudentView(ModelAndView mvc, User user) {
-        List<StudentCourseView> coursesList = customDao.findStudentCoursesByUserId(user.getId());
+        List<StudentCourseView> coursesList = courseService.getStudentCoursesList(user);
         mvc.setViewName("course/studentCoursesList");
         mvc.addObject("coursesList", coursesList);
     }
 
     private void prepareTeacherView(ModelAndView mvc, User user) {
-        List<CourseView> coursesList = customDao.findTeacherCoursesByUserId(user.getId());
+        List<TeacherCourseView> coursesList = courseService.getTeacherCoursesList(user);
         mvc.setViewName("course/teacherCoursesList");
         mvc.addObject("coursesList", coursesList);
     }
 
+    private boolean isLogged(String username) {
+        return StringUtils.isNotBlank(username);
+    }
 }
