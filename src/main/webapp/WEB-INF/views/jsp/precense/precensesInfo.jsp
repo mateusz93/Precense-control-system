@@ -2,6 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE HTML>
 
+<!-- http://www.bootply.com/aKYODoZowf -->
+
 <html>
     <head>
         <title>Szczegóły obecności</title>
@@ -10,6 +12,7 @@
         <link rel="stylesheet" href="/resources/css/menu.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="/resources/js/pagination.js"></script>
     </head>
 
     <body>
@@ -25,7 +28,7 @@
                         <th>Obecność</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="myTable">
                     <c:forEach var="dates" items="${datesList}">
                         <tr>
                             <td><c:out value="${dates.date}"  /></td>
@@ -72,6 +75,9 @@
                     </c:forEach>
                 </tbody>
             </table>
+        </div>
+        <div class="col-md-12 text-center">
+            <ul class="pagination" id="myPager"></ul>
         </div>
     </body>
 </html>
