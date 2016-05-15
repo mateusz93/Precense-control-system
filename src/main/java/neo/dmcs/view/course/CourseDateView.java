@@ -1,36 +1,40 @@
 package neo.dmcs.view.course;
 
+import java.sql.Time;
+import java.util.Date;
+
 /**
  * @Author Mateusz Wieczorek, 09.04.16.
  */
 public class CourseDateView {
 
-    private String date;
-    private String startTime;
-    private String finishTime;
+    private String status;
+    private Date date;
+    private Time startTime;
+    private Time finishTime;
     private int courseDateID;
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 
-    public String getFinishTime() {
+    public Time getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(String finishTime) {
+    public void setFinishTime(Time finishTime) {
         this.finishTime = finishTime;
     }
 
@@ -40,6 +44,14 @@ public class CourseDateView {
 
     public void setCourseDateID(int courseDateID) {
         this.courseDateID = courseDateID;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

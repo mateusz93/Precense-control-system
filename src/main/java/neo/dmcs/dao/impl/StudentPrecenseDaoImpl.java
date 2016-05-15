@@ -19,22 +19,14 @@ public class StudentPrecenseDaoImpl extends GenericDaoImpl<StudentPrecense, Inte
     @PersistenceContext(name = "data")
     private EntityManager em;
 
-    public EntityManager getEm() {
-        return em;
-    }
-
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
-
     @Override
     public List<StudentPrecense> findByStudentId(int id) {
         return em.createNamedQuery(StudentPrecense.FIND_BY_STUDENT_ID, StudentPrecense.class).setParameter("id", id).getResultList();
     }
 
     @Override
-    public List<StudentPrecense> findByCourseDateId(int id) {
-        return em.createNamedQuery(StudentPrecense.FIND_BY_COURSE_DATA_ID, StudentPrecense.class).setParameter("id", id).getResultList();
+    public StudentPrecense findByCourseDateId(int id) {
+        return em.createNamedQuery(StudentPrecense.FIND_BY_COURSE_DATA_ID, StudentPrecense.class).setParameter("id", id).getSingleResult();
     }
 
     @Override

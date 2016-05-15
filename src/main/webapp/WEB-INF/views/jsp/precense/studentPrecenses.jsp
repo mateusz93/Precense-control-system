@@ -36,12 +36,11 @@
                             <td><c:out value="${courses.type}" /></td>
                             <td><c:out value="${courses.quantity}"  /></td>
                             <td><c:out value="${courses.teacherName}"  /></td>
-                    <form action="precensesInfoServlet" method="post">
-                        <input type="hidden" name="subjectName" value="${courses.subjectName}"/>
-                        <td><button name="info" value="${courses.courseId}" scope="session" type="submit" class="btn btn-info">Pokaż obecności</button></td>
-                    </form>
-                    </tr>
-                </c:forEach>
+                            <form action="/precenses/info/${courses.courseId}" method="post">
+                                <td><button name="info" value="${courses.courseId}" type="submit" class="btn btn-info">Pokaż obecności</button></td>
+                            </form>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>
