@@ -2,8 +2,6 @@ package neo.dmcs.model;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 @NamedQueries({
         @NamedQuery(name = Subject.FIND_BY_NAME, query = "from Subject s where s.name = :name"),
         @NamedQuery(name = Subject.FIND_ALL, query = "from Subject")
@@ -15,7 +13,7 @@ public class Subject {
     private int id;
     private String name;
     private String description;
-    private int departmentId;
+    private Department department;
 
     public static final String FIND_BY_NAME = "SubjectFindByName";
     public static final String FIND_ALL = "SubjectFindAll";
@@ -49,13 +47,14 @@ public class Subject {
         this.description = description;
     }
 
-    @Column(name = "departmentID")
-    public int getDepartmentId() {
-        return departmentId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "departmentID")
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     @Override
@@ -66,9 +65,9 @@ public class Subject {
         Subject subject = (Subject) o;
 
         if (id != subject.id) return false;
-        if (departmentId != subject.departmentId) return false;
         if (!name.equals(subject.name)) return false;
-        return description.equals(subject.description);
+        if (!description.equals(subject.description)) return false;
+        return department.equals(subject.department);
 
     }
 
@@ -77,8 +76,7 @@ public class Subject {
         int result = id;
         result = 31 * result + name.hashCode();
         result = 31 * result + description.hashCode();
-        result = 31 * result + departmentId;
+        result = 31 * result + department.hashCode();
         return result;
     }
-
 }

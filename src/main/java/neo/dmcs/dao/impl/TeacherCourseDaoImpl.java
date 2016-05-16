@@ -2,6 +2,7 @@ package neo.dmcs.dao.impl;
 
 
 import neo.dmcs.dao.TeacherCourseDao;
+import neo.dmcs.model.Subject;
 import neo.dmcs.model.TeacherCourse;
 import neo.dmcs.model.User;
 import org.springframework.stereotype.Repository;
@@ -22,13 +23,13 @@ public class TeacherCourseDaoImpl extends GenericDaoImpl<TeacherCourse, Integer>
     private EntityManager em;
 
     @Override
-    public List<TeacherCourse> findBySubjectId(int id) {
-        return em.createNamedQuery(TeacherCourse.FIND_BY_SUBJECT_ID, TeacherCourse.class).setParameter("id", id).getResultList();
+    public List<TeacherCourse> findBySubject(Subject subject) {
+        return em.createNamedQuery(TeacherCourse.FIND_BY_SUBJECT, TeacherCourse.class).setParameter("subject", subject).getResultList();
     }
 
     @Override
-    public List<TeacherCourse> findByTeacherId(int id) {
-        return em.createNamedQuery(TeacherCourse.FIND_BY_TEACHER_ID, TeacherCourse.class).setParameter("id", id).getResultList();
+    public List<TeacherCourse> findByTeacher(User teacher) {
+        return em.createNamedQuery(TeacherCourse.FIND_BY_TEACHER, TeacherCourse.class).setParameter("teacher", teacher).getResultList();
     }
 
     @Override

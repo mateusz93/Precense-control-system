@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Contact", schema = "data")
 public class Contact {
+
     private int id;
     private String email;
     private String group;
@@ -86,26 +87,25 @@ public class Contact {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Contact that = (Contact) o;
+        Contact contact = (Contact) o;
 
-        if (id != that.id) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (group != null ? !group.equals(that.group) : that.group != null) return false;
-        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-        if (street != null ? !street.equals(that.street) : that.street != null) return false;
-        if (city != null ? !city.equals(that.city) : that.city != null) return false;
+        if (id != contact.id) return false;
+        if (!email.equals(contact.email)) return false;
+        if (!group.equals(contact.group)) return false;
+        if (!phone.equals(contact.phone)) return false;
+        if (!street.equals(contact.street)) return false;
+        return city.equals(contact.city);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (group != null ? group.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (street != null ? street.hashCode() : 0);
-        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + email.hashCode();
+        result = 31 * result + group.hashCode();
+        result = 31 * result + phone.hashCode();
+        result = 31 * result + street.hashCode();
+        result = 31 * result + city.hashCode();
         return result;
     }
 }

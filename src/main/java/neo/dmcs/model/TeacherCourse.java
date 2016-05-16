@@ -2,11 +2,9 @@ package neo.dmcs.model;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 @NamedQueries({
-        @NamedQuery(name = TeacherCourse.FIND_BY_SUBJECT_ID, query = "from TeacherCourse t where t.subjectId = :id"),
-        @NamedQuery(name = TeacherCourse.FIND_BY_TEACHER_ID, query = "from TeacherCourse t where t.teacherId = :id"),
+        @NamedQuery(name = TeacherCourse.FIND_BY_SUBJECT, query = "from TeacherCourse t where t.subject = :subject"),
+        @NamedQuery(name = TeacherCourse.FIND_BY_TEACHER, query = "from TeacherCourse t where t.teacher = :teacher"),
         @NamedQuery(name = TeacherCourse.FIND_ALL, query = "from TeacherCourse")
 })
 @Entity
@@ -14,15 +12,15 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class TeacherCourse {
 
     private int id;
-    private int subjectId;
-    private int teacherId;
+    private Subject subject;
+    private User teacher;
     private String type;
     private int coursesQuantity;
     private int minPresence;
     private String description;
 
-    public static final String FIND_BY_SUBJECT_ID = "TeacherCourseFindBySubjectId";
-    public static final String FIND_BY_TEACHER_ID = "TeacherCourseFindByTeacherId";
+    public static final String FIND_BY_SUBJECT = "TeacherCourseFindBySubject";
+    public static final String FIND_BY_TEACHER = "TeacherCourseFindByTeacher";
     public static final String FIND_ALL = "TeacherCourseFindAll";
 
     @Id
@@ -36,22 +34,24 @@ public class TeacherCourse {
         this.id = id;
     }
 
-    @Column(name = "subjectID")
-    public int getSubjectId() {
-        return subjectId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subjectID")
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
-    @Column(name = "teacherID")
-    public int getTeacherId() {
-        return teacherId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "teacherID")
+    public User getTeacher() {
+        return teacher;
     }
 
-    public void setTeacherId(int teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
     }
 
     @Column(name = "type")
@@ -98,10 +98,10 @@ public class TeacherCourse {
         TeacherCourse that = (TeacherCourse) o;
 
         if (id != that.id) return false;
-        if (subjectId != that.subjectId) return false;
-        if (teacherId != that.teacherId) return false;
         if (coursesQuantity != that.coursesQuantity) return false;
         if (minPresence != that.minPresence) return false;
+        if (!subject.equals(that.subject)) return false;
+        if (!teacher.equals(that.teacher)) return false;
         if (!type.equals(that.type)) return false;
         return description.equals(that.description);
 
@@ -110,8 +110,8 @@ public class TeacherCourse {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + subjectId;
-        result = 31 * result + teacherId;
+        result = 31 * result + subject.hashCode();
+        result = 31 * result + teacher.hashCode();
         result = 31 * result + type.hashCode();
         result = 31 * result + coursesQuantity;
         result = 31 * result + minPresence;

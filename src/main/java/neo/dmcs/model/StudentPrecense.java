@@ -2,11 +2,9 @@ package neo.dmcs.model;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 @NamedQueries({
-        @NamedQuery(name = StudentPrecense.FIND_BY_STUDENT_ID, query = "from StudentPrecense s where s.studentId = :id"),
-        @NamedQuery(name = StudentPrecense.FIND_BY_COURSE_DATA_ID, query = "from StudentPrecense s where s.courseDateId = :id"),
+        @NamedQuery(name = StudentPrecense.FIND_BY_STUDENT, query = "from StudentPrecense s where s.student = :student"),
+        @NamedQuery(name = StudentPrecense.FIND_BY_COURSE_DATE, query = "from StudentPrecense s where s.courseDate = :courseDate"),
         @NamedQuery(name = StudentPrecense.FIND_ALL, query = "from StudentPrecense")
 })
 @Entity
@@ -15,11 +13,11 @@ public class StudentPrecense {
 
     private int id;
     private String status;
-    private int studentId;
-    private int courseDateId;
+    private User student;
+    private CourseDate courseDate;
 
-    public static final String FIND_BY_STUDENT_ID = "StudentPrecenseFindByStudentId";
-    public static final String FIND_BY_COURSE_DATA_ID = "StudentPrecenseFindByCourseDateId";
+    public static final String FIND_BY_STUDENT = "StudentPrecenseFindByStudent";
+    public static final String FIND_BY_COURSE_DATE = "StudentPrecenseFindByCourseDate";
     public static final String FIND_ALL = "StudentPrecenseFindAll";
 
     @Id
@@ -42,21 +40,46 @@ public class StudentPrecense {
         this.status = status;
     }
 
-    @Column(name = "courseDateID")
-    public int getCourseDateId() {
-        return courseDateId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "courseDateID")
+    public CourseDate getCourseDate() {
+        return courseDate;
     }
 
-    public void setCourseDateId(int courseDateId) {
-        this.courseDateId = courseDateId;
+    public void setCourseDate(CourseDate courseDate) {
+        this.courseDate = courseDate;
     }
 
-    @Column(name = "studentID")
-    public int getStudentId() {
-        return studentId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "studentID")
+    public User getStudent() {
+        return student;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setStudent(User student) {
+        this.student = student;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StudentPrecense that = (StudentPrecense) o;
+
+        if (id != that.id) return false;
+        if (!status.equals(that.status)) return false;
+        if (!student.equals(that.student)) return false;
+        return courseDate.equals(that.courseDate);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + status.hashCode();
+        result = 31 * result + student.hashCode();
+        result = 31 * result + courseDate.hashCode();
+        return result;
     }
 }

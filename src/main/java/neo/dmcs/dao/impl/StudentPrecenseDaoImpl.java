@@ -1,7 +1,9 @@
 package neo.dmcs.dao.impl;
 
 import neo.dmcs.dao.StudentPrecenseDao;
+import neo.dmcs.model.CourseDate;
 import neo.dmcs.model.StudentPrecense;
+import neo.dmcs.model.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
@@ -20,13 +22,13 @@ public class StudentPrecenseDaoImpl extends GenericDaoImpl<StudentPrecense, Inte
     private EntityManager em;
 
     @Override
-    public List<StudentPrecense> findByStudentId(int id) {
-        return em.createNamedQuery(StudentPrecense.FIND_BY_STUDENT_ID, StudentPrecense.class).setParameter("id", id).getResultList();
+    public List<StudentPrecense> findByStudent(User student) {
+        return em.createNamedQuery(StudentPrecense.FIND_BY_STUDENT, StudentPrecense.class).setParameter("student", student).getResultList();
     }
 
     @Override
-    public StudentPrecense findByCourseDateId(int id) {
-        return em.createNamedQuery(StudentPrecense.FIND_BY_COURSE_DATA_ID, StudentPrecense.class).setParameter("id", id).getSingleResult();
+    public StudentPrecense findByCourseDate(CourseDate courseDate) {
+        return em.createNamedQuery(StudentPrecense.FIND_BY_COURSE_DATE, StudentPrecense.class).setParameter("courseDate", courseDate).getSingleResult();
     }
 
     @Override

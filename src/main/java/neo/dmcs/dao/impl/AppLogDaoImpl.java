@@ -2,6 +2,8 @@ package neo.dmcs.dao.impl;
 
 import neo.dmcs.dao.AppLogDao;
 import neo.dmcs.model.AppLog;
+import neo.dmcs.model.EventDictionary;
+import neo.dmcs.model.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
@@ -20,18 +22,13 @@ public class AppLogDaoImpl extends GenericDaoImpl<AppLog, Integer> implements Ap
     private EntityManager em;
 
     @Override
-    public List<AppLog> findByEventDictionaryId(int id) {
-        return em.createNamedQuery(AppLog.FIND_BY_EVENT_DICTIONARY_ID, AppLog.class).setParameter("id", id).getResultList();
+    public List<AppLog> findByEventDictionary(EventDictionary eventDictionary) {
+        return em.createNamedQuery(AppLog.FIND_BY_EVENT_DICTIONARY, AppLog.class).setParameter("eventDictionary", eventDictionary).getResultList();
     }
 
     @Override
-    public List<AppLog> findByTeacherId(int id) {
-        return em.createNamedQuery(AppLog.FIND_BY_TEACHER_ID, AppLog.class).setParameter("id", id).getResultList();
-    }
-
-    @Override
-    public List<AppLog> findByStudentId(int id) {
-        return em.createNamedQuery(AppLog.FIND_BY_STUDENT_ID, AppLog.class).setParameter("id", id).getResultList();
+    public List<AppLog> findByStudent(User user) {
+        return em.createNamedQuery(AppLog.FIND_BY_STUDENT, AppLog.class).setParameter("user", user).getResultList();
     }
 
     @Override

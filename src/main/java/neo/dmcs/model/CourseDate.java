@@ -4,10 +4,8 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 @NamedQueries({
-        @NamedQuery(name = CourseDate.FIND_BY_COURSE_ID, query = "from CourseDate c where c.courseId = :id"),
+        @NamedQuery(name = CourseDate.FIND_BY_TEACHER_COURSE, query = "from CourseDate c where c.teacherCourse = :teacherCourse"),
         @NamedQuery(name = CourseDate.FIND_ALL, query = "from CourseDate")
 })
 @Entity
@@ -15,12 +13,12 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class CourseDate {
 
     private int id;
-    private int courseId;
+    private TeacherCourse teacherCourse;
     private Time startTime;
     private Time finishTime;
     private Date date;
 
-    public static final String FIND_BY_COURSE_ID = "CourseDateFindByCourseId";
+    public static final String FIND_BY_TEACHER_COURSE = "CourseDateFindByCourse";
     public static final String FIND_ALL = "CourseDateFindAll";
 
     @Id
@@ -34,13 +32,14 @@ public class CourseDate {
         this.id = id;
     }
 
-    @Column(name = "courseID")
-    public int getCourseId() {
-        return courseId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "teacherCourseID")
+    public TeacherCourse getTeacherCourse() {
+        return teacherCourse;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setTeacherCourse(TeacherCourse teacherCourse) {
+        this.teacherCourse = teacherCourse;
     }
 
     @Column(name = "startTime")
@@ -78,7 +77,7 @@ public class CourseDate {
         CourseDate that = (CourseDate) o;
 
         if (id != that.id) return false;
-        if (courseId != that.courseId) return false;
+        if (!teacherCourse.equals(that.teacherCourse)) return false;
         if (!startTime.equals(that.startTime)) return false;
         if (!finishTime.equals(that.finishTime)) return false;
         return date.equals(that.date);
@@ -88,7 +87,7 @@ public class CourseDate {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + courseId;
+        result = 31 * result + teacherCourse.hashCode();
         result = 31 * result + startTime.hashCode();
         result = 31 * result + finishTime.hashCode();
         result = 31 * result + date.hashCode();

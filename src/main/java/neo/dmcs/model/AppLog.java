@@ -3,12 +3,9 @@ package neo.dmcs.model;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 @NamedQueries({
-        @NamedQuery(name = AppLog.FIND_BY_EVENT_DICTIONARY_ID, query = "from AppLog a where a.eventDictionaryId = :id"),
-        @NamedQuery(name = AppLog.FIND_BY_TEACHER_ID, query = "from AppLog a where a.teacherId = :id"),
-        @NamedQuery(name = AppLog.FIND_BY_STUDENT_ID, query = "from AppLog a where a.studentId = :id"),
+        @NamedQuery(name = AppLog.FIND_BY_EVENT_DICTIONARY, query = "from AppLog a where a.eventDictionary = :eventDictionary"),
+        @NamedQuery(name = AppLog.FIND_BY_STUDENT, query = "from AppLog a where a.student = :student"),
         @NamedQuery(name = AppLog.FIND_ALL, query = "from AppLog")
 })
 @Entity
@@ -17,14 +14,12 @@ public class AppLog {
 
     private int id;
     private Timestamp time;
-    private int eventDictionaryId;
-    private int teacherId;
-    private int studentId;
+    private EventDictionary eventDictionary;
+    private User student;
     private String description;
 
-    public static final String FIND_BY_EVENT_DICTIONARY_ID = "AppLogFindByEventDictionaryId";
-    public static final String FIND_BY_TEACHER_ID = "AppLogFindByTeacherId";
-    public static final String FIND_BY_STUDENT_ID = "AppLogFindByStudentId";
+    public static final String FIND_BY_EVENT_DICTIONARY = "AppLogFindByEventDictionary";
+    public static final String FIND_BY_STUDENT = "AppLogFindByStudent";
     public static final String FIND_ALL = "AppLogFindAll";
 
     @Id
@@ -47,31 +42,24 @@ public class AppLog {
         this.time = time;
     }
 
-    @Column(name = "eventDictionaryID")
-    public int getEventDictionaryId() {
-        return eventDictionaryId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "eventDictionaryID")
+    public EventDictionary getEventDictionary() {
+        return eventDictionary;
     }
 
-    public void setEventDictionaryId(int eventDictionaryId) {
-        this.eventDictionaryId = eventDictionaryId;
+    public void setEventDictionary(EventDictionary eventDictionary) {
+        this.eventDictionary = eventDictionary;
     }
 
-    @Column(name = "teacherID")
-    public int getTeacherId() {
-        return teacherId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "studentID")
+    public User getStudent() {
+        return student;
     }
 
-    public void setTeacherId(int teacherId) {
-        this.teacherId = teacherId;
-    }
-
-    @Column(name = "studentID")
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setStudent(User student) {
+        this.student = student;
     }
 
     @Column(name = "description")
@@ -91,10 +79,9 @@ public class AppLog {
         AppLog appLog = (AppLog) o;
 
         if (id != appLog.id) return false;
-        if (eventDictionaryId != appLog.eventDictionaryId) return false;
-        if (teacherId != appLog.teacherId) return false;
-        if (studentId != appLog.studentId) return false;
         if (!time.equals(appLog.time)) return false;
+        if (!eventDictionary.equals(appLog.eventDictionary)) return false;
+        if (!student.equals(appLog.student)) return false;
         return description.equals(appLog.description);
 
     }
@@ -103,9 +90,8 @@ public class AppLog {
     public int hashCode() {
         int result = id;
         result = 31 * result + time.hashCode();
-        result = 31 * result + eventDictionaryId;
-        result = 31 * result + teacherId;
-        result = 31 * result + studentId;
+        result = 31 * result + eventDictionary.hashCode();
+        result = 31 * result + student.hashCode();
         result = 31 * result + description.hashCode();
         return result;
     }

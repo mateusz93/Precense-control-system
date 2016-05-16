@@ -3,6 +3,7 @@ package neo.dmcs.dao.impl;
 
 import neo.dmcs.dao.CourseDateDao;
 import neo.dmcs.model.CourseDate;
+import neo.dmcs.model.TeacherCourse;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +23,8 @@ public class CourseDateDaoImpl extends GenericDaoImpl<CourseDate, Integer> imple
     private EntityManager em;
 
     @Override
-    public List<CourseDate> findByCourseId(int id) {
-        return em.createNamedQuery(CourseDate.FIND_BY_COURSE_ID, CourseDate.class).setParameter("id", id).getResultList();
+    public List<CourseDate> findByTeacherCourse(TeacherCourse teacherCourse) {
+        return em.createNamedQuery(CourseDate.FIND_BY_TEACHER_COURSE, CourseDate.class).setParameter("teacherCourse", teacherCourse).getResultList();
     }
 
     @Override
