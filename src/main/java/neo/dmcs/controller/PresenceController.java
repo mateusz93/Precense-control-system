@@ -1,15 +1,11 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.dao.CourseDateDao;
-import neo.dmcs.dao.CustomDao;
-import neo.dmcs.dao.StudentPrecenseDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.dao.*;
 import neo.dmcs.enums.UserType;
-import neo.dmcs.model.CourseDate;
-import neo.dmcs.model.StudentPrecense;
-import neo.dmcs.model.User;
+import neo.dmcs.model.*;
 import neo.dmcs.service.PrecenseService;
 import neo.dmcs.view.course.CourseDateView;
+import neo.dmcs.view.precense.CheckPrecenseView;
 import neo.dmcs.view.precense.StudentPrecensesView;
 import neo.dmcs.view.precense.TeacherPrecensesView;
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +45,12 @@ public class PresenceController {
     private StudentPrecenseDao studentPrecenseDao;
 
     @Autowired
+    private TeacherCourseDao teacherCourseDao;
+
+    @Autowired
+    private StudentCourseDao studentCourseDao;
+
+    @Autowired
     private PrecenseService precenseService;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -66,38 +68,95 @@ public class PresenceController {
 
     @RequestMapping(value = "/info/{courseId}", method = RequestMethod.POST)
     public ModelAndView precenseInfo(@PathVariable("courseId") int courseId, HttpSession httpSession) {
-        ModelAndView mvc = new ModelAndView("precense/precensesInfo");
+        ModelAndView mvc = new ModelAndView();
         String username = (String) httpSession.getAttribute("username");
         if (!isLogged(username)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        List<CourseDateView> courseDateViews = new ArrayList<CourseDateView>();
-        List<CourseDate> courseDates = courseDateDao.findByCourseId(courseId);
-        for (CourseDate cd : courseDates) {
-            CourseDateView courseDateView = new CourseDateView();
-            courseDateView.setDate(cd.getDate());
-            courseDateView.setFinishTime(cd.getFinishTime());
-            courseDateView.setStartTime(cd.getStartTime());
-            courseDateView.setCourseDateID(courseId);
-            try {
-                StudentPrecense studentPrecense = studentPrecenseDao.findByCourseDateId(courseId);
-                courseDateView.setStatus(studentPrecense.getStatus());
-            } catch (NoResultException e) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(e.getMessage() + "StudentPrecense with courseDateId = " + courseId + " not found");
+        User user = userDao.findByUsername(username);
+        if (user.getType().equals(UserType.Student.name())) {
+            mvc.setViewName("precense/precensesInfo");
+            List<CourseDateView> courseDateViews = new ArrayList<CourseDateView>();
+            List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourseDao.findById(courseId));
+            for (CourseDate cd : courseDates) {
+                CourseDateView courseDateView = new CourseDateView();
+                courseDateView.setDate(cd.getDate());
+                courseDateView.setFinishTime(cd.getFinishTime());
+                courseDateView.setStartTime(cd.getStartTime());
+                courseDateView.setCourseDateID(courseId);
+                try {
+                    CourseDate courseDate = courseDateDao.findById(courseId);
+                    StudentPrecense studentPrecense = studentPrecenseDao.findByCourseDate(courseDate);
+                    courseDateView.setStatus(studentPrecense.getStatus());
+                } catch (NoResultException e) {
+                    if (logger.isWarnEnabled()) {
+                        logger.warn(e.getMessage() + "StudentPrecense with courseDateId = " + courseId + " not found");
+                    }
                 }
-            }
 
-            courseDateViews.add(courseDateView);
+                courseDateViews.add(courseDateView);
+            }
+            mvc.addObject("datesList", courseDateViews);
+        } else {
+            mvc.setViewName("precense/checkPrecenses");
+            List<CourseDateView> courseDateViews = new ArrayList<CourseDateView>();
+            List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourseDao.findById(courseId));
+            for (CourseDate cd : courseDates) {
+                CourseDateView courseDateView = new CourseDateView();
+                courseDateView.setDate(cd.getDate());
+                courseDateView.setFinishTime(cd.getFinishTime());
+                courseDateView.setStartTime(cd.getStartTime());
+                courseDateView.setCourseDateID(cd.getId());
+                courseDateViews.add(courseDateView);
+            }
+            mvc.addObject("datesList", courseDateViews);
+
+//            List<StudentCourse> studentCourses = studentCourseDao.findByTeacherCourse(courseId);
+//            List<User> students = new ArrayList<User>();
+//
+//            for (StudentCourse studentCourse : studentCourses) {
+//                User student = userDao.findById(studentCourse.getStudent());
+//                if (student != null) {
+//                    students.add(student);
+//                }
+//            }
+//            mvc.addObject("students", students);
         }
-        mvc.addObject("datesList", courseDateViews);
+
+        return mvc;
+    }
+
+    @RequestMapping(value = "/check/{courseDateId}", method = RequestMethod.POST)
+    public ModelAndView precensecheck(@PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("precense/checkPrecense");
+        String username = (String) httpSession.getAttribute("username");
+        if (!isLogged(username)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+
+        CourseDate courseDate = courseDateDao.findById(courseDateId);
+        TeacherCourse teacherCourse = courseDate.getTeacherCourse();
+        List<StudentCourse> studentCourses = studentCourseDao.findByTeacherCourse(teacherCourse);
+        List<CheckPrecenseView> students = new ArrayList<CheckPrecenseView>();
+
+        for (StudentCourse studentCourse : studentCourses) {
+            User student = userDao.findById(studentCourse.getStudent().getId());
+            CheckPrecenseView checkPrecenseView = new CheckPrecenseView();
+            checkPrecenseView.setFirstName(student.getFirstName());
+            checkPrecenseView.setLastName(student.getLastName());
+            checkPrecenseView.setPrecenseStatus(studentPrecenseDao.findByCourseDate(courseDate).getStatus());
+            students.add(checkPrecenseView);
+        }
+        mvc.addObject("courseDateId", courseDateId);
+        mvc.addObject("students", students);
 
         return mvc;
     }
 
     private void prepareView(ModelAndView mvc, User user) {
-        if (UserType.Student.name().equals(user.getType())) {
+        if (user.getType().equals(UserType.Student.name())) {
             prepareStudentView(mvc, user);
         } else {
             prepareTeacherView(mvc, user);

@@ -1,10 +1,10 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.ContactDao;
 import neo.dmcs.dao.CustomDao;
 import neo.dmcs.dao.StudentCourseDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.dao.TeacherCourseDao;
 import neo.dmcs.model.StudentCourse;
+import neo.dmcs.model.TeacherCourse;
 import neo.dmcs.model.User;
 import neo.dmcs.view.course.SaveView;
 import org.slf4j.Logger;
@@ -27,6 +27,9 @@ public class SaveService {
     private CustomDao customDao;
 
     @Autowired
+    private TeacherCourseDao teacherCourseDao;
+
+    @Autowired
     private StudentCourseDao studentCourseDao;
 
     public List<SaveView> getSubjects(User user) {
@@ -46,7 +49,8 @@ public class SaveService {
             saveView.setTeacherName(String.valueOf(object[5]));
             saveView.setDescription(String.valueOf(object[6]));
 
-            List<StudentCourse> studentCourses = studentCourseDao.findByStudentIdAndTeacherCourseId(user.getId(), saveView.getId());
+            TeacherCourse teacherCourse = teacherCourseDao.findById(saveView.getId());
+            List<StudentCourse> studentCourses = studentCourseDao.findByStudentAndTeacherCourse(user, teacherCourse);
             if (studentCourses.size() == 0) {
                 resultList.add(saveView);
             }

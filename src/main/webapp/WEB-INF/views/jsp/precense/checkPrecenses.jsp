@@ -8,26 +8,15 @@
         <title>Sprawdz obecność</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/resources/css/menu.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     </head>
 
-    <style type="text/css">
-        <%@ include file="WEB-INF/css/menu.css" %>
-    </style>
-
     <body>
-        <jsp:include page="WEB-INF/jsp/menu.jsp"/>
-        <%
-            if ((session.getAttribute("username") == null) || (session.getAttribute("username") == "")) {
-                response.sendRedirect("login.jsp");
-            }
-            
-            if ("Teacher".equals(session.getAttribute("type"))) {
-        %>
+        <jsp:include page="../menu.jsp"/>
         <div class="container">
-            <br><br>       
-            <h4><% out.print(request.getParameter("subjectName").trim()); %></h4>
+            <br><br><br>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -42,15 +31,13 @@
                             <td><c:out value="${dates.date}"  /></td>
                             <td><c:out value="${dates.startTime}" /></td>
                             <td><c:out value="${dates.finishTime}" /></td>
-                    <form action="checkPrecensesServlet" method="post">
-                        <input type="hidden" name="date" value="${dates.date}"/>
-                        <td><button name="dateID" value="${dates.id}" scope="request" type="submit" class="btn btn-info">Sprawdź obecność</button></td>
-                    </form>
-                    </tr>
-                </c:forEach>
+                            <form action="/precenses/check/${dates.courseDateID}" method="post">
+                                <td><button value="${dates.courseDateID}" type="submit" class="btn btn-info">Sprawdź obecność</button></td>
+                            </form>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>
-        <% }%>    
     </body>
 </html>
