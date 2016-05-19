@@ -40,7 +40,7 @@ public class StudentPrecense {
         this.status = status;
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "courseDateID")
     public CourseDate getCourseDate() {
         return courseDate;

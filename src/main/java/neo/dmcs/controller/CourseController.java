@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import java.util.List;
  * Created by mateusz on 25.03.16.
  */
 @Controller
+@Transactional
 @RequestMapping("/courses")
 public class CourseController {
 
@@ -99,6 +101,23 @@ public class CourseController {
         return mvc;
     }
 
+    @RequestMapping(value = "/delete/{dateId}", method = RequestMethod.POST)
+    public ModelAndView delete(@PathVariable("dateId") int dateId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
+        String username = (String) httpSession.getAttribute("username");
+        if (!isLogged(username)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        CourseDate courseDate = courseDateDao.findById(dateId);
+        courseDateDao.delete(courseDate);
+        TeacherCourse teacherCourse = teacherCourseDao.findById(courseDate.getTeacherCourse().getId());
+        List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourse);
+        mvc.addObject("datesList", courseDates);
+
+        return mvc;
+    }
+
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView newCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/addCourse");
@@ -113,6 +132,19 @@ public class CourseController {
         mvc.addObject("departments", departments);
         mvc.addObject("message", "course.added");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
+        return mvc;
+    }
+
+    @RequestMapping(value = "/addOne/{courseId}", method = RequestMethod.POST)
+    public ModelAndView newCourse(@PathVariable("courseId") int courseId, HttpSession session) {
+        ModelAndView mvc = new ModelAndView("course/addCourse");
+        String username = (String) session.getAttribute("username");
+        if (!isLogged(username)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+
+
         return mvc;
     }
 

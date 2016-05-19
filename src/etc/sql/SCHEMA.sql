@@ -69,17 +69,17 @@ CREATE TABLE `EventDictionary` (
   UNIQUE KEY `ID_UNIQUE` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `StudentCourse` (
+CREATE TABLE `StudentPrecense` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `teacherCourseID` int(10) unsigned NOT NULL,
   `studentID` int(10) unsigned NOT NULL,
-  `saveTime` datetime NOT NULL,
+  `courseDateID` int(10) unsigned NOT NULL,
+  `status` varchar(20) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`),
-  KEY `courseID` (`teacherCourseID`),
   KEY `studentID` (`studentID`),
-  CONSTRAINT `fk_StudentCourse_1` FOREIGN KEY (`teacherCourseID`) REFERENCES `TeacherCourse` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_StudentCourse_2` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `courseDateID` (`courseDateID`),
+  CONSTRAINT `fk_courseDate` FOREIGN KEY (`courseDateID`) REFERENCES `CourseDate` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_student2` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `StudentPrecense` (
