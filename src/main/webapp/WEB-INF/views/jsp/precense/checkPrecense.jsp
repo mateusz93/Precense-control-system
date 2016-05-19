@@ -17,7 +17,6 @@
         <div class="container">
             <br><br><br>
             <jsp:include page="../alert/allAlerts.jsp"/>
-            <form action="updatePrecensesServlet" method="post">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -27,66 +26,67 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="student" items="${students}">
-                            <tr>
-                                <td><c:out value="${student.firstName}"  /></td>
-                                <td><c:out value="${student.lastName}" /></td>
-                                <td>
-                                    <c:if test="${student.precenseStatus == 'Obecny'}">
-                                        <label class="radio-inline">
-                                            <input checked type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
-                                        </label>
-                                    </c:if>
-                                    <c:if test="${student.precenseStatus == 'Nieobecny'}">
-                                        <label class="radio-inline">
-                                            <input type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input checked type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
-                                        </label>
-                                    </c:if>
-                                    <c:if test="${student.precenseStatus == 'Spozniony'}">
-                                        <label class="radio-inline">
-                                            <input type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input checked type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
-                                        </label>
-                                    </c:if>
-                                    <c:if test="${student.precenseStatus != 'Obecny' &&
-                                                  student.precenseStatus != 'Nieobecny' && 
-                                                  student.precenseStatus != 'Spozniony'}">
-                                          <label class="radio-inline">
-                                              <input type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
-                                          </label>
-                                          <label class="radio-inline">
-                                              <input type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
-                                          </label>
-                                          <label class="radio-inline">
-                                              <input type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
-                                          </label>
-                                    </c:if>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <form action="/precenses/check/${courseDateId}" method="post" commandName="precenseForm" role="form">
+                            <c:forEach var="student" items="${students}">
+                                <tr>
+                                    <td><c:out value="${student.firstName}"  /></td>
+                                    <td><c:out value="${student.lastName}" /></td>
+                                    <td>
+                                        <c:if test="${student.precenseStatus == 'Obecny'}">
+                                            <label class="radio-inline">
+                                                <input checked type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
+                                            </label>
+                                        </c:if>
+                                        <c:if test="${student.precenseStatus == 'Nieobecny'}">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input checked type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
+                                            </label>
+                                        </c:if>
+                                        <c:if test="${student.precenseStatus == 'Spozniony'}">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input checked type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
+                                            </label>
+                                        </c:if>
+                                        <c:if test="${student.precenseStatus != 'Obecny' &&
+                                                      student.precenseStatus != 'Nieobecny' &&
+                                                      student.precenseStatus != 'Spozniony'}">
+                                              <label class="radio-inline">
+                                                  <input type="radio" name="${student.ID}_precenseStatus" value="Obecny"/>Obecny
+                                              </label>
+                                              <label class="radio-inline">
+                                                  <input type="radio" name="${student.ID}_precenseStatus" value="Nieobecny"/>Nieobecny
+                                              </label>
+                                              <label class="radio-inline">
+                                                  <input type="radio" name="${student.ID}_precenseStatus" value="Spozniony"/>Spóźniony
+                                              </label>
+                                        </c:if>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </form>
                         <input type="hidden" name="courseDateId" value="${courseDateId}"/>
                         <!-- <input type="hidden" name="date" value="${date}"/> -->
                     </tbody>
                 </table>
                 <button value="submit" type="submit" class="btn btn-success">Zatwierdź</button>
-            </form>
         </div>
     </body>
 </html>

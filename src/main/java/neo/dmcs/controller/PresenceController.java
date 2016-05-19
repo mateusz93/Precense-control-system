@@ -111,17 +111,6 @@ public class PresenceController {
                 courseDateViews.add(courseDateView);
             }
             mvc.addObject("datesList", courseDateViews);
-
-//            List<StudentCourse> studentCourses = studentCourseDao.findByTeacherCourse(courseId);
-//            List<User> students = new ArrayList<User>();
-//
-//            for (StudentCourse studentCourse : studentCourses) {
-//                User student = userDao.findById(studentCourse.getStudent());
-//                if (student != null) {
-//                    students.add(student);
-//                }
-//            }
-//            mvc.addObject("students", students);
         }
 
         return mvc;
@@ -152,6 +141,35 @@ public class PresenceController {
         mvc.addObject("courseDateId", courseDateId);
         mvc.addObject("students", students);
 
+        return mvc;
+    }
+
+    @RequestMapping(value = "/update/{courseDateId}", method = RequestMethod.POST)
+    public ModelAndView update(@PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("precense/checkPrecense");
+        String username = (String) httpSession.getAttribute("username");
+        if (!isLogged(username)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+
+        CourseDate courseDate = courseDateDao.findById(courseDateId);
+        TeacherCourse teacherCourse = courseDate.getTeacherCourse();
+        List<StudentCourse> studentCourses = studentCourseDao.findByTeacherCourse(teacherCourse);
+        List<CheckPrecenseView> students = new ArrayList<CheckPrecenseView>();
+
+        for (StudentCourse studentCourse : studentCourses) {
+            User student = userDao.findById(studentCourse.getStudent().getId());
+            CheckPrecenseView checkPrecenseView = new CheckPrecenseView();
+            checkPrecenseView.setFirstName(student.getFirstName());
+            checkPrecenseView.setLastName(student.getLastName());
+            checkPrecenseView.setPrecenseStatus(studentPrecenseDao.findByCourseDate(courseDate).getStatus());
+            students.add(checkPrecenseView);
+        }
+        mvc.addObject("courseDateId", courseDateId);
+        mvc.addObject("students", students);
+
+        //TODO dodać komunikat (pozytywny / negatywny) Zaaktualizowano listę obecności
         return mvc;
     }
 

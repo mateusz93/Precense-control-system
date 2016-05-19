@@ -4,7 +4,6 @@
 
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Kursy</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
@@ -14,11 +13,10 @@
     </head>
     <body>
         <jsp:include page="../menu.jsp"/>
-
         <div class="container">
             <br><br><br>
             <jsp:include page="../alert/allAlerts.jsp"/>
-            <form action="addSubjectServlet" method="get">
+            <form action="/courses/new" method="get">
                 <td><button type="submit" class="btn btn-success">Dodaj nowy kurs</button></td>
             </form>
             <table class="table table-striped">
@@ -31,18 +29,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="courses" items="${coursesList}">
+                    <c:forEach var="course" items="${coursesList}">
                         <tr>
-                            <td><c:out value="${courses.subjectName}"  /></td>
-                            <td><c:out value="${courses.departmentName}" /></td>
-                            <td><c:out value="${courses.type}" /></td>
-                            <td><c:out value="${courses.coursesQuantity}"  /></td>
-                    <form action="courseInfoServlet" method="post">
-                        <input type="hidden" name="subjectName" value="${courses.subjectName}"/>
-                        <td><button name="info" value="${courses.ID}" scope="session" type="submit" class="btn btn-info">Szczegóły</button></td>
-                    </form>
-                    </tr>
-                </c:forEach>
+                            <td><c:out value="${course.subjectName}"  /></td>
+                            <td><c:out value="${course.departmentName}" /></td>
+                            <td><c:out value="${course.type}" /></td>
+                            <td><c:out value="${course.coursesQuantity}"  /></td>
+                            <form action="/courses/info/${course.ID}" method="post">
+                                <td><button value="${course.ID}" type="submit" class="btn btn-info">Szczegóły</button></td>
+                            </form>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>
