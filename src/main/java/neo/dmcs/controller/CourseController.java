@@ -5,6 +5,7 @@ import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
 import neo.dmcs.service.CourseService;
+import neo.dmcs.view.course.CourseDateView;
 import neo.dmcs.view.course.NewCourseView;
 import neo.dmcs.view.course.StudentCourseView;
 import neo.dmcs.view.course.TeacherCourseView;
@@ -82,6 +83,7 @@ public class CourseController {
             mvc.setViewName("course/teacherCourseDates");
             TeacherCourse teacherCourse = teacherCourseDao.findById(teacherCourseId);
             List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourse);
+            mvc.addObject("teacherCourseId", teacherCourseId);
             mvc.addObject("datesList", courseDates);
         }
 
@@ -135,16 +137,38 @@ public class CourseController {
         return mvc;
     }
 
-    @RequestMapping(value = "/addOne/{courseId}", method = RequestMethod.POST)
-    public ModelAndView newCourse(@PathVariable("courseId") int courseId, HttpSession session) {
-        ModelAndView mvc = new ModelAndView("course/addCourse");
+    @RequestMapping(value = "/addOne/{teacherCourseId}", method = RequestMethod.POST)
+    public ModelAndView newOne(@PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
+        ModelAndView mvc = new ModelAndView("course/addCourseDate");
         String username = (String) session.getAttribute("username");
         if (!isLogged(username)) {
             mvc.setViewName("security/login");
             return mvc;
         }
+        mvc.addObject("teacherCourseId", teacherCourseId);
+        return mvc;
+    }
 
+    @RequestMapping(value = "/addCourseDate/{teacherCourseId}", method = RequestMethod.POST)
+    public ModelAndView newCourseDate(@ModelAttribute("courseDateForm") CourseDateView form, @PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
+        ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
+        String username = (String) session.getAttribute("username");
+        if (!isLogged(username)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        TeacherCourse teacherCourse = teacherCourseDao.findById(teacherCourseId);
+        CourseDate courseDate = new CourseDate();
+        courseDate.setTeacherCourse(teacherCourse);
+        courseDate.setStartTime(form.getStartTime());
+        courseDate.setFinishTime(form.getFinishTime());
+        courseDate.setDate(form.getDate());
+        courseDateDao.save(courseDate);
 
+        List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourse);
+        mvc.addObject("datesList", courseDates);
+        mvc.addObject("message", "course.courseDateAdded");
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
 

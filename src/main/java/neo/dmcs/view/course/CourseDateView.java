@@ -1,7 +1,7 @@
 package neo.dmcs.view.course;
 
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @Author Mateusz Wieczorek, 09.04.16.

@@ -13,13 +13,10 @@
     </head>
     <body>
         <jsp:include page="../menu.jsp"/>
-
         <div class="container">
-            <br><br><br>
             <jsp:include page="../alert/allAlerts.jsp"/>
-
-            <form action="/courses/addOne/${courseID}" method="post">
-                <td><button type="submit" value="${courseID}" name="courseID" class="btn btn-success">Dodaj termin</button></td>
+            <form action="/courses/addOne/${teacherCourseId}" method="post">
+                <td><button type="submit" value="${teacherCourseId}" name="teacherCourseId" class="btn btn-success">Dodaj termin</button></td>
             </form>
         <!--
             <form action="/courses/addSeveral/${courseID}" method="post">
