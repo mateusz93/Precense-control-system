@@ -135,7 +135,11 @@ public class PresenceController {
             CheckPrecenseView checkPrecenseView = new CheckPrecenseView();
             checkPrecenseView.setFirstName(student.getFirstName());
             checkPrecenseView.setLastName(student.getLastName());
-            checkPrecenseView.setPrecenseStatus(studentPrecenseDao.findByCourseDate(courseDate).getStatus());
+            try {
+                checkPrecenseView.setPrecenseStatus(studentPrecenseDao.findByCourseDate(courseDate).getStatus());
+            } catch (NoResultException e) {
+                logger.debug("Student " + student.getFirstName() + " " + student.getLastName() + " nie ma sprawdzonej obecności w tym terminie");
+            }
             students.add(checkPrecenseView);
         }
         mvc.addObject("courseDateId", courseDateId);
