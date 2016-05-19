@@ -18,7 +18,7 @@
             <h1>System kontroli obecności</h1> 
             <p>Sprawdzaj obecność codziennie w łatwy sposób</p>
             <% if ("".equals(session.getAttribute("username")) || session.getAttribute("username") == null) { %>
-                <form class="form-inline" action="register" method="post">
+                <form class="form-inline" action="/register" method="post">
                     <input type="email" class="form-control" name="newEmail" size="50" placeholder="Email" required>
                     <button type="submit" class="btn btn-danger">Zarejestruj</button>
                 </form>
