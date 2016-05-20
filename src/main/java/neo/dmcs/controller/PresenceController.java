@@ -1,6 +1,7 @@
 package neo.dmcs.controller;
 
 import neo.dmcs.dao.*;
+import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
 import neo.dmcs.service.PrecenseService;
@@ -8,11 +9,13 @@ import neo.dmcs.view.course.CourseDateView;
 import neo.dmcs.view.precense.CheckPrecenseView;
 import neo.dmcs.view.precense.StudentPrecensesView;
 import neo.dmcs.view.precense.TeacherPrecensesView;
+import neo.dmcs.view.precense.CheckPrecenseViewWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -124,7 +127,27 @@ public class PresenceController {
             mvc.setViewName("security/login");
             return mvc;
         }
+        preparePrecensesList(courseDateId, mvc);
+        return mvc;
+    }
 
+    @RequestMapping(value = "/update/{courseDateId}", method = RequestMethod.POST)
+    public ModelAndView update(@ModelAttribute("studentWrapper") CheckPrecenseViewWrapper studentWrapper, @PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("precense/checkPrecense");
+        String username = (String) httpSession.getAttribute("username");
+        if (!isLogged(username)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+
+
+        preparePrecensesList(courseDateId, mvc);
+        mvc.addObject("message", "precense.updated");
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
+        return mvc;
+    }
+
+    private void preparePrecensesList(@PathVariable("courseDateId") int courseDateId, ModelAndView mvc) {
         CourseDate courseDate = courseDateDao.findById(courseDateId);
         TeacherCourse teacherCourse = courseDate.getTeacherCourse();
         List<StudentCourse> studentCourses = studentCourseDao.findByTeacherCourse(teacherCourse);
@@ -142,39 +165,10 @@ public class PresenceController {
             }
             students.add(checkPrecenseView);
         }
+        CheckPrecenseViewWrapper checkPrecenseViewWrapper = new CheckPrecenseViewWrapper();
+        checkPrecenseViewWrapper.setStudents(students);
         mvc.addObject("courseDateId", courseDateId);
-        mvc.addObject("students", students);
-
-        return mvc;
-    }
-
-    @RequestMapping(value = "/update/{courseDateId}", method = RequestMethod.POST)
-    public ModelAndView update(@PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
-        ModelAndView mvc = new ModelAndView("precense/checkPrecense");
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
-            mvc.setViewName("security/login");
-            return mvc;
-        }
-
-        CourseDate courseDate = courseDateDao.findById(courseDateId);
-        TeacherCourse teacherCourse = courseDate.getTeacherCourse();
-        List<StudentCourse> studentCourses = studentCourseDao.findByTeacherCourse(teacherCourse);
-        List<CheckPrecenseView> students = new ArrayList<CheckPrecenseView>();
-
-        for (StudentCourse studentCourse : studentCourses) {
-            User student = userDao.findById(studentCourse.getStudent().getId());
-            CheckPrecenseView checkPrecenseView = new CheckPrecenseView();
-            checkPrecenseView.setFirstName(student.getFirstName());
-            checkPrecenseView.setLastName(student.getLastName());
-            checkPrecenseView.setPrecenseStatus(studentPrecenseDao.findByCourseDate(courseDate).getStatus());
-            students.add(checkPrecenseView);
-        }
-        mvc.addObject("courseDateId", courseDateId);
-        mvc.addObject("students", students);
-
-        //TODO dodać komunikat (pozytywny / negatywny) Zaaktualizowano listę obecności
-        return mvc;
+        mvc.addObject("studentWrapper", checkPrecenseViewWrapper);
     }
 
     private void prepareView(ModelAndView mvc, User user) {

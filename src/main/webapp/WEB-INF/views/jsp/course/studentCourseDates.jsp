@@ -14,16 +14,8 @@
     <body>
         <jsp:include page="../menu.jsp"/>
         <div class="container">
-            <br><br><br>
+            <br><br>
             <jsp:include page="../alert/allAlerts.jsp"/>
-            
-            <% if ("Teacher".equals(session.getAttribute("type"))) { %>
-            <form action="addCourseDateServlet" method="get">
-                <td><button type="submit" value="${courseID}" name="courseID" class="btn btn-success">Dodaj termin</button></td>
-                <td><button type="submit" value="${courseID}" name="courseID2" class="btn btn-success">Dodaj kilka terminów</button></td>
-            </form>
-            <% } %>  
-            
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -38,16 +30,6 @@
                             <td class="col-md-2"><c:out value="${date.date}"  /></td>
                             <td class="col-md-2"><c:out value="${date.startTime}" /></td>
                             <td class="col-md-2"><c:out value="${date.finishTime}" /></td>
-                            <% if ("Teacher".equals(session.getAttribute("type"))) { %>
-                            <form action="editCourseDateServlet" method="post">
-                                <td class="col-md-1"><button name="editID" value="${date.id}" type="submit" class="btn btn-warning">Edytuj</button></td>
-                            </form>
-                            <form action="deleteCourseDateServlet" method="post">
-                                <input type="hidden" name="subjectName" value="${subjectName}"/>
-                                <input type="hidden" name="info" value="${info}"/>
-                                <td class="col-md-1"><button name="deleteID" value="${date.id}" type="submit" class="btn btn-danger">Usuń</button></td>
-                            </form>
-                            <% } %>
                         </tr>
                     </c:forEach>
                 </tbody>

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,11 +51,11 @@ public class SaveService {
             saveView.setDescription(String.valueOf(object[6]));
 
             TeacherCourse teacherCourse = teacherCourseDao.findById(saveView.getId());
-            List<StudentCourse> studentCourses = studentCourseDao.findByStudentAndTeacherCourse(user, teacherCourse);
-            if (studentCourses.size() == 0) {
+            try {
+                StudentCourse studentCourses = studentCourseDao.findByStudentAndTeacherCourse(user, teacherCourse);
+            } catch (NoResultException e) {
                 resultList.add(saveView);
             }
-
         }
         return resultList;
     }

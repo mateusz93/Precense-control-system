@@ -10,6 +10,6 @@ public interface StudentCourseDao extends GenericDao<StudentCourse, Integer> {
 
     List<StudentCourse> findByTeacherCourse(TeacherCourse teacherCourse);
     List<StudentCourse> findByStudent(User student);
-    List<StudentCourse> findByStudentAndTeacherCourse(User student, TeacherCourse teacherCourse);
+    StudentCourse findByStudentAndTeacherCourse(User student, TeacherCourse teacherCourse);
     List<StudentCourse> findAll();
 }

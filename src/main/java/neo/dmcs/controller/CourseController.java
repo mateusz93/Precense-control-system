@@ -53,6 +53,9 @@ public class CourseController {
     private TeacherCourseDao teacherCourseDao;
 
     @Autowired
+    private StudentCourseDao studentCourseDao;
+
+    @Autowired
     private CourseService courseService;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -79,6 +82,9 @@ public class CourseController {
         User user = userDao.findByUsername(username);
         if (user.getType().equals(UserType.Student.name())) {
             mvc.setViewName("course/studentCourseDates");
+            TeacherCourse teacherCourse = teacherCourseDao.findById(teacherCourseId);
+            List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourse);
+            mvc.addObject("datesList", courseDates);
         } else {
             mvc.setViewName("course/teacherCourseDates");
             TeacherCourse teacherCourse = teacherCourseDao.findById(teacherCourseId);
@@ -116,6 +122,27 @@ public class CourseController {
         TeacherCourse teacherCourse = teacherCourseDao.findById(courseDate.getTeacherCourse().getId());
         List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourse);
         mvc.addObject("datesList", courseDates);
+
+        return mvc;
+    }
+
+    @RequestMapping(value = "/unSubscribe/{courseId}", method = RequestMethod.POST)
+    public ModelAndView unSubscribe(@PathVariable("courseId") int courseId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView();
+        String username = (String) httpSession.getAttribute("username");
+        if (!isLogged(username)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        User user = userDao.findByUsername(username);
+        TeacherCourse teacherCourse = teacherCourseDao.findById(courseId);
+        StudentCourse studentCourse = studentCourseDao.findByStudentAndTeacherCourse(user, teacherCourse);
+        studentCourseDao.delete(studentCourse);
+
+        prepareView(mvc, user);
+
+        mvc.addObject("message", "course.unSubscribed");
+        mvc.addObject("messageType", MessageType.WARNING.name());
 
         return mvc;
     }

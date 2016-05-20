@@ -29,22 +29,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="courses" items="${coursesList}">
+                    <c:forEach var="course" items="${coursesList}">
                         <tr>
-                            <td><c:out value="${courses.subjectName}"  /></td>
-                            <td><c:out value="${courses.departmentName}" /></td>
-                            <td><c:out value="${courses.type}" /></td>
-                            <td><c:out value="${courses.coursesQuantity}"  /></td>
-                            <td><c:out value="${courses.teacherName}"  /></td>
-                    <form action="courseInfoServlet" method="post">
-                        <input type="hidden" name="subjectName" value="${courses.subjectName}"/>
-                        <td><button name="info" value="${courses.courseID}" type="submit" class="btn btn-info">Pokaż terminy</button></td>
-                    </form>
-                    <form action="unsubscribeSubjectServlet" method="post">
-                        <td><button name="unsubscribe" value="${courses.courseID}" type="submit" class="btn btn-danger">Wypisz się</button></td>
-                    </form>
-                    </tr>
-                </c:forEach>
+                            <td><c:out value="${course.subjectName}"  /></td>
+                            <td><c:out value="${course.departmentName}" /></td>
+                            <td><c:out value="${course.type}" /></td>
+                            <td><c:out value="${course.coursesQuantity}"  /></td>
+                            <td><c:out value="${course.teacherName}"  /></td>
+                            <form action="/courses/info/${course.courseID}" method="post">
+                                <td><button type="submit" class="btn btn-info">Pokaż terminy</button></td>
+                            </form>
+                            <form action="/courses/unSubscribe/${course.courseID}" method="post">
+                                <td><button type="submit" class="btn btn-danger">Wypisz się</button></td>
+                            </form>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>

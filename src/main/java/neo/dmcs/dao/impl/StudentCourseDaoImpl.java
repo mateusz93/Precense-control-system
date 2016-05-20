@@ -34,8 +34,8 @@ public class StudentCourseDaoImpl extends GenericDaoImpl<StudentCourse, Integer>
     }
 
     @Override
-    public List<StudentCourse> findByStudentAndTeacherCourse(User student, TeacherCourse teacherCourse) {
-        return em.createNamedQuery(StudentCourse.FIND_BY_STUDENT_AND_TEACHER_COURSE, StudentCourse.class).setParameter("student", student).setParameter("teacherCourse", teacherCourse).getResultList();
+    public StudentCourse findByStudentAndTeacherCourse(User student, TeacherCourse teacherCourse) {
+        return em.createNamedQuery(StudentCourse.FIND_BY_STUDENT_AND_TEACHER_COURSE, StudentCourse.class).setParameter("student", student).setParameter("teacherCourse", teacherCourse).getSingleResult();
     }
 
     @Override
