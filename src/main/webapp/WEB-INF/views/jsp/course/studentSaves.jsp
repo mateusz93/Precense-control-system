@@ -15,35 +15,36 @@
     <body>
         <jsp:include page="../menu.jsp"/>
         <div class="container">
-            <br><br><br>
+            <br><br>
             <jsp:include page="../alert/allAlerts.jsp"/>
-            <form action="savesServlet" method="post">
-                <table class="table table-striped">
-                    <thead>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Wydział</th>
+                        <th>Typ zajęć</th>
+                        <th>Ilość zajęć</th>
+                        <th>Prowadzący</th>
+                        <th>Opis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="course" items="${subjectList}">
                         <tr>
-                            <th>Nazwa</th>
-                            <th>Wydział</th>
-                            <th>Typ zajęć</th>
-                            <th>Ilość zajęć</th>
-                            <th>Prowadzący</th>
-                            <th>Opis</th>
+                            <td><c:out value="${course.subjectName}"  /></td>
+                            <td><c:out value="${course.departmentName}" /></td>
+                            <td><c:out value="${course.type}" /></td>
+                            <td><c:out value="${course.coursesQuantity}"  /></td>
+                            <td><c:out value="${course.teacherName}"  /></td>
+                            <td><c:out value="${course.description}"  /></td>
+                            <form action="/saves/${course.id}" method="post">
+                                <td><button type="submit" class="btn btn-success">Zapisz się</button></td>
+                            </form>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="subjects" items="${subjectList}">
-                            <tr>
-                                <td><c:out value="${subjects.subjectName}"  /></td>
-                                <td><c:out value="${subjects.departmentName}" /></td>
-                                <td><c:out value="${subjects.type}" /></td>
-                                <td><c:out value="${subjects.coursesQuantity}"  /></td>
-                                <td><c:out value="${subjects.teacherName}"  /></td>
-                                <td><c:out value="${subjects.description}"  /></td>
-                                <td><button name="ID" value="${subjects.id}" type="submit" class="btn btn-success">Zapisz się</button></td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </form>
+                    </c:forEach>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>
