@@ -22,6 +22,7 @@
             <form action="/courses/new" method="get">
                 <td><button type="submit" class="btn btn-success">Dodaj nowy kurs</button></td>
             </form>
+            <br>
             <div class="input-group input-group-lg add-on">
                 <div class="input-group"> <span class="input-group-addon">Filter</span>
                     <input id="filter" type="text" class="form-control" placeholder="Type here...">

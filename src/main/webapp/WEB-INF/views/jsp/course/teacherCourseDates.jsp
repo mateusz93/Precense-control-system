@@ -22,6 +22,7 @@
             <form action="/courses/addOne/${teacherCourseId}" method="post">
                 <td><button type="submit" value="${teacherCourseId}" name="teacherCourseId" class="btn btn-success">Dodaj termin</button></td>
             </form>
+            <br>
         <!--
             <form action="/courses/addSeveral/${courseID}" method="post">
                 <td><button type="submit" value="${courseID}" name="courseID" class="btn btn-success">Dodaj kilka terminów</button></td>
