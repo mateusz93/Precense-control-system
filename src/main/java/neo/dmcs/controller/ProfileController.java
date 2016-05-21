@@ -15,12 +15,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.MalformedURLException;
 
 /**
  * @Author Mateusz Wieczorek
@@ -83,6 +91,36 @@ public class ProfileController {
         return mvc;
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/upload")
+    public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file,
+                                         RedirectAttributes redirectAttributes, HttpSession session) {
+        ModelAndView mvc = new ModelAndView("user/profile");
+        String username = (String) session.getAttribute("username");
+        if (!StringUtils.isNotBlank(username)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+
+        if (!file.isEmpty()) {
+            try {
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(new File("src/main/webapp/WEB-INF/resources/images/" + username)));
+                FileCopyUtils.copy(file.getInputStream(), stream);
+                stream.close();
+                mvc.addObject("message", "profile.upload.success");
+                mvc.addObject("messageType", MessageType.SUCCESS.name());
+            } catch (Exception e) {
+                mvc.addObject("message", "profile.upload.fail");
+                mvc.addObject("messageType", MessageType.DANGER.name());
+            }
+        } else {
+            mvc.addObject("message", "profile.upload.empty");
+            mvc.addObject("messageType", MessageType.DANGER.name());
+        }
+
+        return mvc;
+    }
+
     private void prepareProfileView(ModelAndView mvc, String email) {
         Contact contact = contactDao.findByEmail(email);
         User user = userDao.findByContact(contact);
@@ -95,6 +133,11 @@ public class ProfileController {
         mvc.addObject("group", user.getContact().getGroup());
         mvc.addObject("phone", user.getContact().getPhone());
         mvc.addObject("street", user.getContact().getStreet());
+        File f = new File("src/main/webapp/WEB-INF/resources/images/" + user.getLogin());
+        if (f.exists() && !f.isDirectory()) {
+            mvc.addObject("photoPath", "/resources/images/" + user.getLogin());
+        } else {
+            mvc.addObject("photoPath", "/resources/images/default.png");
+        }
     }
-
 }

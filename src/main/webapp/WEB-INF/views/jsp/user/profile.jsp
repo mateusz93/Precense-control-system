@@ -15,27 +15,23 @@
 
     <body>
         <jsp:include page="../menu.jsp"/>
-        <%
-            if ((session.getAttribute("username") == null) || ("".equals(session.getAttribute("username")))) {
-                response.sendRedirect("login.jsp");
-            }
-        %>
         <div class="container">
-            <br><br><br>
+            <br><br>
+            <jsp:include page="../alert/allAlerts.jsp"/>
             <hr>
             <div class="row">
                 <!-- left column -->
                 <div class="col-md-3">
                     <div class="text-center">
-                        <img src="/https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT2d4kAayBmJjefFVzQR7txYHk9Lzg0bdXeGWkRF7jRUgdZMNtR" class="avatar img-circle" alt="avatar">
-                        <h6>Upload a different photo...</h6>
-
-                        <input class="form-control" type="file">
+                        <img src="${photoPath}" />
+                        <form method="POST" enctype="multipart/form-data" action="/profile/upload">
+                            <input class="form-control" type="file" name="file" />
+                            <input type="submit" value="Upload" />
+                        </form>
                     </div>
                 </div>
                 <!-- edit form column -->
                 <div class="col-md-9 personal-info">
-                    <jsp:include page="../alert/allAlerts.jsp"/>
                     <h3>Dane osobiste</h3>
                     <form class="form-horizontal" id="profile-form" action="/profile" commandName="profileForm" method="post" role="form">
                         <div class="form-group">
