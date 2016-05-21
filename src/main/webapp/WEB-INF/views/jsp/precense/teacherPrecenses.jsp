@@ -11,12 +11,19 @@
         <link rel="stylesheet" href="/resources/css/menu.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="/resources/js/pagination.js"></script>
+        <script src="/resources/js/filter.js"></script>
     </head>
     <body>
         <jsp:include page="../menu.jsp"/>
-
         <div class="container">
-            <br><br><br>
+            <br><br>
+            <hr>
+            <div class="input-group input-group-lg add-on">
+                <div class="input-group"> <span class="input-group-addon">Filter</span>
+                    <input id="filter" type="text" class="form-control" placeholder="Type here...">
+                </div>
+            </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -26,7 +33,7 @@
                         <th>Ilość zajęć</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="paginationTable" class="searchable">
                     <c:forEach var="courses" items="${coursesList}">
                         <tr>
                             <td><c:out value="${courses.subjectName}"  /></td>
@@ -40,6 +47,9 @@
                     </c:forEach>
                 </tbody>
             </table>
+        </div>
+        <div class="col-md-12 text-center">
+            <ul class="pagination" id="pager"></ul>
         </div>
     </body>
 </html>

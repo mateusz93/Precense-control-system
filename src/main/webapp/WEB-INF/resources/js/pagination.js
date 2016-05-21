@@ -113,11 +113,11 @@
  // load the plugin
  $(document).ready(function() {
 
-     $('#myTable').pageMe({
-         pagerSelector: '#myPager',
+     $('#paginationTable').pageMe({
+         pagerSelector: '#pager',
          showPrevNext: true,
          hidePageNumbers: false,
-         perPage: 10
+         perPage: 8
      });
 
  });

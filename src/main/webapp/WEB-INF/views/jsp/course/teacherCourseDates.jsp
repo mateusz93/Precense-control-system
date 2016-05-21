@@ -10,12 +10,15 @@
         <link rel="stylesheet" href="/resources/css/menu.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="/resources/js/pagination.js"></script>
+        <script src="/resources/js/filter.js"></script>
     </head>
     <body>
         <jsp:include page="../menu.jsp"/>
         <div class="container">
             <br><br>
             <jsp:include page="../alert/allAlerts.jsp"/>
+            <hr>
             <form action="/courses/addOne/${teacherCourseId}" method="post">
                 <td><button type="submit" value="${teacherCourseId}" name="teacherCourseId" class="btn btn-success">Dodaj termin</button></td>
             </form>
@@ -24,6 +27,11 @@
                 <td><button type="submit" value="${courseID}" name="courseID" class="btn btn-success">Dodaj kilka terminów</button></td>
             </form>
         -->
+            <div class="input-group input-group-lg add-on">
+                <div class="input-group"> <span class="input-group-addon">Filter</span>
+                    <input id="filter" type="text" class="form-control" placeholder="Type here...">
+                </div>
+            </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -32,7 +40,7 @@
                         <th>Czas zakończenia</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="paginationTable" class="searchable">
                     <c:forEach var="date" items="${datesList}">
                         <tr>
                             <td class="col-md-2"><c:out value="${date.date}"  /></td>
@@ -50,6 +58,9 @@
                     </c:forEach>
                 </tbody>
             </table>
-        </div>  
+        </div>
+        <div class="col-md-12 text-center">
+            <ul class="pagination" id="pager"></ul>
+        </div>
     </body>
 </html>
