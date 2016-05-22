@@ -54,7 +54,7 @@ public class ProfileService {
         contact.setGroup(form.getGroup());
         contact.setPhone(form.getPhone());
         contact.setCity(form.getCity());
-        contact.setStreet(form.getCity());
+        contact.setStreet(form.getStreet());
         contactDao.update(contact);
         user.setContact(contact);
         user.setFirstName(form.getFirstName());
