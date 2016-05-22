@@ -56,6 +56,7 @@ public class ProfileService {
         contact.setCity(form.getCity());
         contact.setStreet(form.getStreet());
         contactDao.update(contact);
+        contact = contactDao.findByEmail(form.getEmail());
         user.setContact(contact);
         user.setFirstName(form.getFirstName());
         user.setLastName(form.getLastName());
