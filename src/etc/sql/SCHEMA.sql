@@ -2,16 +2,16 @@ USE data;
 
 SET foreign_key_checks = 0;
 -- Drop tables
-drop table `AppLog`;
-drop table `Contact`;
-drop table `CourseDate`;
-drop table `Department`;
-drop table `EventDictionary`;
-drop table `StudentCourse`;
-drop table `StudentPrecense`;
-drop table `Subject`;
-drop table `TeacherCourse`;
-drop table `User`;
+--drop table `AppLog`;
+--drop table `Contact`;
+--drop table `CourseDate`;
+--drop table `Department`;
+--drop table `EventDictionary`;
+--drop table `StudentCourse`;
+--drop table `StudentPrecense`;
+--drop table `Subject`;
+--drop table `TeacherCourse`;
+--drop table `User`;
 
 
 CREATE TABLE `AppLog` (
@@ -82,17 +82,17 @@ CREATE TABLE `StudentPrecense` (
   CONSTRAINT `fk_student2` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `StudentPrecense` (
+CREATE TABLE `StudentCourse` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `studentID` int(10) unsigned NOT NULL,
-  `courseDateID` int(10) unsigned NOT NULL,
-  `status` varchar(20) NOT NULL,
+  `teacherCourseID` int(10) unsigned NOT NULL,
+  `saveTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`),
   KEY `studentID` (`studentID`),
-  KEY `courseDateID` (`courseDateID`),
-  CONSTRAINT `fk_courseDate` FOREIGN KEY (`courseDateID`) REFERENCES `CourseDate` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_student2` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `teacherCourseID` (`teacherCourseID`),
+  CONSTRAINT `fk_teacherCourse1` FOREIGN KEY (`teacherCourseID`) REFERENCES `TeacherCourse` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_student3` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Subject` (
@@ -140,15 +140,15 @@ CREATE TABLE `User` (
   CONSTRAINT `fk_User_1` FOREIGN KEY (`contactID`) REFERENCES `Contact` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
-ALTER TABLE AppLog CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE Contact CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE CourseDate CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE Department CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE EventDictionary CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE StudentCourse CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE StudentPrecense CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE Subject CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE TeacherCourse CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE User CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE AppLog CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE Contact CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE CourseDate CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE Department CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE EventDictionary CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE StudentCourse CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE StudentPrecense CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE Subject CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE TeacherCourse CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+--ALTER TABLE User CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 SET foreign_key_checks = 1;
