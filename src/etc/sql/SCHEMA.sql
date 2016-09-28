@@ -3,9 +3,11 @@ USE data;
 SET foreign_key_checks = 0;
 -- Drop tables
 --drop table `AppLog`;
+--drop table `AppProperty`;
 --drop table `Contact`;
 --drop table `CourseDate`;
 --drop table `Department`;
+--drop table `EmailTemplate`;
 --drop table `EventDictionary`;
 --drop table `StudentCourse`;
 --drop table `StudentPrecense`;
@@ -26,6 +28,14 @@ CREATE TABLE `AppLog` (
   KEY `fk_student_idx` (`studentID`),
   CONSTRAINT `fk_AppLog_eventDictionary` FOREIGN KEY (`eventDictionaryID`) REFERENCES `EventDictionary` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_AppLog_student` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `AppProperty` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(500) NOT NULL,
+  `value` varchar(500) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID_UNIQUE` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Contact` (
@@ -59,6 +69,14 @@ CREATE TABLE `Department` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`),
   UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `EmailTemplate` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(500) NOT NULL,
+  `value` varchar(500) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID_UNIQUE` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `EventDictionary` (
