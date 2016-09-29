@@ -11,6 +11,7 @@ SET foreign_key_checks = 0;
 --drop table `EventDictionary`;
 --drop table `StudentCourse`;
 --drop table `StudentPrecense`;
+--drop table `SMSTemplate`;
 --drop table `Subject`;
 --drop table `TeacherCourse`;
 --drop table `User`;
@@ -111,6 +112,14 @@ CREATE TABLE `StudentCourse` (
   KEY `teacherCourseID` (`teacherCourseID`),
   CONSTRAINT `fk_teacherCourse1` FOREIGN KEY (`teacherCourseID`) REFERENCES `TeacherCourse` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_student3` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `SMSTemplate` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(500) NOT NULL,
+  `value` varchar(500) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID_UNIQUE` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Subject` (

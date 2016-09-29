@@ -101,4 +101,15 @@ INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('5', '7');
 INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('5', '27');
 INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('5', '24');
 
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.from.adress', 'dmcs.p.lodz.pl@gmail.com');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.from.username', 'dmcs.p.lodz.pl');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.from.password', 'dmcs1234');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.port', '587');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.host', 'smtp.gmail.com');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.smtp.auth', 'true');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.smtp.starttls.enable', 'true');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('sms.account_sid', 'AC3d8d5a6178f996ab92bdc4d2d5931e44');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('sms.auth_token', 'd181f81cfc1f9fa21efb427aebe1b67d');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('sms.from.number', '+48732230590');
+
 SET foreign_key_checks = 1;

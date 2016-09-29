@@ -34,8 +34,10 @@ public class EmailService {
         String password = appPropertyDao.findByName("email.from.password").getValue();
         String port = appPropertyDao.findByName("email.port").getValue();
         String host = appPropertyDao.findByName("email.host").getValue();
+        String auth = appPropertyDao.findByName("email.smtp.auth").getValue();
+        String isStarttls = appPropertyDao.findByName("email.smtp.starttls.enable").getValue();
 
-        Properties props = getProperties(host, port);
+        Properties props = getProperties(host, port, auth, isStarttls);
         Session session = getSession(username, password, props);
 
         try {
@@ -52,12 +54,12 @@ public class EmailService {
         }
     }
 
-    private Properties getProperties(String host, String port) {
+    private Properties getProperties(String host, String port, String auth, String isStarttls) {
         Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", host); // smtp.gmail.com
-        props.put("mail.smtp.port", port); // 587, 465 for ssl
+        props.put("mail.smtp.auth", auth);
+        props.put("mail.smtp.starttls.enable", isStarttls);
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
         return props;
     }
 
