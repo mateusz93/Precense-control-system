@@ -18,7 +18,7 @@ h4 {
     margin-bottom: 30px;
 }  
 .jumbotron {
-    background-color: #f4511e;
+    background-color: #750105;
     color: #fff;
     padding: 60px 25px;
     font-family: Montserrat, sans-serif;
@@ -31,11 +31,11 @@ h4 {
     background-color: #f6f6f6;
 }
 .logo-small {
-    color: #f4511e;
+    color: #750105;
     font-size: 50px;
 }
 .logo {
-    color: #f4511e;
+    color: #750105;
     font-size: 200px;
 }
 .thumbnail {
@@ -56,7 +56,7 @@ h4 {
     border-color: #f4511e;
 }
 .carousel-indicators li.active {
-    background-color: #f4511e;
+    background-color: #750105;
 }
 .item h4 {
     font-size: 19px;
@@ -69,7 +69,7 @@ h4 {
     font-style: normal;
 }
 .panel {
-    border: 1px solid #f4511e; 
+    border: 1px solid #750105;
     border-radius:0 !important;
     transition: box-shadow 0.5s;
 }
@@ -77,13 +77,13 @@ h4 {
     box-shadow: 5px 0px 40px rgba(0,0,0, .2);
 }
 .panel-footer .btn:hover {
-    border: 1px solid #f4511e;
+    border: 1px solid #750105;
     background-color: #fff !important;
     color: #f4511e;
 }
 .panel-heading {
     color: #fff !important;
-    background-color: #f4511e !important;
+    background-color: #750105 !important;
     padding: 25px;
     border-bottom: 1px solid transparent;
     border-top-left-radius: 0px;
@@ -103,12 +103,12 @@ h4 {
 }
 .panel-footer .btn {
     margin: 15px 0;
-    background-color: #f4511e;
+    background-color: #750105;
     color: #fff;
 }
 .navbar {
     margin-bottom: 0;
-    background-color: #f4511e;
+    background-color: #750105;
     z-index: 9999;
     border: 0;
     font-size: 14px !important;
@@ -131,7 +131,7 @@ h4 {
 footer .glyphicon {
     font-size: 20px;
     margin-bottom: 20px;
-    color: #f4511e;
+    color: #750105;
 }
 @media screen and (max-width: 768px) {
     .col-sm-4 {
