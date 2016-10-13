@@ -5,10 +5,10 @@
     <head>
         <title>System kontroli obecności</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="/resources/css/main.css"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
 
     <body>
@@ -55,7 +55,6 @@
 
 
         <div id="contact" class="container-fluid bg-grey">
-          <h2 class="text-center">Kontakt</h2>
           <div class="row">
             <div class="col-sm-5">
               <p>Skontaktuj się z nami, odpowiemy w przeciągu 24 godzin</p>
@@ -73,7 +72,7 @@
                   <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
                 </div>
               </div>
-              <textarea class="form-control" id="comments" name="comments" placeholder="Treść" rows="5"></textarea><br>
+              <textarea class="form-control" id="comment" name="comment" placeholder="Treść" rows="5"></textarea><br>
               <div class="row">
                 <div class="col-sm-12 form-group">
                   <button class="btn btn-default pull-right" type="submit">Wyślij</button>
