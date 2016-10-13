@@ -1,11 +1,13 @@
-package neo.dmcs.dao;
+package neo.dmcs.repository;
+
+import neo.dmcs.model.User;
 
 import java.util.List;
 
 /**
  * @Author Mateusz Wieczorek, 28.04.16.
  */
-public interface CustomDao {
+public interface CustomRepository extends CrudRepository<User, Integer> {
 
     List<Object[]> findTeacherPrecensesByUserId(int id);
     List<Object[]> findStudentPrecensesByUserId(int id);

@@ -1,6 +1,6 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.CustomDao;
+import neo.dmcs.repository.CustomRepository;
 import neo.dmcs.model.User;
 import neo.dmcs.view.precense.StudentPrecensesView;
 import neo.dmcs.view.precense.TeacherPrecensesView;
@@ -21,15 +21,15 @@ public class PrecenseService {
     private static final Logger logger = LoggerFactory.getLogger(PrecenseService.class);
 
     @Autowired
-    private CustomDao customDao;
+    private CustomRepository customRepository;
 
     public List<StudentPrecensesView> getStudentPrecenses(User user) {
-        List<Object[]> objects = customDao.findStudentPrecensesByUserId(user.getId());
+        List<Object[]> objects = customRepository.findStudentPrecensesByUserId(user.getId());
         return getStudentCastedResult(objects);
     }
 
     public List<TeacherPrecensesView> getTeacherPrecenses(User user) {
-        List<Object[]> objects = customDao.findTeacherPrecensesByUserId(user.getId());
+        List<Object[]> objects = customRepository.findTeacherPrecensesByUserId(user.getId());
         return getTeacherCastedResult(objects);
     }
 

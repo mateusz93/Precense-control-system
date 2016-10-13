@@ -1,6 +1,6 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.dao.*;
+import neo.dmcs.repository.*;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
- * Created by mateusz on 25.03.16.
+ * @Author Mateusz Wieczorek on 25.03.16.
  */
 @Controller
 @Transactional
@@ -35,25 +35,25 @@ public class CourseController {
     private final Logger logger = LoggerFactory.getLogger(CourseController.class);
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Autowired
-    private CustomDao customDao;
+    private CustomRepository customRepository;
 
     @Autowired
-    private CourseDateDao courseDateDao;
+    private CourseDateRepository courseDateRepository;
 
     @Autowired
-    private DepartmentDao departmentDao;
+    private DepartmentRepository departmentRepository;
 
     @Autowired
-    private SubjectDao subjectDao;
+    private SubjectRepository subjectRepository;
 
     @Autowired
-    private TeacherCourseDao teacherCourseDao;
+    private TeacherCourseRepository teacherCourseRepository;
 
     @Autowired
-    private StudentCourseDao studentCourseDao;
+    private StudentCourseRepository studentCourseRepository;
 
     @Autowired
     private CourseService courseService;
@@ -66,7 +66,7 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userDao.findByUsername(username);
+        User user = userRepository.findByLogin(username);
         prepareView(mvc, user);
         return mvc;
     }
@@ -79,16 +79,16 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userDao.findByUsername(username);
+        User user = userRepository.findByLogin(username);
         if (user.getType().equals(UserType.Student.name())) {
             mvc.setViewName("course/studentCourseDates");
-            TeacherCourse teacherCourse = teacherCourseDao.findById(teacherCourseId);
-            List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourse);
+            TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
+            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
             mvc.addObject("datesList", courseDates);
         } else {
             mvc.setViewName("course/teacherCourseDates");
-            TeacherCourse teacherCourse = teacherCourseDao.findById(teacherCourseId);
-            List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourse);
+            TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
+            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
             mvc.addObject("teacherCourseId", teacherCourseId);
             mvc.addObject("datesList", courseDates);
         }
@@ -104,7 +104,7 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        List<Department> departments = departmentDao.findAll();
+        List<Department> departments = (List<Department>) departmentRepository.findAll();
         mvc.addObject("departments", departments);
         return mvc;
     }
@@ -117,10 +117,10 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        CourseDate courseDate = courseDateDao.findById(dateId);
-        courseDateDao.delete(courseDate);
-        TeacherCourse teacherCourse = teacherCourseDao.findById(courseDate.getTeacherCourse().getId());
-        List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourse);
+        CourseDate courseDate = courseDateRepository.findOne(dateId);
+        courseDateRepository.delete(courseDate);
+        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseDate.getTeacherCourse().getId());
+        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
         mvc.addObject("datesList", courseDates);
 
         return mvc;
@@ -134,10 +134,10 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userDao.findByUsername(username);
-        TeacherCourse teacherCourse = teacherCourseDao.findById(courseId);
-        StudentCourse studentCourse = studentCourseDao.findByStudentAndTeacherCourse(user, teacherCourse);
-        studentCourseDao.delete(studentCourse);
+        User user = userRepository.findByLogin(username);
+        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
+        StudentCourse studentCourse = studentCourseRepository.findByStudentAndTeacherCourse(user, teacherCourse);
+        studentCourseRepository.delete(studentCourse);
 
         prepareView(mvc, user);
 
@@ -155,9 +155,9 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userDao.findByUsername(username);
+        User user = userRepository.findByLogin(username);
         saveNewCourse(newCourseForm, user);
-        List<Department> departments = departmentDao.findAll();
+        List<Department> departments = (List<Department>) departmentRepository.findAll();
         mvc.addObject("departments", departments);
         mvc.addObject("message", "course.added");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
@@ -184,15 +184,15 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        TeacherCourse teacherCourse = teacherCourseDao.findById(teacherCourseId);
+        TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
         CourseDate courseDate = new CourseDate();
         courseDate.setTeacherCourse(teacherCourse);
         courseDate.setStartTime(form.getStartTime());
         courseDate.setFinishTime(form.getFinishTime());
         courseDate.setDate(form.getDate());
-        courseDateDao.save(courseDate);
+        courseDateRepository.save(courseDate);
 
-        List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourse);
+        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
         mvc.addObject("datesList", courseDates);
         mvc.addObject("message", "course.courseDateAdded");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
@@ -200,13 +200,13 @@ public class CourseController {
     }
 
     private void saveNewCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, User user) {
-        Department department = departmentDao.findById(newCourseForm.getDepartmentID());
+        Department department = departmentRepository.findOne(newCourseForm.getDepartmentID());
 
         Subject subject = new Subject();
         subject.setDepartment(department);
         subject.setDescription(newCourseForm.getDescription());
         subject.setName(newCourseForm.getSubjectName());
-        subjectDao.save(subject);
+        subjectRepository.save(subject);
 
         TeacherCourse teacherCourse = new TeacherCourse();
         teacherCourse.setDescription(newCourseForm.getDescription());
@@ -215,7 +215,7 @@ public class CourseController {
         teacherCourse.setSubject(subject);
         teacherCourse.setTeacher(user);
         teacherCourse.setType(newCourseForm.getType());
-        teacherCourseDao.save(teacherCourse);
+        teacherCourseRepository.save(teacherCourse);
     }
 
     private void prepareView(ModelAndView mvc, User user) {

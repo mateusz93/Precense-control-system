@@ -1,7 +1,5 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.ContactDao;
-import neo.dmcs.dao.UserDao;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.FieldEmptyException;

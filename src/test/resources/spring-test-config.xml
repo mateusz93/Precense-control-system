@@ -9,7 +9,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd
 http://www.springframework.org/schema/data/jpa
 http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-    <jpa:repositories base-package="neo.dmcs.dao"/>
+    <jpa:repositories base-package="neo.dmcs.repository"/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml"/>
@@ -40,16 +40,16 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <bean id="appLogDao" class="neo.dmcs.dao.impl.AppLogDaoImpl" />
-    <bean id="contactDao" class="neo.dmcs.dao.impl.ContactDaoImpl" />
-    <bean id="courseDateDao" class="neo.dmcs.dao.impl.CourseDateDaoImpl" />
-    <bean id="departmentDao" class="neo.dmcs.dao.impl.DepartmentDaoImpl" />
-    <bean id="eventDictionaryDao" class="neo.dmcs.dao.impl.EventDictionaryDaoImpl" />
-    <bean id="studentCourseDao" class="neo.dmcs.dao.impl.StudentCourseDaoImpl" />
-    <bean id="studentPrecenseDao" class="neo.dmcs.dao.impl.StudentPrecenseDaoImpl" />
-    <bean id="subjectDao" class="neo.dmcs.dao.impl.SubjectDaoImpl" />
-    <bean id="teacherCourseDao" class="neo.dmcs.dao.impl.TeacherCourseDaoImpl" />
-    <bean id="userDao" class="neo.dmcs.dao.impl.UserDaoImpl" />
+    <bean id="appLogDao" class="neo.dmcs.repository.impl.AppLogDaoImpl" />
+    <bean id="contactDao" class="neo.dmcs.repository.impl.ContactDaoImpl" />
+    <bean id="courseDateDao" class="neo.dmcs.repository.impl.CourseDateDaoImpl" />
+    <bean id="departmentDao" class="neo.dmcs.repository.impl.DepartmentDaoImpl" />
+    <bean id="eventDictionaryDao" class="neo.dmcs.repository.impl.EventDictionaryDaoImpl" />
+    <bean id="studentCourseDao" class="neo.dmcs.repository.impl.StudentCourseDaoImpl" />
+    <bean id="studentPrecenseDao" class="neo.dmcs.repository.impl.StudentPrecenseDaoImpl" />
+    <bean id="subjectDao" class="neo.dmcs.repository.impl.SubjectDaoImpl" />
+    <bean id="teacherCourseDao" class="neo.dmcs.repository.impl.TeacherCourseDaoImpl" />
+    <bean id="userDao" class="neo.dmcs.repository.impl.UserDaoImpl" />
 
     <bean id="loginService" class="neo.dmcs.service.LoginService" />
     <bean id="registerService" class="neo.dmcs.service.RegisterService" />

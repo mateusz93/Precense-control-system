@@ -1,7 +1,7 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.ContactDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.repository.ContactRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.exception.*;
 import neo.dmcs.model.Contact;
@@ -28,10 +28,10 @@ public class LoginService {
     private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
 
     @Autowired
-    private UserDao usersDao;
+    private UserRepository userRepository;
 
     @Autowired
-    private ContactDao contactDao;
+    private ContactRepository contactRepository;
 
 
     public void validate(LoginView form) throws IncorrectEmailException, IncorrectPasswordException, IncorrectUserTypeException, UserNotActivedException, FieldEmptyException {
@@ -41,7 +41,7 @@ public class LoginService {
         }
 
         Contact contact = getContact(form.getEmail());
-        User user = usersDao.findByContact(contact);
+        User user = userRepository.findByContact(contact);
 
         try {
             if (!Encryptor.encryption(form.getPassword()).equals(user.getPassword())) {
@@ -60,12 +60,12 @@ public class LoginService {
         }
 
         user.setLastLogin(new Timestamp((new Date()).getTime()));
-        usersDao.update(user);
+        userRepository.save(user);
     }
 
     private Contact getContact(String email) throws IncorrectEmailException {
         try {
-            return contactDao.findByEmail(email);
+            return contactRepository.findByEmail(email);
         } catch (NoResultException e) {
             throw new IncorrectEmailException();
         }

@@ -1,7 +1,7 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.ContactDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.repository.ContactRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.IncorrectPasswordException;
@@ -24,10 +24,10 @@ public class ProfileService {
     private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
 
     @Autowired
-    private UserDao usersDao;
+    private UserRepository usersDao;
 
     @Autowired
-    private ContactDao contactDao;
+    private ContactRepository contactRepository;
 
     public void update(ProfileView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException {
         deleteWhiteCharacters(form);
@@ -45,18 +45,18 @@ public class ProfileService {
         }
 
         User user = getUpdatedUser(form);
-        usersDao.update(user);
+        usersDao.save(user);
     }
 
     private User getUpdatedUser(ProfileView form) {
-        Contact contact = contactDao.findByEmail(form.getEmail());
+        Contact contact = contactRepository.findByEmail(form.getEmail());
         User user = usersDao.findByContact(contact);
         contact.setGroup(form.getGroup());
         contact.setPhone(form.getPhone());
         contact.setCity(form.getCity());
         contact.setStreet(form.getStreet());
-        contactDao.update(contact);
-        contact = contactDao.findByEmail(form.getEmail());
+        contactRepository.save(contact);
+        contact = contactRepository.findByEmail(form.getEmail());
         user.setContact(contact);
         user.setFirstName(form.getFirstName());
         user.setLastName(form.getLastName());

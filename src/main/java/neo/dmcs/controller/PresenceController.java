@@ -1,6 +1,6 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.dao.*;
+import neo.dmcs.repository.*;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,31 +28,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mateusz on 25.03.16.
+ * @Author Mateusz Wieczorek on 25.03.16.
  */
 @Controller
+@Transactional
 @RequestMapping("/precenses")
 public class PresenceController {
 
     private final Logger logger = LoggerFactory.getLogger(PresenceController.class);
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Autowired
-    private CustomDao customDao;
+    private CustomRepository customRepository;
 
     @Autowired
-    private CourseDateDao courseDateDao;
+    private CourseDateRepository courseDateRepository;
 
     @Autowired
-    private StudentPrecenseDao studentPrecenseDao;
+    private StudentPrecenseRepository studentPrecenseRepository;
 
     @Autowired
-    private TeacherCourseDao teacherCourseDao;
+    private TeacherCourseRepository teacherCourseRepository;
 
     @Autowired
-    private StudentCourseDao studentCourseDao;
+    private StudentCourseRepository studentCourseRepository;
 
     @Autowired
     private PrecenseService precenseService;
@@ -64,7 +66,7 @@ public class PresenceController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userDao.findByUsername(username);
+        User user = userRepository.findByLogin(username);
         prepareView(mvc, user);
         return mvc;
     }
@@ -77,11 +79,11 @@ public class PresenceController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userDao.findByUsername(username);
+        User user = userRepository.findByLogin(username);
         if (user.getType().equals(UserType.Student.name())) {
             mvc.setViewName("precense/precensesInfo");
             List<CourseDateView> courseDateViews = new ArrayList<CourseDateView>();
-            List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourseDao.findById(courseId));
+            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourseRepository.findOne(courseId));
             for (CourseDate cd : courseDates) {
                 CourseDateView courseDateView = new CourseDateView();
                 courseDateView.setDate(cd.getDate());
@@ -89,8 +91,8 @@ public class PresenceController {
                 courseDateView.setStartTime(cd.getStartTime());
                 courseDateView.setCourseDateID(courseId);
                 try {
-                    CourseDate courseDate = courseDateDao.findById(courseId);
-                    StudentPrecense studentPrecense = studentPrecenseDao.findByCourseDate(courseDate);
+                    CourseDate courseDate = courseDateRepository.findOne(courseId);
+                    StudentPrecense studentPrecense = studentPrecenseRepository.findByCourseDate(courseDate);
                     courseDateView.setStatus(studentPrecense.getStatus());
                 } catch (NoResultException e) {
                     if (logger.isWarnEnabled()) {
@@ -104,7 +106,7 @@ public class PresenceController {
         } else {
             mvc.setViewName("precense/checkPrecenses");
             List<CourseDateView> courseDateViews = new ArrayList<CourseDateView>();
-            List<CourseDate> courseDates = courseDateDao.findByTeacherCourse(teacherCourseDao.findById(courseId));
+            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourseRepository.findOne(courseId));
             for (CourseDate cd : courseDates) {
                 CourseDateView courseDateView = new CourseDateView();
                 courseDateView.setDate(cd.getDate());
@@ -132,7 +134,8 @@ public class PresenceController {
     }
 
     @RequestMapping(value = "/update/{courseDateId}", method = RequestMethod.POST)
-    public ModelAndView update(@ModelAttribute("studentWrapper") CheckPrecenseViewWrapper studentWrapper, @PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
+    public ModelAndView update(@ModelAttribute("studentWrapper") CheckPrecenseViewWrapper studentWrapper,
+                               @PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("precense/checkPrecense");
         String username = (String) httpSession.getAttribute("username");
         if (!isLogged(username)) {
@@ -148,18 +151,18 @@ public class PresenceController {
     }
 
     private void preparePrecensesList(@PathVariable("courseDateId") int courseDateId, ModelAndView mvc) {
-        CourseDate courseDate = courseDateDao.findById(courseDateId);
+        CourseDate courseDate = courseDateRepository.findOne(courseDateId);
         TeacherCourse teacherCourse = courseDate.getTeacherCourse();
-        List<StudentCourse> studentCourses = studentCourseDao.findByTeacherCourse(teacherCourse);
+        List<StudentCourse> studentCourses = studentCourseRepository.findByTeacherCourse(teacherCourse);
         List<CheckPrecenseView> students = new ArrayList<CheckPrecenseView>();
 
         for (StudentCourse studentCourse : studentCourses) {
-            User student = userDao.findById(studentCourse.getStudent().getId());
+            User student = userRepository.findOne(studentCourse.getStudent().getId());
             CheckPrecenseView checkPrecenseView = new CheckPrecenseView();
             checkPrecenseView.setFirstName(student.getFirstName());
             checkPrecenseView.setLastName(student.getLastName());
             try {
-                checkPrecenseView.setPrecenseStatus(studentPrecenseDao.findByCourseDate(courseDate).getStatus());
+                checkPrecenseView.setPrecenseStatus(studentPrecenseRepository.findByCourseDate(courseDate).getStatus());
             } catch (NoResultException e) {
                 logger.debug("Student " + student.getFirstName() + " " + student.getLastName() + " nie ma sprawdzonej obecności w tym terminie");
             }

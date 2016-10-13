@@ -3,12 +3,6 @@ package neo.dmcs.model;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@NamedQueries({
-        @NamedQuery(name = StudentCourse.FIND_BY_STUDENT_AND_TEACHER_COURSE, query = "from StudentCourse s where s.teacherCourse = :teacherCourse and s.student = :student"),
-        @NamedQuery(name = StudentCourse.FIND_BY_TEACHER_COURSE, query = "from StudentCourse s where s.teacherCourse = :teacherCourse"),
-        @NamedQuery(name = StudentCourse.FIND_BY_STUDENT, query = "from StudentCourse s where s.student = :student"),
-        @NamedQuery(name = StudentCourse.FIND_ALL, query = "from StudentCourse")
-})
 @Entity
 @Table(name = "StudentCourse", schema = "data")
 public class StudentCourse {
@@ -17,11 +11,6 @@ public class StudentCourse {
     private TeacherCourse teacherCourse;
     private User student;
     private Timestamp saveTime;
-
-    public static final String FIND_BY_STUDENT_AND_TEACHER_COURSE = "StudentCourseFindByStudentAndTeacherCourse";
-    public static final String FIND_BY_TEACHER_COURSE = "StudentCourseFindByTeacherCourse";
-    public static final String FIND_BY_STUDENT = "StudentCourseFindByStudent";
-    public static final String FIND_ALL = "StudentCourseFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -1,7 +1,7 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.ContactDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.repository.ContactRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.exception.*;
@@ -31,9 +31,9 @@ import static org.junit.Assert.assertTrue;
 public class RegisterServiceTest {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
     @Autowired
-    private ContactDao contactDao;
+    private ContactRepository contactRepository;
     @Autowired
     private RegisterService registerService;
 
@@ -43,7 +43,7 @@ public class RegisterServiceTest {
     public void setUp() {
         Contact contact = new Contact();
         contact.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
-        contactDao.save(contact);
+        contactRepository.save(contact);
 
         user = new neo.dmcs.model.User();
         user.setContact(contact);
@@ -59,12 +59,12 @@ public class RegisterServiceTest {
         user.setType(UserType.Student.name());
         user.setLastLogin(new Timestamp((new Date()).getTime() - 100000000));
 
-        userDao.save(user);
+        userRepository.save(user);
     }
 
     @After
     public void delete() {
-        userDao.delete(user);
+        userRepository.delete(user);
     }
 
     @Test(expected=FieldEmptyException.class)
@@ -131,12 +131,12 @@ public class RegisterServiceTest {
 
         registerService.accept(registerView);
 
-        Contact contact2 = contactDao.findByEmail(registerView.getEmail());
-        User user2 = userDao.findByContact(contact2);
+        Contact contact2 = contactRepository.findByEmail(registerView.getEmail());
+        User user2 = userRepository.findByContact(contact2);
 
         assertTrue(user2.getLogin().equals("zxcvbnmfghjkajshdh0"));
         
-        userDao.delete(user2);
+        userRepository.delete(user2);
     }
 
 }

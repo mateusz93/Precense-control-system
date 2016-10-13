@@ -1,7 +1,7 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.dao.ContactDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.repository.ContactRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.FieldEmptyException;
@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,22 +29,22 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.MalformedURLException;
 
 /**
  * @Author Mateusz Wieczorek
  */
 @Controller
+@Transactional
 @RequestMapping("/profile")
 public class ProfileController {
 
     private final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Autowired
-    private ContactDao contactDao;
+    private ContactRepository contactRepository;
 
     @Autowired
     private ProfileService profileService;
@@ -56,7 +57,7 @@ public class ProfileController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userDao.findByUsername(username);
+        User user = userRepository.findByLogin(username);
         prepareProfileView(mvc, user.getContact().getEmail());
         return mvc;
     }
@@ -122,8 +123,8 @@ public class ProfileController {
     }
 
     private void prepareProfileView(ModelAndView mvc, String email) {
-        Contact contact = contactDao.findByEmail(email);
-        User user = userDao.findByContact(contact);
+        Contact contact = contactRepository.findByEmail(email);
+        User user = userRepository.findByContact(contact);
         mvc.addObject("firstName", user.getFirstName());
         mvc.addObject("lastName", user.getLastName());
         mvc.addObject("ID", user.getId());

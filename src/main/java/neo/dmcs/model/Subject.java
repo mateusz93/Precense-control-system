@@ -2,10 +2,6 @@ package neo.dmcs.model;
 
 import javax.persistence.*;
 
-@NamedQueries({
-        @NamedQuery(name = Subject.FIND_BY_NAME, query = "from Subject s where s.name = :name"),
-        @NamedQuery(name = Subject.FIND_ALL, query = "from Subject")
-})
 @Entity
 @Table(name = "Subject", schema = "data")
 public class Subject {
@@ -14,9 +10,6 @@ public class Subject {
     private String name;
     private String description;
     private Department department;
-
-    public static final String FIND_BY_NAME = "SubjectFindByName";
-    public static final String FIND_ALL = "SubjectFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -2,21 +2,13 @@ package neo.dmcs.model;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
-@NamedQueries({
-        @NamedQuery(name = Department.FIND_BY_NAME, query = "from Department d where d.name = :name"),
-        @NamedQuery(name = Department.FIND_ALL, query = "from Department")
-})
 @Entity
 @Table(name = "Department", schema = "data")
 public class Department {
+
     private int id;
     private String name;
     private String description;
-
-    public static final String FIND_BY_NAME = "DepartmentFindByName";
-    public static final String FIND_ALL = "DepartmentFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

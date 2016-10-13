@@ -2,11 +2,6 @@ package neo.dmcs.model;
 
 import javax.persistence.*;
 
-@NamedQueries({
-        @NamedQuery(name = TeacherCourse.FIND_BY_SUBJECT, query = "from TeacherCourse t where t.subject = :subject"),
-        @NamedQuery(name = TeacherCourse.FIND_BY_TEACHER, query = "from TeacherCourse t where t.teacher = :teacher"),
-        @NamedQuery(name = TeacherCourse.FIND_ALL, query = "from TeacherCourse")
-})
 @Entity
 @Table(name = "TeacherCourse", schema = "data")
 public class TeacherCourse {
@@ -18,10 +13,6 @@ public class TeacherCourse {
     private int coursesQuantity;
     private int minPresence;
     private String description;
-
-    public static final String FIND_BY_SUBJECT = "TeacherCourseFindBySubject";
-    public static final String FIND_BY_TEACHER = "TeacherCourseFindByTeacher";
-    public static final String FIND_ALL = "TeacherCourseFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

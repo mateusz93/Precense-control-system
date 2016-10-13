@@ -1,7 +1,6 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.CustomDao;
-import neo.dmcs.enums.UserType;
+import neo.dmcs.repository.CustomRepository;
 import neo.dmcs.model.User;
 import neo.dmcs.view.course.StudentCourseView;
 import neo.dmcs.view.course.TeacherCourseView;
@@ -22,15 +21,15 @@ public class CourseService {
     private static final Logger logger = LoggerFactory.getLogger(CourseService.class);
 
     @Autowired
-    private CustomDao customDao;
+    private CustomRepository customRepository;
 
     public List<StudentCourseView> getStudentCoursesList(User user) {
-        List<Object[]> objects = customDao.findStudentCoursesByUserId(user.getId());
+        List<Object[]> objects = customRepository.findStudentCoursesByUserId(user.getId());
         return getStudentCastedResult(objects);
     }
 
     public List<TeacherCourseView> getTeacherCoursesList(User user) {
-        List<Object[]> objects = customDao.findTeacherCoursesByUserId(user.getId());
+        List<Object[]> objects = customRepository.findTeacherCoursesByUserId(user.getId());
         return getTeacherCastedResult(objects);
     }
 

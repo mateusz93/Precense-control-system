@@ -2,9 +2,9 @@ USE data;
 
 SET foreign_key_checks = 0;
 
-INSERT INTO `data`.`Contact` (`userID`, `Email`, `PESEL`, `phone`, `street`, `city`) VALUES ('1', 'mati@edu.p.lodz.pl', '89798355652', '767332112', 'kardynalna', 'Warszawa');
-INSERT INTO `data`.`Contact` (`userID`, `Email`, `PESEL`, `phone`, `street`, `city`) VALUES ('2', 'ziomeczek12@edu.p.lodz.pl', '89010178909', '556677888', 'kozietulskiego', 'Łódź');
-INSERT INTO `data`.`Contact` (`userID`, `Email`, `PESEL`, `phone`, `street`, `city`) VALUES ('3', '123763@edu.p.lodz.pl', '77090188923', '701889203', 'kaliska', 'Poznań');
+INSERT INTO `data`.`Contact` (`ID`, `Email`, `phone`, `street`, `city`) VALUES ('1', 'mati@edu.p.lodz.pl', '767332112', 'kardynalna', 'Warszawa');
+INSERT INTO `data`.`Contact` (`ID`, `Email`, `phone`, `street`, `city`) VALUES ('2', 'ziomeczek12@edu.p.lodz.pl', '556677888', 'kozietulskiego', 'Łódź');
+INSERT INTO `data`.`Contact` (`ID`, `Email`, `phone`, `street`, `city`) VALUES ('3', '123763@edu.p.lodz.pl', '701889203', 'kaliska', 'Poznań');
 
 INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('1', 'Laboratorium', '15', '14');
 INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('2', 'Cwiczenia', '30', '28');
@@ -84,13 +84,9 @@ INSERT INTO `data`.`Subject` (`Name`, `departmentID`, `description`) VALUES ('Pr
 INSERT INTO `data`.`Subject` (`Name`, `departmentID`) VALUES ('Statystyka', '1');
 INSERT INTO `data`.`Subject` (`Name`, `departmentID`, `description`) VALUES ('Kryptografia', '3', 'Szyfr cezara, szyfr afiniczny, klucz publiczny i prywatny');
 
-INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `index`, `type`, `password`, `Status`) VALUES ('mateuszek', 'Mateusz', 'Wieczorek', '187835', 'Student', 'maslo123', 'ACTIVE');
-INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `index`, `type`, `password`, `Status`) VALUES ('janek123','Jan', 'Nowak', '210231', 'Student', 'dupa123', 'ACTIVE');
-INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `index`, `type`, `password`, `Status`) VALUES ('tobi90', 'Tobiasz', 'Kowalski', '188291', 'Student', 'password1', 'ACTIVE');
-INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `index`, `type`, `password`, `Status`) VALUES ('G12', 'Grzegorz', 'Maslowski', '139111', 'Teacher', 'passwd', 'ACTIVE');
-INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `type`, `password`, `Status`) VALUES ('zofia12', 'Zofia', 'Kaleta', 'Teacher', 'zofia12', 'ACTIVE');
-INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `type`, `password`, `Status`) VALUES ('marek9', 'Marek', 'Zdun', 'Teacher', 'mzdun', 'ACTIVE');
-INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `type`, `password`, `Status`) VALUES ('Igor', 'Igor', 'Dudek', 'Teacher', 'dudekigor', 'ACTIVE');
+INSERT INTO `data`.`User` (`login`, `contactID`, `firstName`, `lastName`, `type`, `password`, `Status`) VALUES ('mateuszek', '1', 'Mateusz', 'Wieczorek', 'Student', 'maslo123', 'ACTIVE');
+INSERT INTO `data`.`User` (`login`, `contactID`, `firstName`, `lastName`, `type`, `password`, `Status`) VALUES ('G12', '2', 'Grzegorz', 'Maslowski', 'Teacher', 'passwd', 'ACTIVE');
+INSERT INTO `data`.`User` (`login`, `contactID`, `firstName`, `lastName`, `type`, `password`, `Status`) VALUES ('Igor', '3', 'Igor', 'Dudek', 'Teacher', 'dudekigor', 'ACTIVE');
 
 INSERT INTO `data`.`StudentCourse` (`studentID`, `courseID`) VALUES ('4', '5');
 INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('4', '2');

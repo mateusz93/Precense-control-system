@@ -6,10 +6,6 @@ import javax.persistence.*;
  * @Author Mateusz Wieczorek on 9/28/16.
  */
 
-@NamedQueries({
-        @NamedQuery(name = AppProperty.FIND_BY_NAME, query = "from AppProperty a where a.name = :name"),
-        @NamedQuery(name = AppProperty.FIND_ALL, query = "from AppProperty")
-})
 @Entity
 @Table(name = "AppProperty", schema = "data")
 public class AppProperty {
@@ -17,9 +13,6 @@ public class AppProperty {
     private int id;
     private String name;
     private String value;
-
-    public static final String FIND_BY_NAME = "AppPropertyFindByName";
-    public static final String FIND_ALL = "AppPropertyFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

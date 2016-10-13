@@ -6,10 +6,6 @@ import javax.persistence.*;
  * @Author Mateusz Wieczorek on 9/27/16.
  */
 
-@NamedQueries({
-        @NamedQuery(name = EmailTemplate.FIND_BY_NAME, query = "from EmailTemplate a where a.name = :name"),
-        @NamedQuery(name = EmailTemplate.FIND_ALL, query = "from EmailTemplate")
-})
 @Entity
 @Table(name = "EmailTemplate", schema = "data")
 public class EmailTemplate {
@@ -17,9 +13,6 @@ public class EmailTemplate {
     private int id;
     private String name;
     private String value;
-
-    public static final String FIND_BY_NAME = "EmailTemplateFindByName";
-    public static final String FIND_ALL = "EmailTemplateFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

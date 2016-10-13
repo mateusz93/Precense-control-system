@@ -3,18 +3,10 @@ package neo.dmcs.model;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
-@NamedQueries({
-        @NamedQuery(name = User.FIND_BY_USERNAME, query = "from User u where u.login = :login"),
-        @NamedQuery(name = User.FIND_BY_FIRSTNAME, query = "from User u where u.firstName = :firstname"),
-        @NamedQuery(name = User.FIND_BY_LASTNAME, query = "from User u where u.lastName = :lastname"),
-        @NamedQuery(name = User.FIND_BY_CONTACT, query = "from User u where u.contact = :contact"),
-        @NamedQuery(name = User.FIND_ALL, query = "from User")
-})
 @Entity
 @Table(name = "User", schema = "data")
 public class User {
+
     private int id;
     private String login;
     private String firstName;
@@ -24,12 +16,6 @@ public class User {
     private Timestamp lastLogin;
     private String status;
     private Contact contact;
-
-    public static final String FIND_BY_FIRSTNAME = "UserFindByFirstname";
-    public static final String FIND_BY_LASTNAME = "UserFindByLastname";
-    public static final String FIND_BY_USERNAME = "UserFindByUsername";
-    public static final String FIND_BY_CONTACT = "UserFindByContact";
-    public static final String FIND_ALL = "UserFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

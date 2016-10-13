@@ -1,7 +1,7 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.dao.ContactDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.repository.ContactRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.exception.*;
 import neo.dmcs.model.Contact;
@@ -31,9 +31,9 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
     @Autowired
-    private ContactDao contactDao;
+    private ContactRepository contactRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView logIn() {
@@ -46,8 +46,8 @@ public class LoginController {
 
         try {
             loginService.validate(form);
-            Contact contact = contactDao.findByEmail(form.getEmail());
-            User user = userDao.findByContact(contact);
+            Contact contact = contactRepository.findByEmail(form.getEmail());
+            User user = userRepository.findByContact(contact);
             session.setAttribute("username", user.getLogin());
             session.setAttribute("userType", user.getType());
         } catch (FieldEmptyException e) {

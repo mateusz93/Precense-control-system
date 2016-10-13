@@ -1,7 +1,7 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.ContactDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.repository.ContactRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.EmailExistsException;
@@ -24,15 +24,16 @@ import java.security.NoSuchAlgorithmException;
 /**
  * @Author Mateusz Wieczorek, 30.03.16.
  */
-@Service("registerService")
+@Service
 public class RegisterService {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
 
     @Autowired
-    private UserDao usersDao;
+    private UserRepository userRepository;
+
     @Autowired
-    private ContactDao contactDao;
+    private ContactRepository contactRepository;
 
     public void accept(RegisterView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException, EmailExistsException {
         validate(form);
@@ -40,14 +41,14 @@ public class RegisterService {
         String username = generateUsername(form.getFirstName(), form.getLastName());
 
         Contact contact = getContact(form);
-        contactDao.save(contact);
+        contactRepository.save(contact);
         User user = getUser(form, username);
-        usersDao.save(user);
+        userRepository.save(user);
     }
 
     private neo.dmcs.model.User getUser(RegisterView form, String username) {
         try {
-            Contact contact = contactDao.findByEmail(form.getEmail());
+            Contact contact = contactRepository.findByEmail(form.getEmail());
             neo.dmcs.model.User user = new neo.dmcs.model.User();
             user.setFirstName(form.getFirstName());
             user.setLastName(form.getLastName());
@@ -100,7 +101,7 @@ public class RegisterService {
 
     private void checkEmail(String email) throws EmailExistsException {
         try {
-            contactDao.findByEmail(email);
+            contactRepository.findByEmail(email);
         } catch (NoResultException e) {
             return;
         }
@@ -112,7 +113,7 @@ public class RegisterService {
 
         for (int i = 0; i < 100000; ++i) {
             try {
-                usersDao.findByUsername(username);
+                userRepository.findByLogin(username);
             } catch (NoResultException e) {
                 return username;
             }

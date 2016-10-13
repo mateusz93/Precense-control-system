@@ -2,13 +2,6 @@ package neo.dmcs.model;
 
 import javax.persistence.*;
 
-@NamedQueries({
-        @NamedQuery(name = Contact.FIND_BY_EMAIL, query = "from Contact c where c.email = :email"),
-        @NamedQuery(name = Contact.FIND_BY_GROUP, query = "from Contact c where c.group = :group"),
-        @NamedQuery(name = Contact.FIND_BY_PHONE, query = "from Contact c where c.phone = :phone"),
-        @NamedQuery(name = Contact.FIND_BY_CITY, query = "from Contact c where c.city = :city"),
-        @NamedQuery(name = Contact.FIND_ALL, query = "from Contact")
-})
 @Entity
 @Table(name = "Contact", schema = "data")
 public class Contact {
@@ -19,12 +12,6 @@ public class Contact {
     private String phone;
     private String street;
     private String city;
-
-    public static final String FIND_BY_EMAIL = "ContactFindByEmail";
-    public static final String FIND_BY_GROUP = "ContactFindByGroup";
-    public static final String FIND_BY_PHONE = "ContactFindByPhone";
-    public static final String FIND_BY_CITY = "ContactFindByCity";
-    public static final String FIND_ALL = "ContactFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

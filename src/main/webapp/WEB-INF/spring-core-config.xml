@@ -9,7 +9,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd
 http://www.springframework.org/schema/data/jpa
 http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-    <jpa:repositories base-package="neo.dmcs.dao"/>
+    <jpa:repositories base-package="neo.dmcs.repository"/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml"/>
@@ -39,7 +39,7 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
     </bean>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="268435456"/> <!-- 256 megs -->
+        <property name="maxUploadSize" value="2048000"/> <!-- 2 mb -->
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

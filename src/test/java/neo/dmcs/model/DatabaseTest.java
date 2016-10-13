@@ -1,7 +1,7 @@
 package neo.dmcs.model;
 
-import neo.dmcs.dao.SubjectDao;
-import neo.dmcs.dao.TeacherCourseDao;
+import neo.dmcs.repository.SubjectRepository;
+import neo.dmcs.repository.TeacherCourseRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +21,15 @@ import static org.hamcrest.core.Is.is;
 public class DatabaseTest {
 
     @Autowired
-    private TeacherCourseDao teacherCourseDao;
+    private TeacherCourseRepository teacherCourseRepository;
     @Autowired
-    private SubjectDao subjectDao;
+    private SubjectRepository subjectRepository;
 
     @Test
     public void test() {
-        Subject subject = subjectDao.findById(1);
+        Subject subject = subjectRepository.findOne(1);
 
-        List<TeacherCourse> teacherCourseList = teacherCourseDao.findBySubject(subject);
+        List<TeacherCourse> teacherCourseList = teacherCourseRepository.findBySubject(subject);
         assertThat(true, is(true));
 
     }

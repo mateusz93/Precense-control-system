@@ -6,21 +6,13 @@ import javax.persistence.*;
  * @Author Mateusz Wieczorek on 9/29/16.
  */
 
-@NamedQueries({
-        @NamedQuery(name = SMSTemplate.FIND_BY_NAME, query = "from SMSTemplateDao a where a.name = :name"),
-        @NamedQuery(name = SMSTemplate.FIND_ALL, query = "from SMSTemplateDao")
-})
 @Entity
-@Table(name = "SMSTemplateDao", schema = "data")
+@Table(name = "SMSTemplate", schema = "data")
 public class SMSTemplate {
-
 
     private int id;
     private String name;
     private String value;
-
-    public static final String FIND_BY_NAME = "SMSTemplateFindByName";
-    public static final String FIND_ALL = "SMSTemplateFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -1,10 +1,12 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.AppPropertyDao;
-import neo.dmcs.dao.EmailTemplateDao;
+import neo.dmcs.repository.AppPropertyRepository;
+import neo.dmcs.repository.EmailTemplateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -17,25 +19,26 @@ import javax.mail.internet.MimeMessage;
 /**
  * @Author by Mateusz Wieczorek on 9/27/16.
  */
+@Service
 public class EmailService {
 
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     @Autowired
-    private EmailTemplateDao emailTemplateDao;
+    private EmailTemplateRepository emailTemplateRepository;
 
     @Autowired
-    private AppPropertyDao appPropertyDao;
+    private AppPropertyRepository appPropertyRepository;
 
     public void sendEmail(String recipient, String subject, String content) {
 
-        String from = appPropertyDao.findByName("email.from.adress").getValue();
-        String username = appPropertyDao.findByName("email.from.username").getValue();
-        String password = appPropertyDao.findByName("email.from.password").getValue();
-        String port = appPropertyDao.findByName("email.port").getValue();
-        String host = appPropertyDao.findByName("email.host").getValue();
-        String auth = appPropertyDao.findByName("email.smtp.auth").getValue();
-        String isStarttls = appPropertyDao.findByName("email.smtp.starttls.enable").getValue();
+        String from = appPropertyRepository.findByName("email.from.adress").getValue();
+        String username = appPropertyRepository.findByName("email.from.username").getValue();
+        String password = appPropertyRepository.findByName("email.from.password").getValue();
+        String port = appPropertyRepository.findByName("email.port").getValue();
+        String host = appPropertyRepository.findByName("email.host").getValue();
+        String auth = appPropertyRepository.findByName("email.smtp.auth").getValue();
+        String isStarttls = appPropertyRepository.findByName("email.smtp.starttls.enable").getValue();
 
         Properties props = getProperties(host, port, auth, isStarttls);
         Session session = getSession(username, password, props);

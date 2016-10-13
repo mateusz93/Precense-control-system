@@ -4,10 +4,6 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
 
-@NamedQueries({
-        @NamedQuery(name = CourseDate.FIND_BY_TEACHER_COURSE, query = "from CourseDate c where c.teacherCourse = :teacherCourse"),
-        @NamedQuery(name = CourseDate.FIND_ALL, query = "from CourseDate")
-})
 @Entity
 @Table(name = "CourseDate", schema = "data")
 public class CourseDate {
@@ -17,9 +13,6 @@ public class CourseDate {
     private Time startTime;
     private Time finishTime;
     private Date date;
-
-    public static final String FIND_BY_TEACHER_COURSE = "CourseDateFindByCourse";
-    public static final String FIND_ALL = "CourseDateFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

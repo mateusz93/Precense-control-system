@@ -3,11 +3,6 @@ package neo.dmcs.model;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@NamedQueries({
-        @NamedQuery(name = AppLog.FIND_BY_EVENT_DICTIONARY, query = "from AppLog a where a.eventDictionary = :eventDictionary"),
-        @NamedQuery(name = AppLog.FIND_BY_STUDENT, query = "from AppLog a where a.student = :student"),
-        @NamedQuery(name = AppLog.FIND_ALL, query = "from AppLog")
-})
 @Entity
 @Table(name = "AppLog", schema = "data")
 public class AppLog {
@@ -17,10 +12,6 @@ public class AppLog {
     private EventDictionary eventDictionary;
     private User student;
     private String description;
-
-    public static final String FIND_BY_EVENT_DICTIONARY = "AppLogFindByEventDictionary";
-    public static final String FIND_BY_STUDENT = "AppLogFindByStudent";
-    public static final String FIND_ALL = "AppLogFindAll";
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

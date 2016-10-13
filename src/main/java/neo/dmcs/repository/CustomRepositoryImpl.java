@@ -1,8 +1,9 @@
-package neo.dmcs.dao.impl;
+package neo.dmcs.repository;
 
-import neo.dmcs.dao.CustomDao;
+import neo.dmcs.model.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
@@ -12,7 +13,11 @@ import java.util.List;
  */
 @Transactional
 @Repository
-public class CustomDaoImpl implements CustomDao {
+public class CustomRepositoryImpl implements CustomRepository {
+
+    @PersistenceContext(name = "data")
+    private EntityManager em;
+
 
     private final String TeacherPrecensesByTeacherId = "SELECT TeacherCourse.ID as id, Subject.name AS subjectName, " +
             " Department.name AS departmentName, TeacherCourse.type, TeacherCourse.coursesQuantity as quantity FROM TeacherCourse" +
@@ -20,7 +25,6 @@ public class CustomDaoImpl implements CustomDao {
             " JOIN Department ON Subject.departmentID = Department.ID" +
             " JOIN User ON User.ID = TeacherCourse.teacherID" +
             " WHERE User.ID =:userID";
-
 
     private final String StudentPrecensesByStudentId = "SELECT Subject.Name AS subjectName, Department.Name AS departmentName, " +
             "TeacherCourse.type, TeacherCourse.ID AS courseId, TeacherCourse.coursesQuantity AS quantity, " +
@@ -52,9 +56,6 @@ public class CustomDaoImpl implements CustomDao {
             "JOIN Department ON Department.ID = Subject.departmentID " +
             "JOIN User ON User.ID = TeacherCourse.teacherID";
 
-    @PersistenceContext(name = "data")
-    private EntityManager em;
-
     @Override
     public List<Object[]> findTeacherPrecensesByUserId(int id) {
         return em.createNativeQuery(TeacherPrecensesByTeacherId).setParameter("userID", id).getResultList();
@@ -78,5 +79,35 @@ public class CustomDaoImpl implements CustomDao {
     @Override
     public List<Object[]> findTeacherCourses() {
         return em.createNativeQuery(TeacherCourses).getResultList();
+    }
+
+    @Override
+    public <S extends User> S save(S entity) {
+        return null;
+    }
+
+    @Override
+    public User findOne(Integer primaryKey) {
+        return null;
+    }
+
+    @Override
+    public Iterable<User> findAll() {
+        return null;
+    }
+
+    @Override
+    public Long count() {
+        return null;
+    }
+
+    @Override
+    public void delete(User entity) {
+
+    }
+
+    @Override
+    public boolean exists(Integer primaryKey) {
+        return false;
     }
 }

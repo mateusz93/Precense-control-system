@@ -1,7 +1,7 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.ContactDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.repository.ContactRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.exception.*;
@@ -31,9 +31,9 @@ import static org.junit.Assert.assertTrue;
 public class LoginServiceTest {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
     @Autowired
-    private ContactDao contactDao;
+    private ContactRepository contactRepository;
     @Autowired
     private LoginService loginService;
 
@@ -43,7 +43,7 @@ public class LoginServiceTest {
     public void setUp() {
         Contact contact = new Contact();
         contact.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
-        contactDao.save(contact);
+        contactRepository.save(contact);
 
         user = new neo.dmcs.model.User();
         user.setContact(contact);
@@ -59,12 +59,12 @@ public class LoginServiceTest {
         user.setType(UserType.Student.name());
         user.setLastLogin(new Timestamp((new Date()).getTime() - 100000000));
 
-        userDao.save(user);
+        userRepository.save(user);
     }
 
     @After
     public void delete() {
-        userDao.delete(user);
+        userRepository.delete(user);
     }
 
 
@@ -81,7 +81,7 @@ public class LoginServiceTest {
     @Test(expected=UserNotActivedException.class)
     public void shouldThrowUserNotActivedException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivedException {
         user.setStatus(UserStatus.INACTIVE.name());
-        userDao.update(user);
+        userRepository.save(user);
 
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
@@ -136,7 +136,7 @@ public class LoginServiceTest {
 
         loginService.validate(loginView);
 
-        user = userDao.findById(user.getId());
+        user = userRepository.findOne(user.getId());
         long newLastLogin = user.getLastLogin().getTime();
 
         assertTrue(newLastLogin > lastLogin);

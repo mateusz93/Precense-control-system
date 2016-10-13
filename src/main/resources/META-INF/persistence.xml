@@ -3,10 +3,13 @@
 
     <persistence-unit name="data" transaction-type="RESOURCE_LOCAL">
         <class>neo.dmcs.model.AppLog</class>
+        <class>neo.dmcs.model.AppProperty</class>
         <class>neo.dmcs.model.Contact</class>
         <class>neo.dmcs.model.CourseDate</class>
         <class>neo.dmcs.model.Department</class>
+        <class>neo.dmcs.model.EmailTemplate</class>
         <class>neo.dmcs.model.EventDictionary</class>
+        <class>neo.dmcs.model.SMSTemplate</class>
         <class>neo.dmcs.model.StudentCourse</class>
         <class>neo.dmcs.model.StudentPrecense</class>
         <class>neo.dmcs.model.Subject</class>
@@ -14,8 +17,9 @@
         <class>neo.dmcs.model.User</class>
         <properties>
             <property name="persistenceUnitName" value="data"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/data?UseUnicode=true&amp;characterEncoding=utf8"/>
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/data?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true
+                &amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;autoReconnect=true&amp;useSSL=false"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.connection.password" value="root"/>
             <property name="hibernate.connection.useUnicode" value="true" />

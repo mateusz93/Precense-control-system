@@ -1,18 +1,18 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.dao.StudentCourseDao;
-import neo.dmcs.dao.TeacherCourseDao;
-import neo.dmcs.dao.UserDao;
+import neo.dmcs.repository.StudentCourseRepository;
+import neo.dmcs.repository.TeacherCourseRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.model.StudentCourse;
 import neo.dmcs.model.TeacherCourse;
 import neo.dmcs.model.User;
 import neo.dmcs.service.SaveService;
 import neo.dmcs.view.course.SaveView;
-import neo.dmcs.view.course.StudentCourseView;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,17 +26,18 @@ import java.util.List;
  * @Author Mateusz Wieczorek, 14.05.16.
  */
 @Controller
+@Transactional
 @RequestMapping("/saves")
 public class SaveController {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Autowired
-    private TeacherCourseDao teacherCourseDao;
+    private TeacherCourseRepository teacherCourseRepository;
 
     @Autowired
-    private StudentCourseDao studentCourseDao;
+    private StudentCourseRepository studentCourseRepository;
 
     @Autowired
     private SaveService saveService;
@@ -50,7 +51,7 @@ public class SaveController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userDao.findByUsername(username);
+        User user = userRepository.findByLogin(username);
         prepareView(mvc, user);
         return mvc;
     }
@@ -64,13 +65,13 @@ public class SaveController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userDao.findByUsername(username);
-        TeacherCourse teacherCourse = teacherCourseDao.findById(courseId);
+        User user = userRepository.findByLogin(username);
+        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
         StudentCourse studentCourse = new StudentCourse();
         studentCourse.setStudent(user);
         studentCourse.setTeacherCourse(teacherCourse);
         studentCourse.setSaveTime(new Timestamp((new Date()).getTime()));
-        studentCourseDao.save(studentCourse);
+        studentCourseRepository.save(studentCourse);
 
         prepareView(mvc, user);
 

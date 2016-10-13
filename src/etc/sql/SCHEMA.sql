@@ -82,8 +82,17 @@ CREATE TABLE `EmailTemplate` (
 
 CREATE TABLE `EventDictionary` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `eventName` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `description` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID_UNIQUE` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Notification` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userID` int(10) unsigned NOT NULL,
+  `sms` varchar(500) DEFAULT NULL,
+  `email` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;

@@ -1,8 +1,8 @@
 package neo.dmcs.service;
 
-import neo.dmcs.dao.CustomDao;
-import neo.dmcs.dao.StudentCourseDao;
-import neo.dmcs.dao.TeacherCourseDao;
+import neo.dmcs.repository.CustomRepository;
+import neo.dmcs.repository.StudentCourseRepository;
+import neo.dmcs.repository.TeacherCourseRepository;
 import neo.dmcs.model.StudentCourse;
 import neo.dmcs.model.TeacherCourse;
 import neo.dmcs.model.User;
@@ -19,27 +19,27 @@ import java.util.List;
 /**
  * @Author Mateusz Wieczorek, 14.05.16.
  */
-@Service("saveService")
+@Service
 public class SaveService {
 
     private static final Logger logger = LoggerFactory.getLogger(SaveService.class);
 
     @Autowired
-    private CustomDao customDao;
+    private CustomRepository customRepository;
 
     @Autowired
-    private TeacherCourseDao teacherCourseDao;
+    private TeacherCourseRepository teacherCourseRepository;
 
     @Autowired
-    private StudentCourseDao studentCourseDao;
+    private StudentCourseRepository studentCourseRepository;
 
     public List<SaveView> getSubjects(User user) {
-        List<Object[]> objects = customDao.findTeacherCourses();
+        List<Object[]> objects = customRepository.findTeacherCourses();
         return getCastedResult(objects, user);
     }
 
     private List<SaveView> getCastedResult(List<Object[]> objects, User user) {
-        List<SaveView> resultList = new ArrayList<SaveView>();
+        List<SaveView> resultList = new ArrayList<>();
         for (Object[] object : objects) {
             SaveView saveView = new SaveView();
             saveView.setId((Integer) object[0]);
@@ -50,9 +50,9 @@ public class SaveService {
             saveView.setTeacherName(String.valueOf(object[5]));
             saveView.setDescription(String.valueOf(object[6]));
 
-            TeacherCourse teacherCourse = teacherCourseDao.findById(saveView.getId());
+            TeacherCourse teacherCourse = teacherCourseRepository.findOne(saveView.getId());
             try {
-                StudentCourse studentCourses = studentCourseDao.findByStudentAndTeacherCourse(user, teacherCourse);
+                StudentCourse studentCourses = studentCourseRepository.findByStudentAndTeacherCourse(user, teacherCourse);
             } catch (NoResultException e) {
                 resultList.add(saveView);
             }
