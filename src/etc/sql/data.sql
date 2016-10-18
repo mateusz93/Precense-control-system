@@ -107,5 +107,7 @@ INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.smtp.starttls.
 INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('sms.account_sid', 'AC3d8d5a6178f996ab92bdc4d2d5931e44');
 INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('sms.auth_token', 'd181f81cfc1f9fa21efb427aebe1b67d');
 INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('sms.from.number', '+48732230590');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('contact.email.content', 'Dziękujemy za kontakt. Odpowiemy w ciągu 24godzin.');
+INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('contact.email.subject', 'Kontakt');
 
 SET foreign_key_checks = 1;
