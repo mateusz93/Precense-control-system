@@ -5,95 +5,94 @@ package neo.dmcs.view.user;
  */
 public class ProfileNotificationView {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String group;
-    private String type;
-    private String phone;
-    private String city;
-    private String street;
-    private String password;
-    private String confirmPassword;
+    private String courseCanceledEmail;
+    private String courseCanceledSMS;
+    private String changeCourseDateEmail;
+    private String changeCourseDateSMS;
+    private String absenceEmail;
+    private String absenceSMS;
+    private String criticalPresenceLevelEmail;
+    private String criticalPresenceLevelSMS;
+    private String badMarkEmail;
+    private String badMarkSMS;
 
-    public String getFirstName() {
-        return firstName;
+    public String getCourseCanceledEmail() {
+        return courseCanceledEmail;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setCourseCanceledEmail(String courseCanceledEmail) {
+        this.courseCanceledEmail = courseCanceledEmail;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getCourseCanceledSMS() {
+        return courseCanceledSMS;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setCourseCanceledSMS(String courseCanceledSMS) {
+        this.courseCanceledSMS = courseCanceledSMS;
     }
 
-    public String getEmail() {
-        return email;
+    public String getChangeCourseDateEmail() {
+        return changeCourseDateEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setChangeCourseDateEmail(String changeCourseDateEmail) {
+        this.changeCourseDateEmail = changeCourseDateEmail;
     }
 
-    public String getGroup() {
-        return group;
+    public String getChangeCourseDateSMS() {
+        return changeCourseDateSMS;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setChangeCourseDateSMS(String changeCourseDateSMS) {
+        this.changeCourseDateSMS = changeCourseDateSMS;
     }
 
-    public String getType() {
-        return type;
+    public String getAbsenceEmail() {
+        return absenceEmail;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAbsenceEmail(String absenceEmail) {
+        this.absenceEmail = absenceEmail;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getAbsenceSMS() {
+        return absenceSMS;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setAbsenceSMS(String absenceSMS) {
+        this.absenceSMS = absenceSMS;
     }
 
-    public String getCity() {
-        return city;
+    public String getCriticalPresenceLevelEmail() {
+        return criticalPresenceLevelEmail;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCriticalPresenceLevelEmail(String criticalPresenceLevelEmail) {
+        this.criticalPresenceLevelEmail = criticalPresenceLevelEmail;
     }
 
-    public String getStreet() {
-        return street;
+    public String getCriticalPresenceLevelSMS() {
+        return criticalPresenceLevelSMS;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setCriticalPresenceLevelSMS(String criticalPresenceLevelSMS) {
+        this.criticalPresenceLevelSMS = criticalPresenceLevelSMS;
     }
 
-    public String getPassword() {
-        return password;
+    public String getBadMarkEmail() {
+        return badMarkEmail;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setBadMarkEmail(String badMarkEmail) {
+        this.badMarkEmail = badMarkEmail;
     }
 
-    public String getConfirmPassword() {
-        return confirmPassword;
+    public String getBadMarkSMS() {
+        return badMarkSMS;
     }
 
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+    public void setBadMarkSMS(String badMarkSMS) {
+        this.badMarkSMS = badMarkSMS;
     }
-
 }

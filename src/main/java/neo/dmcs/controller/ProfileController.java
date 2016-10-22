@@ -1,6 +1,8 @@
 package neo.dmcs.controller;
 
+import neo.dmcs.model.Notification;
 import neo.dmcs.repository.ContactRepository;
+import neo.dmcs.repository.NotificationRepository;
 import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.exception.DifferentPasswordsException;
@@ -27,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -50,25 +53,32 @@ public class ProfileController {
     private ContactRepository contactRepository;
 
     @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
     private ProfileService profileService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView profile(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("user/profile");
-        String username = (String) httpSession.getAttribute("username");
-        if (!StringUtils.isNotBlank(username)) {
+        User user = getUserFromSession(httpSession);
+        if (user == null) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userRepository.findByLogin(username);
-        prepareProfileView(mvc, user.getContact().getEmail());
+        prepareProfileView(mvc, user);
         return mvc;
     }
 
     @RequestMapping(value = "/general", method = RequestMethod.POST)
-    public ModelAndView profileGeneral(@ModelAttribute("profileForm") ProfileGeneralView form, HttpSession httpSession) {
+    public ModelAndView profileGeneral(@ModelAttribute("profileForm") ProfileGeneralView form,
+                                       HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("user/profile");
-
+        User user = getUserFromSession(httpSession);
+        if (user == null) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
         try {
             profileService.update(form);
         } catch (FieldEmptyException e) {
@@ -91,20 +101,35 @@ public class ProfileController {
         logger.debug("Profile updated");
         mvc.addObject("message", "profile.updated");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
-        prepareProfileView(mvc, form.getEmail());
+        prepareProfileView(mvc, user);
         return mvc;
     }
 
     @RequestMapping(value = "/notification", method = RequestMethod.POST)
-    public ModelAndView profileNotification(@ModelAttribute("profileForm") ProfileNotificationView form, HttpSession httpSession) {
+    public ModelAndView profileNotification(@ModelAttribute("profileForm") ProfileNotificationView form,
+                                            HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("user/profile");
-
+        User user = getUserFromSession(httpSession);
+        if (user == null) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        saveNewNotificationSettings(user, form);
+        mvc.addObject("message", "profile.updated");
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
+        prepareProfileView(mvc, user);
         return mvc;
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.POST)
-    public ModelAndView profilePassword(@ModelAttribute("profileForm") ProfilePasswordView form, HttpSession httpSession) {
-        ModelAndView mvc = new ModelAndView("profile");
+    public ModelAndView profilePassword(@ModelAttribute("profileForm") ProfilePasswordView form,
+                                        HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("user/profile");
+        User user = getUserFromSession(httpSession);
+        if (user == null) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
 
         try {
             profileService.updatePassword(form, httpSession);
@@ -133,23 +158,27 @@ public class ProfileController {
         logger.debug("Password updated");
         mvc.addObject("message", "profile.password.updated");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
+        prepareProfileView(mvc, user);
         return mvc;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/upload")
     public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file,
-                                         RedirectAttributes redirectAttributes, HttpSession session) {
+                                         HttpSession session) {
         ModelAndView mvc = new ModelAndView("user/profile");
-        String username = (String) session.getAttribute("username");
-        if (!StringUtils.isNotBlank(username)) {
+        User user = getUserFromSession(session);
+        if (user == null) {
             mvc.setViewName("security/login");
             return mvc;
         }
 
-        if (!file.isEmpty()) {
+        if (file.isEmpty()) {
+            mvc.addObject("message", "profile.upload.empty");
+            mvc.addObject("messageType", MessageType.DANGER.name());
+        } else {
             try {
                 BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(new File("src/main/webapp/WEB-INF/resources/images/" + username)));
+                        new FileOutputStream(new File("src/main/webapp/WEB-INF/resources/images/" + user.getLogin())));
                 FileCopyUtils.copy(file.getInputStream(), stream);
                 stream.close();
                 mvc.addObject("message", "profile.upload.success");
@@ -158,17 +187,123 @@ public class ProfileController {
                 mvc.addObject("message", "profile.upload.fail");
                 mvc.addObject("messageType", MessageType.DANGER.name());
             }
-        } else {
-            mvc.addObject("message", "profile.upload.empty");
-            mvc.addObject("messageType", MessageType.DANGER.name());
         }
 
         return mvc;
     }
 
-    private void prepareProfileView(ModelAndView mvc, String email) {
-        Contact contact = contactRepository.findByEmail(email);
-        User user = userRepository.findByContact(contact);
+    private User getUserFromSession(HttpSession httpSession) {
+        String username = (String) httpSession.getAttribute("username");
+        return userRepository.findByLogin(username);
+    }
+
+    private void saveNewNotificationSettings(User user, ProfileNotificationView form) {
+        Notification notification = notificationRepository.findByUser(user);
+        if (notification == null) {
+            notification = new Notification();
+            notification.setUser(user);
+            notification.setCriticalPresenceLevel("");
+            notification.setCourseCanceled("");
+            notification.setAbsence("");
+            notification.setBadMark("");
+            notification.setChangeCourseDate("");
+        }
+        if (form.getCriticalPresenceLevelEmail() != null) {
+            notification.setCriticalPresenceLevel("EMAIL ");
+        } else {
+            notification.setCriticalPresenceLevel("");
+        }
+        if (form.getCriticalPresenceLevelSMS() != null) {
+            notification.setCriticalPresenceLevel(notification.getCriticalPresenceLevel() + "SMS");
+        }
+        if (form.getCourseCanceledEmail() != null) {
+            notification.setCourseCanceled("EMAIL ");
+        } else {
+            notification.setCourseCanceled("");
+        }
+        if (form.getCourseCanceledSMS() != null) {
+            notification.setCourseCanceled(notification.getCourseCanceled() + "SMS");
+        }
+        if (form.getAbsenceEmail() != null) {
+            notification.setAbsence("EMAIL ");
+        } else {
+            notification.setAbsence("");
+        }
+        if (form.getAbsenceSMS() != null) {
+            notification.setAbsence(notification.getAbsence() + "SMS");
+        }
+        if (form.getBadMarkEmail() != null) {
+            notification.setBadMark("EMAIL ");
+        } else {
+            notification.setBadMark("");
+        }
+        if (form.getBadMarkSMS() != null) {
+            notification.setBadMark(notification.getBadMark() + "SMS");
+        }
+        if (form.getChangeCourseDateEmail() != null) {
+            notification.setChangeCourseDate("EMAIL ");
+        } else {
+            notification.setChangeCourseDate("");
+        }
+        if (form.getChangeCourseDateSMS() != null) {
+            notification.setChangeCourseDate(notification.getChangeCourseDate() + "SMS");
+        }
+        notificationRepository.save(notification);
+    }
+
+    private void prepareProfileView(ModelAndView mvc, User user) {
+        prepareGeneralData(mvc, user);
+        prepareImage(mvc, user);
+        prepareNotificationData(mvc, user);
+    }
+
+    private void prepareNotificationData(ModelAndView mvc, User user) {
+        Notification notification = notificationRepository.findByUser(user);
+        if (notification == null) {
+            return;
+        }
+        if (notification.getCourseCanceled().contains("EMAIL")) {
+            mvc.addObject("courseCanceledEmail", "on");
+        }
+        if (notification.getCourseCanceled().contains("SMS")) {
+            mvc.addObject("courseCanceledSMS", "on");
+        }
+        if (notification.getAbsence().contains("EMAIL")) {
+            mvc.addObject("absenceEmail", "on");
+        }
+        if (notification.getAbsence().contains("SMS")) {
+            mvc.addObject("absenceSMS", "on");
+        }
+        if (notification.getBadMark().contains("EMAIL")) {
+            mvc.addObject("badMarkEmail", "on");
+        }
+        if (notification.getBadMark().contains("SMS")) {
+            mvc.addObject("badMarkSMS", "on");
+        }
+        if (notification.getChangeCourseDate().contains("EMAIL")) {
+            mvc.addObject("changeCourseDateEmail", "on");
+        }
+        if (notification.getChangeCourseDate().contains("SMS")) {
+            mvc.addObject("changeCourseDateSMS", "on");
+        }
+        if (notification.getCriticalPresenceLevel().contains("EMAIL")) {
+            mvc.addObject("criticalPresenceLevelEmail", "on");
+        }
+        if (notification.getCriticalPresenceLevel().contains("SMS")) {
+            mvc.addObject("criticalPresenceLevelSMS", "on");
+        }
+    }
+
+    private void prepareImage(ModelAndView mvc, User user) {
+        File f = new File("src/main/webapp/WEB-INF/resources/images/" + user.getLogin());
+        if (f.exists() && !f.isDirectory()) {
+            mvc.addObject("photoPath", "/resources/images/" + user.getLogin());
+        } else {
+            mvc.addObject("photoPath", "/resources/images/default.png");
+        }
+    }
+
+    private User prepareGeneralData(ModelAndView mvc, User user) {
         mvc.addObject("firstName", user.getFirstName());
         mvc.addObject("lastName", user.getLastName());
         mvc.addObject("ID", user.getId());
@@ -178,11 +313,7 @@ public class ProfileController {
         mvc.addObject("group", user.getContact().getGroup());
         mvc.addObject("phone", user.getContact().getPhone());
         mvc.addObject("street", user.getContact().getStreet());
-        File f = new File("src/main/webapp/WEB-INF/resources/images/" + user.getLogin());
-        if (f.exists() && !f.isDirectory()) {
-            mvc.addObject("photoPath", "/resources/images/" + user.getLogin());
-        } else {
-            mvc.addObject("photoPath", "/resources/images/default.png");
-        }
+        return user;
     }
+
 }

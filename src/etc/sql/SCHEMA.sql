@@ -15,6 +15,7 @@ SET foreign_key_checks = 0;
 --drop table `Subject`;
 --drop table `TeacherCourse`;
 --drop table `User`;
+--drop table `Notification`;
 
 
 CREATE TABLE `AppLog` (
@@ -84,15 +85,6 @@ CREATE TABLE `EventDictionary` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `description` varchar(500) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `ID_UNIQUE` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `Notification` (
-  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userID` int(10) unsigned NOT NULL,
-  `sms` varchar(500) DEFAULT NULL,
-  `email` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
@@ -174,6 +166,20 @@ CREATE TABLE `User` (
   UNIQUE KEY `ID_UNIQUE` (`ID`),
   UNIQUE KEY `contactID_UNIQUE` (`contactID`),
   CONSTRAINT `fk_User_1` FOREIGN KEY (`contactID`) REFERENCES `Contact` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Notification` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userID` int(10) unsigned NOT NULL,
+  `courseCanceled` varchar(50),
+  `changeCourseDate` varchar(50),
+  `absence` varchar(50),
+  `criticalPresenceLevel` varchar(50),
+  `badMark` varchar(50),
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID_UNIQUE` (`ID`),
+  UNIQUE KEY `userID_UNIQUE` (`userID`),
+  CONSTRAINT `fk_User_2` FOREIGN KEY (`userID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 --ALTER TABLE AppLog CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;

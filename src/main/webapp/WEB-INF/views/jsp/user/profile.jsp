@@ -96,10 +96,10 @@
                            <label class="col-lg-4 control-label">Odwołane zajęcia:</label>
                            <div class="col-lg-8">
                               <label class="col-lg-3 control-label">
-                              <input id="courseCanceledEmail" type="checkbox">
+                              <input name="courseCanceledEmail" ${'on' == courseCanceledEmail ? 'checked' : ''} type="checkbox">
                               </label>
                               <label class="col-lg-3 control-label">
-                              <input id="courseCanceledSMS" type="checkbox">
+                              <input name="courseCanceledSMS" ${'on' == courseCanceledSMS ? 'checked' : ''} type="checkbox">
                               </label>
                            </div>
                         </div>
@@ -107,10 +107,10 @@
                            <label class="col-lg-4 control-label">Zmiana terminu zajęć:</label>
                            <div class="col-lg-8">
                               <label class="col-lg-3 control-label">
-                              <input id="courseChangeDateEmail" type="checkbox">
+                              <input name="changeCourseDateEmail" ${'on' == changeCourseDateEmail ? 'checked' : ''} type="checkbox">
                               </label>
                               <label class="col-lg-3 control-label">
-                              <input id="courseChangeDateSMS" type="checkbox">
+                              <input name="changeCourseDateSMS" ${'on' == changeCourseDateSMS ? 'checked' : ''} type="checkbox">
                               </label>
                            </div>
                         </div>
@@ -118,10 +118,10 @@
                            <label class="col-lg-4 control-label">Nieobecność na zajęciach:</label>
                            <div class="col-lg-8">
                               <label class="col-lg-3 control-label">
-                              <input id="absenceEmail" type="checkbox">
+                              <input name="absenceEmail" ${'on' == absenceEmail ? 'checked' : ''} type="checkbox">
                               </label>
                               <label class="col-lg-3 control-label">
-                              <input id="absenceSMS" type="checkbox">
+                              <input name="absenceSMS" ${'on' == absenceSMS ? 'checked' : ''} type="checkbox">
                               </label>
                            </div>
                         </div>
@@ -129,10 +129,10 @@
                            <label class="col-lg-4 control-label">Krytyczny poziom obecności:</label>
                            <div class="col-lg-8">
                               <label class="col-lg-3 control-label">
-                              <input id="criticalPresenceLevelEmail" type="checkbox">
+                              <input name="criticalPresenceLevelEmail" ${'on' == criticalPresenceLevelEmail ? 'checked' : ''} type="checkbox">
                               </label>
                               <label class="col-lg-3 control-label">
-                              <input id="criticalPresenceLevelSMS" type="checkbox">
+                              <input name="criticalPresenceLevelSMS" ${'on' == criticalPresenceLevelSMS ? 'checked' : ''} type="checkbox">
                               </label>
                            </div>
                         </div>
@@ -140,10 +140,10 @@
                            <label class="col-lg-4 control-label">Ocena niedostateczna:</label>
                            <div class="col-lg-8">
                               <label class="col-lg-3 control-label">
-                              <input id="badMarkEmail" type="checkbox">
+                              <input name="badMarkEmail" ${'on' == badMarkEmail ? 'checked' : ''} type="checkbox">
                               </label>
                               <label class="col-lg-3 control-label">
-                              <input id="badMarkSMS" type="checkbox">
+                              <input name="badMarkSMS" ${'on' == badMarkSMS ? 'checked' : ''} type="checkbox">
                               </label>
                            </div>
                         </div>
