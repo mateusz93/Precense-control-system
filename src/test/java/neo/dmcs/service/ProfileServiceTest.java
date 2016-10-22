@@ -5,7 +5,7 @@ import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.IncorrectPasswordException;
 import neo.dmcs.util.Encryptor;
-import neo.dmcs.view.user.ProfileView;
+import neo.dmcs.view.user.ProfileGeneralView;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,46 +25,46 @@ public class ProfileServiceTest {
     @Autowired
     private ProfileService profileService;
 
-    private ProfileView profileView;
+    private ProfileGeneralView profileGeneralView;
 
     @Before
     public void setUp() throws NoSuchAlgorithmException {
-        profileView = new ProfileView();
-        profileView.setFirstName("Mateusz");
-        profileView.setLastName("Wieczorek");
-        profileView.setGroup("TI3");
-        profileView.setStreet("kanoniczna");
-        profileView.setPhone("222333444");
-        profileView.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
-        profileView.setConfirmPassword(Encryptor.encryption("zxcvbnmZ123$"));
-        profileView.setType(UserType.Student.name());
-        profileView.setEmail("kasdhnkjan@waea.pl");
-        profileView.setCity("Lodz");
+        profileGeneralView = new ProfileGeneralView();
+        profileGeneralView.setFirstName("Mateusz");
+        profileGeneralView.setLastName("Wieczorek");
+        profileGeneralView.setGroup("TI3");
+        profileGeneralView.setStreet("kanoniczna");
+        profileGeneralView.setPhone("222333444");
+        profileGeneralView.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
+        profileGeneralView.setConfirmPassword(Encryptor.encryption("zxcvbnmZ123$"));
+        profileGeneralView.setType(UserType.Student.name());
+        profileGeneralView.setEmail("kasdhnkjan@waea.pl");
+        profileGeneralView.setCity("Lodz");
     }
 
     @Test(expected=FieldEmptyException.class)
     public void shouldThrowFieldEmptyExceptionException() throws FieldEmptyException, IncorrectPasswordException, DifferentPasswordsException {
 
-        profileView.setFirstName("  ");
-        profileService.update(profileView);
+        profileGeneralView.setFirstName("  ");
+        profileService.update(profileGeneralView);
     }
 
     @Test(expected=DifferentPasswordsException.class)
     public void shouldThrowDifferentPasswordsException() throws FieldEmptyException, IncorrectPasswordException, DifferentPasswordsException, NoSuchAlgorithmException {
 
-        profileView.setPassword("zxcvbnmZ123$");
-        profileView.setConfirmPassword("zxcvbn2mZ123$");
+        profileGeneralView.setPassword("zxcvbnmZ123$");
+        profileGeneralView.setConfirmPassword("zxcvbn2mZ123$");
 
-        profileService.update(profileView);
+        profileService.update(profileGeneralView);
     }
 
     @Test(expected=IncorrectPasswordException.class)
     public void shouldThrowIncorrectPasswordException() throws FieldEmptyException, IncorrectPasswordException, DifferentPasswordsException, NoSuchAlgorithmException {
 
-        profileView.setPassword("zxcvbnmZ");
-        profileView.setConfirmPassword("zxcvbnmZ");
+        profileGeneralView.setPassword("zxcvbnmZ");
+        profileGeneralView.setConfirmPassword("zxcvbnmZ");
 
-        profileService.update(profileView);
+        profileService.update(profileGeneralView);
     }
 
 }

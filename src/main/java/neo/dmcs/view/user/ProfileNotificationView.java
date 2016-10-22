@@ -3,7 +3,7 @@ package neo.dmcs.view.user;
 /**
  * @Author Mateusz Wieczorek, 09.04.16.
  */
-public class ProfileView {
+public class ProfileNotificationView {
 
     private String firstName;
     private String lastName;

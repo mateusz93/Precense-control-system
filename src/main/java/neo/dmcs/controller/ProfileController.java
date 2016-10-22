@@ -9,7 +9,9 @@ import neo.dmcs.exception.IncorrectPasswordException;
 import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
 import neo.dmcs.service.ProfileService;
-import neo.dmcs.view.user.ProfileView;
+import neo.dmcs.view.user.ProfileGeneralView;
+import neo.dmcs.view.user.ProfileNotificationView;
+import neo.dmcs.view.user.ProfilePasswordView;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @Author Mateusz Wieczorek
@@ -62,8 +65,8 @@ public class ProfileController {
         return mvc;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView profile(@ModelAttribute("profileForm") ProfileView form, HttpSession httpSession) {
+    @RequestMapping(value = "/general", method = RequestMethod.POST)
+    public ModelAndView profileGeneral(@ModelAttribute("profileForm") ProfileGeneralView form, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("user/profile");
 
         try {
@@ -89,6 +92,47 @@ public class ProfileController {
         mvc.addObject("message", "profile.updated");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         prepareProfileView(mvc, form.getEmail());
+        return mvc;
+    }
+
+    @RequestMapping(value = "/notification", method = RequestMethod.POST)
+    public ModelAndView profileNotification(@ModelAttribute("profileForm") ProfileNotificationView form, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("user/profile");
+
+        return mvc;
+    }
+
+    @RequestMapping(value = "/password", method = RequestMethod.POST)
+    public ModelAndView profilePassword(@ModelAttribute("profileForm") ProfilePasswordView form, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("profile");
+
+        try {
+            profileService.updatePassword(form, httpSession);
+        } catch (FieldEmptyException e) {
+            logger.error(e.getMessage());
+            mvc.addObject("message", "emptyField");
+            mvc.addObject("messageType", MessageType.DANGER.name());
+            return mvc;
+        } catch (DifferentPasswordsException e) {
+            logger.error(e.getMessage());
+            mvc.addObject("message", "register.differentPasswords");
+            mvc.addObject("messageType", MessageType.DANGER.name());
+            return mvc;
+        } catch (IncorrectPasswordException e) {
+            logger.error(e.getMessage());
+            mvc.addObject("message", "register.incorrectPassword");
+            mvc.addObject("messageType", MessageType.DANGER.name());
+            return mvc;
+        } catch (NoSuchAlgorithmException e) {
+            logger.error(e.getMessage());
+            mvc.addObject("message", "error");
+            mvc.addObject("messageType", MessageType.DANGER.name());
+            return mvc;
+        }
+
+        logger.debug("Password updated");
+        mvc.addObject("message", "profile.password.updated");
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
 
