@@ -52,7 +52,7 @@ public class SaveService {
 
             TeacherCourse teacherCourse = teacherCourseRepository.findOne(saveView.getId());
             try {
-                StudentCourse studentCourses = studentCourseRepository.findByStudentAndTeacherCourse(user, teacherCourse);
+                StudentCourse studentCourses = studentCourseRepository.findByStudentAndSubject(user, teacherCourse.getSubject());
             } catch (NoResultException e) {
                 resultList.add(saveView);
             }

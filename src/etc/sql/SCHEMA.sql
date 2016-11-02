@@ -6,7 +6,6 @@ SET foreign_key_checks = 0;
 --drop table `AppProperty`;
 --drop table `Contact`;
 --drop table `CourseDate`;
---drop table `Department`;
 --drop table `EmailTemplate`;
 --drop table `EventDictionary`;
 --drop table `StudentCourse`;
@@ -54,23 +53,14 @@ CREATE TABLE `Contact` (
 
 CREATE TABLE `CourseDate` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `teacherCourseID` int(10) unsigned NOT NULL,
+  `subjectID` int(10) unsigned NOT NULL,
   `startTime` time NOT NULL,
   `finishTime` time NOT NULL,
   `date` date NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`),
-  KEY `fk_CourseDates_1` (`teacherCourseID`),
-  CONSTRAINT `fk_teacherCourse` FOREIGN KEY (`teacherCourseID`) REFERENCES `TeacherCourse` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `Department` (
-  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `description` varchar(1000) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `ID_UNIQUE` (`ID`),
-  UNIQUE KEY `name_UNIQUE` (`name`)
+  KEY `fk_subject23` (`subjectID`),
+  CONSTRAINT `fk_subject23` FOREIGN KEY (`subjectID`) REFERENCES `Subject` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `EmailTemplate` (
@@ -105,13 +95,12 @@ CREATE TABLE `StudentPrecense` (
 CREATE TABLE `StudentCourse` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `studentID` int(10) unsigned NOT NULL,
-  `teacherCourseID` int(10) unsigned NOT NULL,
-  `saveTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `subjectID` int(10) unsigned NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`),
   KEY `studentID` (`studentID`),
-  KEY `teacherCourseID` (`teacherCourseID`),
-  CONSTRAINT `fk_teacherCourse1` FOREIGN KEY (`teacherCourseID`) REFERENCES `TeacherCourse` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `subjectID` (`subjectID`),
+  CONSTRAINT `fk_subject2` FOREIGN KEY (`subjectID`) REFERENCES `Subject` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_student3` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
@@ -126,19 +115,25 @@ CREATE TABLE `SMSTemplate` (
 CREATE TABLE `Subject` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `departmentID` int(10) unsigned NOT NULL,
+  `year` int(10) unsigned NOT NULL,
+  `fieldID` int(10) unsigned NOT NULL,
   `description` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`),
-  KEY `departmentID` (`departmentID`),
-  CONSTRAINT `fk_department` FOREIGN KEY (`departmentID`) REFERENCES `Department` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_Subject546` FOREIGN KEY (`fieldID`) REFERENCES `Field` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Field` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID_UNIQUE` (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `TeacherCourse` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `subjectID` int(10) unsigned NOT NULL,
   `teacherID` int(10) unsigned NOT NULL,
-  `type` varchar(15) NOT NULL,
   `coursesQuantity` int(10) unsigned DEFAULT NULL,
   `minPresence` int(10) unsigned DEFAULT NULL,
   `description` varchar(500) DEFAULT NULL,
@@ -158,6 +153,8 @@ CREATE TABLE `User` (
   `lastName` varchar(25) NOT NULL,
   `type` varchar(20) NOT NULL,
   `lastLogin` datetime DEFAULT NULL,
+  `yearOfStudy` int(6) DEFAULT NULL,
+  `fieldID` int(10) unsigned NOT NULL,
   `password` varchar(100) NOT NULL,
   `salt` varchar(100) DEFAULT NULL,
   `status` varchar(20) NOT NULL,
@@ -165,7 +162,8 @@ CREATE TABLE `User` (
   UNIQUE KEY `login_UNIQUE` (`login`),
   UNIQUE KEY `ID_UNIQUE` (`ID`),
   UNIQUE KEY `contactID_UNIQUE` (`contactID`),
-  CONSTRAINT `fk_User_1` FOREIGN KEY (`contactID`) REFERENCES `Contact` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_User_1` FOREIGN KEY (`contactID`) REFERENCES `Contact` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_User_2` FOREIGN KEY (`fieldID`) REFERENCES `Field` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Notification` (
@@ -179,7 +177,7 @@ CREATE TABLE `Notification` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`),
   UNIQUE KEY `userID_UNIQUE` (`userID`),
-  CONSTRAINT `fk_User_2` FOREIGN KEY (`userID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_User_22` FOREIGN KEY (`userID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 --ALTER TABLE AppLog CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;

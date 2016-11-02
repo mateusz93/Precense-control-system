@@ -43,8 +43,8 @@ public class CourseController {
     @Autowired
     private CourseDateRepository courseDateRepository;
 
-    @Autowired
-    private DepartmentRepository departmentRepository;
+    //@Autowired
+    //private DepartmentRepository departmentRepository;
 
     @Autowired
     private SubjectRepository subjectRepository;
@@ -83,12 +83,12 @@ public class CourseController {
         if (user.getType().equals(UserType.Student.name())) {
             mvc.setViewName("course/studentCourseDates");
             TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
-            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
+            List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourse.getSubject());
             mvc.addObject("datesList", courseDates);
         } else {
             mvc.setViewName("course/teacherCourseDates");
             TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
-            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
+            List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourse.getSubject());
             mvc.addObject("teacherCourseId", teacherCourseId);
             mvc.addObject("datesList", courseDates);
         }
@@ -104,8 +104,8 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        List<Department> departments = (List<Department>) departmentRepository.findAll();
-        mvc.addObject("departments", departments);
+        //List<Department> departments = (List<Department>) departmentRepository.findAll();
+       // mvc.addObject("departments", departments);
         return mvc;
     }
 
@@ -119,13 +119,14 @@ public class CourseController {
         }
         CourseDate courseDate = courseDateRepository.findOne(dateId);
         courseDateRepository.delete(courseDate);
-        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseDate.getTeacherCourse().getId());
-        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
+        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseDate.getSubject().getId());
+        List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourse.getSubject());
         mvc.addObject("datesList", courseDates);
 
         return mvc;
     }
 
+    /*
     @RequestMapping(value = "/unSubscribe/{courseId}", method = RequestMethod.POST)
     public ModelAndView unSubscribe(@PathVariable("courseId") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
@@ -136,7 +137,7 @@ public class CourseController {
         }
         User user = userRepository.findByLogin(username);
         TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
-        StudentCourse studentCourse = studentCourseRepository.findByStudentAndTeacherCourse(user, teacherCourse);
+        StudentCourse studentCourse = studentCourseRepository.findByStudentAndSubject(user, teacherCourse);
         studentCourseRepository.delete(studentCourse);
 
         prepareView(mvc, user);
@@ -146,7 +147,9 @@ public class CourseController {
 
         return mvc;
     }
+    */
 
+    /*
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView newCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/addCourse");
@@ -163,6 +166,7 @@ public class CourseController {
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
+    */
 
     @RequestMapping(value = "/addOne/{teacherCourseId}", method = RequestMethod.POST)
     public ModelAndView newOne(@PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
@@ -186,13 +190,13 @@ public class CourseController {
         }
         TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
         CourseDate courseDate = new CourseDate();
-        courseDate.setTeacherCourse(teacherCourse);
+        courseDate.setTeacherCourse(teacherCourse.getSubject());
         courseDate.setStartTime(form.getStartTime());
         courseDate.setFinishTime(form.getFinishTime());
         courseDate.setDate(form.getDate());
         courseDateRepository.save(courseDate);
 
-        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
+        List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourse.getSubject());
         mvc.addObject("datesList", courseDates);
         mvc.addObject("message", "course.courseDateAdded");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
@@ -200,10 +204,7 @@ public class CourseController {
     }
 
     private void saveNewCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, User user) {
-        Department department = departmentRepository.findOne(newCourseForm.getDepartmentID());
-
         Subject subject = new Subject();
-        subject.setDepartment(department);
         subject.setDescription(newCourseForm.getDescription());
         subject.setName(newCourseForm.getSubjectName());
         subjectRepository.save(subject);

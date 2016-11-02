@@ -83,7 +83,7 @@ public class PresenceController {
         if (user.getType().equals(UserType.Student.name())) {
             mvc.setViewName("precense/precensesInfo");
             List<CourseDateView> courseDateViews = new ArrayList<CourseDateView>();
-            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourseRepository.findOne(courseId));
+            List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourseRepository.findOne(courseId).getSubject());
             for (CourseDate cd : courseDates) {
                 CourseDateView courseDateView = new CourseDateView();
                 courseDateView.setDate(cd.getDate());
@@ -106,7 +106,7 @@ public class PresenceController {
         } else {
             mvc.setViewName("precense/checkPrecenses");
             List<CourseDateView> courseDateViews = new ArrayList<CourseDateView>();
-            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourseRepository.findOne(courseId));
+            List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourseRepository.findOne(courseId).getSubject());
             for (CourseDate cd : courseDates) {
                 CourseDateView courseDateView = new CourseDateView();
                 courseDateView.setDate(cd.getDate());
@@ -152,9 +152,9 @@ public class PresenceController {
 
     private void preparePrecensesList(@PathVariable("courseDateId") int courseDateId, ModelAndView mvc) {
         CourseDate courseDate = courseDateRepository.findOne(courseDateId);
-        TeacherCourse teacherCourse = courseDate.getTeacherCourse();
-        List<StudentCourse> studentCourses = studentCourseRepository.findByTeacherCourse(teacherCourse);
-        List<CheckPrecenseView> students = new ArrayList<CheckPrecenseView>();
+        Subject subject = courseDate.getSubject();
+        List<StudentCourse> studentCourses = studentCourseRepository.findBySubject(subject);
+        List<CheckPrecenseView> students = new ArrayList<>();
 
         for (StudentCourse studentCourse : studentCourses) {
             User student = userRepository.findOne(studentCourse.getStudent().getId());

@@ -69,7 +69,7 @@ public class SaveController {
         TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
         StudentCourse studentCourse = new StudentCourse();
         studentCourse.setStudent(user);
-        studentCourse.setTeacherCourse(teacherCourse);
+        studentCourse.setSubject(teacherCourse.getSubject());
         studentCourse.setSaveTime(new Timestamp((new Date()).getTime()));
         studentCourseRepository.save(studentCourse);
 

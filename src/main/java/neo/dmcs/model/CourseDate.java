@@ -9,7 +9,7 @@ import java.sql.Time;
 public class CourseDate {
 
     private int id;
-    private TeacherCourse teacherCourse;
+    private Subject subject;
     private Time startTime;
     private Time finishTime;
     private Date date;
@@ -26,13 +26,17 @@ public class CourseDate {
     }
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "teacherCourseID")
-    public TeacherCourse getTeacherCourse() {
-        return teacherCourse;
+    @JoinColumn(name = "subjectID")
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setTeacherCourse(TeacherCourse teacherCourse) {
-        this.teacherCourse = teacherCourse;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public void setTeacherCourse(Subject subject) {
+        this.subject = subject;
     }
 
     @Column(name = "startTime")
@@ -70,7 +74,7 @@ public class CourseDate {
         CourseDate that = (CourseDate) o;
 
         if (id != that.id) return false;
-        if (!teacherCourse.equals(that.teacherCourse)) return false;
+        if (!subject.equals(that.subject)) return false;
         if (!startTime.equals(that.startTime)) return false;
         if (!finishTime.equals(that.finishTime)) return false;
         return date.equals(that.date);
@@ -80,7 +84,7 @@ public class CourseDate {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + teacherCourse.hashCode();
+        result = 31 * result + subject.hashCode();
         result = 31 * result + startTime.hashCode();
         result = 31 * result + finishTime.hashCode();
         result = 31 * result + date.hashCode();

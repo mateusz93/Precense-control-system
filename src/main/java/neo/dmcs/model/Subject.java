@@ -9,7 +9,8 @@ public class Subject {
     private int id;
     private String name;
     private String description;
-    private Department department;
+    private Field field;
+    private int year;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -41,35 +42,22 @@ public class Subject {
     }
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "departmentID")
-    public Department getDepartment() {
-        return department;
+    @JoinColumn(name = "fieldID")
+    public Field getField() {
+        return field;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setField(Field field) {
+        this.field = field;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Subject subject = (Subject) o;
-
-        if (id != subject.id) return false;
-        if (!name.equals(subject.name)) return false;
-        if (!description.equals(subject.description)) return false;
-        return department.equals(subject.department);
-
+    @Column(name = "year")
+    public int getYear() {
+        return year;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + description.hashCode();
-        result = 31 * result + department.hashCode();
-        return result;
+    public void setYear(int year) {
+        this.year = year;
     }
+
 }

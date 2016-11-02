@@ -16,6 +16,8 @@ public class User {
     private Timestamp lastLogin;
     private String status;
     private Contact contact;
+    private Field field;
+    private int yearOfStudy;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -26,6 +28,25 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fieldID")
+    public Field getField() {
+        return field;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
+    }
+
+    @Column(name = "yearOfStudy")
+    public int getYearOfStudy() {
+        return yearOfStudy;
+    }
+
+    public void setYearOfStudy(int yearOfStudy) {
+        this.yearOfStudy = yearOfStudy;
     }
 
     @Column(name = "login")

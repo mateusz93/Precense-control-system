@@ -9,6 +9,7 @@
         <class>neo.dmcs.model.Department</class>
         <class>neo.dmcs.model.EmailTemplate</class>
         <class>neo.dmcs.model.EventDictionary</class>
+        <class>neo.dmcs.model.Field</class>
         <class>neo.dmcs.model.Notification</class>
         <class>neo.dmcs.model.SMSTemplate</class>
         <class>neo.dmcs.model.StudentCourse</class>

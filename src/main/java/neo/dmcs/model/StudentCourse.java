@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class StudentCourse {
 
     private int id;
-    private TeacherCourse teacherCourse;
+    private Subject subject;
     private User student;
     private Timestamp saveTime;
 
@@ -24,13 +24,13 @@ public class StudentCourse {
     }
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "teacherCourseID")
-    public TeacherCourse getTeacherCourse() {
-        return teacherCourse;
+    @JoinColumn(name = "subjectID")
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setTeacherCourse(TeacherCourse teacherCourse) {
-        this.teacherCourse = teacherCourse;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -60,7 +60,7 @@ public class StudentCourse {
         StudentCourse that = (StudentCourse) o;
 
         if (id != that.id) return false;
-        if (!teacherCourse.equals(that.teacherCourse)) return false;
+        if (!subject.equals(that.subject)) return false;
         if (!student.equals(that.student)) return false;
         return saveTime.equals(that.saveTime);
 
@@ -69,7 +69,7 @@ public class StudentCourse {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + teacherCourse.hashCode();
+        result = 31 * result + subject.hashCode();
         result = 31 * result + student.hashCode();
         result = 31 * result + saveTime.hashCode();
         return result;
