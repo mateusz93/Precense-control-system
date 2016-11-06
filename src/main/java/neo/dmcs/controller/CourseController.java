@@ -1,15 +1,17 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.repository.*;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
-import neo.dmcs.model.*;
+import neo.dmcs.model.CourseDate;
+import neo.dmcs.model.Subject;
+import neo.dmcs.model.TeacherCourse;
+import neo.dmcs.model.User;
+import neo.dmcs.repository.*;
 import neo.dmcs.service.CourseService;
 import neo.dmcs.view.course.CourseDateView;
 import neo.dmcs.view.course.NewCourseView;
 import neo.dmcs.view.course.StudentCourseView;
 import neo.dmcs.view.course.TeacherCourseView;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+
+import static neo.dmcs.util.UserUtils.isLogged;
 
 /**
  * @Author Mateusz Wieczorek on 25.03.16.
@@ -237,9 +241,5 @@ public class CourseController {
         List<TeacherCourseView> coursesList = courseService.getTeacherCoursesList(user);
         mvc.setViewName("course/teacherCoursesList");
         mvc.addObject("coursesList", coursesList);
-    }
-
-    private boolean isLogged(String username) {
-        return StringUtils.isNotBlank(username);
     }
 }

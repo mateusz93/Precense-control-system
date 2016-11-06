@@ -21,7 +21,7 @@
                 <li><a href="/profile">Profil</a></li>
                 <li><a href="/precenses">Obecności</a></li>
                 <li><a href="/courses">Moje przedmioty</a></li>
-            <!--<li><a href="statsServlet">Statystyki</a></li>-->
+                <li><a href="/stats">Statystyki</a></li>
 
                 <% if ("Student".equals(session.getAttribute("userType"))) { %>
                     <li><a href="/saves">Zapisy na zajęcia</a></li>

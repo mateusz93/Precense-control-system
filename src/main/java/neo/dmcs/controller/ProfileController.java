@@ -1,20 +1,18 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.model.Notification;
-import neo.dmcs.repository.ContactRepository;
-import neo.dmcs.repository.NotificationRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.IncorrectPasswordException;
-import neo.dmcs.model.Contact;
+import neo.dmcs.model.Notification;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.ContactRepository;
+import neo.dmcs.repository.NotificationRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.service.ProfileService;
 import neo.dmcs.view.user.ProfileGeneralView;
 import neo.dmcs.view.user.ProfileNotificationView;
 import neo.dmcs.view.user.ProfilePasswordView;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +25,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
+
+import static neo.dmcs.util.UserUtils.getUserFromSession;
 
 /**
  * @Author Mateusz Wieczorek
@@ -190,11 +188,6 @@ public class ProfileController {
         }
 
         return mvc;
-    }
-
-    private User getUserFromSession(HttpSession httpSession) {
-        String username = (String) httpSession.getAttribute("username");
-        return userRepository.findByLogin(username);
     }
 
     private void saveNewNotificationSettings(User user, ProfileNotificationView form) {

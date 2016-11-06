@@ -1,16 +1,15 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.repository.*;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
+import neo.dmcs.repository.*;
 import neo.dmcs.service.PrecenseService;
 import neo.dmcs.view.course.CourseDateView;
 import neo.dmcs.view.precense.CheckPrecenseView;
+import neo.dmcs.view.precense.CheckPrecenseViewWrapper;
 import neo.dmcs.view.precense.StudentPrecensesView;
 import neo.dmcs.view.precense.TeacherPrecensesView;
-import neo.dmcs.view.precense.CheckPrecenseViewWrapper;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,8 @@ import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+
+import static neo.dmcs.util.UserUtils.isLogged;
 
 /**
  * @Author Mateusz Wieczorek on 25.03.16.
@@ -192,10 +193,6 @@ public class PresenceController {
         List<TeacherPrecensesView> precensesList = precenseService.getTeacherPrecenses(user);
         mvc.setViewName("precense/teacherPrecenses");
         mvc.addObject("coursesList", precensesList);
-    }
-
-    private boolean isLogged(String username) {
-        return StringUtils.isNotBlank(username);
     }
 
 }
