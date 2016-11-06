@@ -20,12 +20,14 @@
 
                 <li><a href="/profile">Profil</a></li>
                 <li><a href="/precenses">Obecności</a></li>
-                <li><a href="/courses">Moje przedmioty</a></li>
+                <li><a href="/courses">Przedmioty</a></li>
+                <li><a href="/grades">Oceny</a></li>
                 <li><a href="/stats">Statystyki</a></li>
-
+<!--
                 <% if ("Student".equals(session.getAttribute("userType"))) { %>
                     <li><a href="/saves">Zapisy na zajęcia</a></li>
                 <%} %>
+-->
             </ul>
         </div>
     </div>

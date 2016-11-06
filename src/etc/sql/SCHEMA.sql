@@ -92,6 +92,21 @@ CREATE TABLE `StudentPrecense` (
   CONSTRAINT `fk_student2` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `Grade` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `subjectID` int(10) unsigned NOT NULL,
+  `previousGradeID` int(10) unsigned NOT NULL,
+  `value` int(3) unsigned NOT NULL,
+  `isFinalGrade` boolean NOT NULL DEFAULT 0,
+  `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID_UNIQUE` (`ID`),
+  KEY `subjectID` (`subjectID`),
+  KEY `previousGradeID` (`previousGradeID`),
+  CONSTRAINT `fk_subject_grade` FOREIGN KEY (`subjectID`) REFERENCES `Subject` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_grade_grade` FOREIGN KEY (`previousGradeID`) REFERENCES `Grade` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+
 CREATE TABLE `StudentCourse` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `studentID` int(10) unsigned NOT NULL,

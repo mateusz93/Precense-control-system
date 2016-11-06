@@ -3,7 +3,7 @@
 
 <html>
     <head>
-        <title>System kontroli obecności</title>
+        <title>System zarządzania przedmiotami</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="/resources/css/main.css"/>
@@ -15,7 +15,7 @@
         <jsp:include page="menu.jsp"/>
 
         <div class="jumbotron text-center">
-            <h1>System kontroli obecności</h1> 
+            <h1>System zarządzania przedmiotami</h1>
             <p>Sprawdzaj obecność codziennie w łatwy sposób</p>
             <% if ("".equals(session.getAttribute("username")) || session.getAttribute("username") == null) { %>
                 <form class="form-inline" action="/register" method="post">
