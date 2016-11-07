@@ -4,7 +4,6 @@
     <persistence-unit name="data" transaction-type="RESOURCE_LOCAL">
         <class>neo.dmcs.model.AppLog</class>
         <class>neo.dmcs.model.AppProperty</class>
-        <class>neo.dmcs.model.Contact</class>
         <class>neo.dmcs.model.CourseDate</class>
         <class>neo.dmcs.model.Department</class>
         <class>neo.dmcs.model.EmailTemplate</class>

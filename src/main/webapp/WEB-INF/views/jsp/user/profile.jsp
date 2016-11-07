@@ -5,10 +5,11 @@
    <head>
       <title>Profil</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+      <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
+      <link rel="stylesheet" href="/resources/css/menu.css"/>
       <link rel="stylesheet" href="/resources/css/profile.css"/>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+      <script src="/resources/js/jquery.1.11.3.min.js"></script>
+      <script src="/resources/js/bootstrap.3.3.7.min.js"></script>
    </head>
    <body>
       <jsp:include page="../menu.jsp"/>
@@ -41,13 +42,13 @@
                         <div class="form-group">
                            <label class="col-lg-3 control-label">Imię:</label>
                            <div class="col-lg-8">
-                              <input class="form-control" value="${firstName}" name="firstName" type="text">
+                              <input class="form-control" readonly="readonly" value="${firstName}" name="firstName" type="text">
                            </div>
                         </div>
                         <div class="form-group">
                            <label class="col-lg-3 control-label">Nazwisko:</label>
                            <div class="col-lg-8">
-                              <input class="form-control" value="${lastName}" name="lastName" type="text">
+                              <input class="form-control" readonly="readonly" value="${lastName}" name="lastName" type="text">
                            </div>
                         </div>
                         <div class="form-group">
@@ -60,6 +61,12 @@
                            <label class="col-lg-3 control-label">Email:</label>
                            <div class="col-lg-8">
                               <input class="form-control" readonly="readonly" value="${email}" name="email" type="text">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label class="col-lg-3 control-label">Grupa:</label>
+                           <div class="col-lg-8">
+                              <input class="form-control" readonly="readonly" value="${group}" name="group" type="text">
                            </div>
                         </div>
                         <div class="form-group">

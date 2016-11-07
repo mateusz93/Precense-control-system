@@ -1,7 +1,10 @@
 package neo.dmcs.service;
 
-import neo.dmcs.repository.CustomRepository;
+import neo.dmcs.model.StudentCourse;
+import neo.dmcs.model.TeacherCourse;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.StudentCourseRepository;
+import neo.dmcs.repository.TeacherCourseRepository;
 import neo.dmcs.view.course.StudentCourseView;
 import neo.dmcs.view.course.TeacherCourseView;
 import org.slf4j.Logger;
@@ -21,45 +24,48 @@ public class CourseService {
     private static final Logger logger = LoggerFactory.getLogger(CourseService.class);
 
     @Autowired
-    private CustomRepository customRepository;
+    private StudentCourseRepository studentCourseRepository;
 
-    public List<StudentCourseView> getStudentCoursesList(User user) {
-        List<Object[]> objects = customRepository.findStudentCoursesByUserId(user.getId());
-        return getStudentCastedResult(objects);
-    }
+    @Autowired
+    private TeacherCourseRepository teacherCourseRepository;
 
     public List<TeacherCourseView> getTeacherCoursesList(User user) {
-        List<Object[]> objects = customRepository.findTeacherCoursesByUserId(user.getId());
-        return getTeacherCastedResult(objects);
+        List<TeacherCourse> courses = teacherCourseRepository.findByTeacher(user);
+        List<TeacherCourseView> courseViews = mapTeacherCoruses(courses, user);
+        return courseViews;
     }
 
-    private List<TeacherCourseView> getTeacherCastedResult(List<Object[]> objects) {
-        List<TeacherCourseView> resultList = new ArrayList<TeacherCourseView>();
-        for (Object[] object : objects) {
-            TeacherCourseView tpv = new TeacherCourseView();
-            tpv.setID((Integer) object[0]);
-            tpv.setSubjectName(String.valueOf(object[1]));
-            tpv.setDepartmentName(String.valueOf(object[2]));
-            tpv.setType(String.valueOf(object[3]));
-            tpv.setCoursesQuantity((Integer) object[4]);
-            resultList.add(tpv);
-        }
-        return resultList;
+    public List<StudentCourseView> getStudentCoursesList(User user) {
+        List<StudentCourse> courses = studentCourseRepository.findByStudent(user);
+        List<StudentCourseView> courseViews = mapStudentCoruses(courses, user);
+        return courseViews;
     }
 
-    private List<StudentCourseView> getStudentCastedResult(List<Object[]> objects) {
-        List<StudentCourseView> resultList = new ArrayList<StudentCourseView>();
-        for (Object[] object : objects) {
-            StudentCourseView spv = new StudentCourseView();
-            spv.setSubjectName(String.valueOf(object[0]));
-            spv.setDepartmentName(String.valueOf(object[1]));
-            spv.setType(String.valueOf(object[2]));
-            spv.setCourseID((Integer) object[3]);
-            spv.setCoursesQuantity((Integer) object[4]);
-            spv.setTeacherName(String.valueOf(object[5]));
-            resultList.add(spv);
+    private List<TeacherCourseView> mapTeacherCoruses(List<TeacherCourse> courses, User user) {
+        List<TeacherCourseView> courseViews = new ArrayList<>();
+        for (TeacherCourse c : courses) {
+            TeacherCourseView courseView = new TeacherCourseView();
+            courseView.setCoursesQuantity(c.getSubject().getQuantity());
+            courseView.setID(c.getId());
+            courseView.setSubjectName(c.getSubject().getName());
         }
-        return resultList;
+        return courseViews;
+    }
+
+    private List<StudentCourseView> mapStudentCoruses(List<StudentCourse> courses, User user) {
+        List<StudentCourseView> courseViews = new ArrayList<>();
+        for (StudentCourse c : courses) {
+            StudentCourseView courseView = new StudentCourseView();
+            courseView.setCoursesQuantity(c.getTeacherCourse().getSubject().getQuantity());
+            courseView.setMinCoursesQuantity(c.getTeacherCourse().getSubject().getMinQuantity());
+            courseView.setDescription(c.getTeacherCourse().getSubject().getDescription());
+            courseView.setName(c.getTeacherCourse().getSubject().getName());
+            courseView.setSubjectID(c.getTeacherCourse().getSubject().getId());
+            TeacherCourse teacherCourse = teacherCourseRepository.findBySubjectAndStudentGroup(c.getTeacherCourse().getSubject(), user.getGroup());
+            courseView.setTeacherName(teacherCourse.getTeacher().getFirstName() + " " +
+                    teacherCourse.getTeacher().getLastName());
+        }
+        return courseViews;
     }
 
 

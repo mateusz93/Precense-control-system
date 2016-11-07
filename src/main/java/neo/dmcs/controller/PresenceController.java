@@ -2,7 +2,10 @@ package neo.dmcs.controller;
 
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
-import neo.dmcs.model.*;
+import neo.dmcs.model.CourseDate;
+import neo.dmcs.model.StudentCourse;
+import neo.dmcs.model.StudentPrecense;
+import neo.dmcs.model.User;
 import neo.dmcs.repository.*;
 import neo.dmcs.service.PrecenseService;
 import neo.dmcs.view.course.CourseDateView;
@@ -26,7 +29,8 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
-import static neo.dmcs.util.UserUtils.isLogged;
+import static neo.dmcs.util.UserUtils.getUserFromSession;
+import static neo.dmcs.util.UserUtils.isNotLogged;
 
 /**
  * @Author Mateusz Wieczorek on 25.03.16.
@@ -40,9 +44,6 @@ public class PresenceController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private CustomRepository customRepository;
 
     @Autowired
     private CourseDateRepository courseDateRepository;
@@ -62,12 +63,11 @@ public class PresenceController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView precense(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userRepository.findByLogin(username);
         prepareView(mvc, user);
         return mvc;
     }
@@ -75,58 +75,65 @@ public class PresenceController {
     @RequestMapping(value = "/info/{courseId}", method = RequestMethod.POST)
     public ModelAndView precenseInfo(@PathVariable("courseId") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userRepository.findByLogin(username);
         if (user.getType().equals(UserType.Student.name())) {
-            mvc.setViewName("precense/precensesInfo");
-            List<CourseDateView> courseDateViews = new ArrayList<CourseDateView>();
-            List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourseRepository.findOne(courseId).getSubject());
-            for (CourseDate cd : courseDates) {
-                CourseDateView courseDateView = new CourseDateView();
-                courseDateView.setDate(cd.getDate());
-                courseDateView.setFinishTime(cd.getFinishTime());
-                courseDateView.setStartTime(cd.getStartTime());
-                courseDateView.setCourseDateID(courseId);
-                try {
-                    CourseDate courseDate = courseDateRepository.findOne(courseId);
-                    StudentPrecense studentPrecense = studentPrecenseRepository.findByCourseDate(courseDate);
-                    courseDateView.setStatus(studentPrecense.getStatus());
-                } catch (NoResultException e) {
-                    if (logger.isWarnEnabled()) {
-                        logger.warn(e.getMessage() + "StudentPrecense with courseDateId = " + courseId + " not found");
-                    }
-                }
-
-                courseDateViews.add(courseDateView);
-            }
-            mvc.addObject("datesList", courseDateViews);
+            prepareStudentPrecenseStatuses(courseId, mvc);
         } else {
-            mvc.setViewName("precense/checkPrecenses");
-            List<CourseDateView> courseDateViews = new ArrayList<CourseDateView>();
-            List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourseRepository.findOne(courseId).getSubject());
-            for (CourseDate cd : courseDates) {
-                CourseDateView courseDateView = new CourseDateView();
-                courseDateView.setDate(cd.getDate());
-                courseDateView.setFinishTime(cd.getFinishTime());
-                courseDateView.setStartTime(cd.getStartTime());
-                courseDateView.setCourseDateID(cd.getId());
-                courseDateViews.add(courseDateView);
-            }
-            mvc.addObject("datesList", courseDateViews);
+            prepareTeacherPrecenseStatuses(courseId, mvc);
         }
 
         return mvc;
     }
 
+    private void prepareTeacherPrecenseStatuses(int courseId, ModelAndView mvc) {
+        mvc.setViewName("precense/checkPrecenses");
+        List<CourseDateView> courseDateViews = new ArrayList<>();
+        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourseRepository.findOne(courseId));
+        for (CourseDate cd : courseDates) {
+            CourseDateView courseDateView = new CourseDateView();
+            courseDateView.setDate(cd.getDate());
+            courseDateView.setFinishTime(cd.getFinishTime());
+            courseDateView.setStartTime(cd.getStartTime());
+            courseDateView.setCourseDateID(cd.getId());
+            courseDateViews.add(courseDateView);
+        }
+        mvc.addObject("datesList", courseDateViews);
+    }
+
+    private void prepareStudentPrecenseStatuses(int courseId, ModelAndView mvc) {
+        mvc.setViewName("precense/precensesInfo");
+        List<CourseDateView> courseDateViews = new ArrayList<>();
+        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourseRepository.findOne(courseId));
+        for (CourseDate cd : courseDates) {
+            CourseDateView courseDateView = new CourseDateView();
+            courseDateView.setDate(cd.getDate());
+            courseDateView.setFinishTime(cd.getFinishTime());
+            courseDateView.setStartTime(cd.getStartTime());
+            courseDateView.setCourseDateID(courseId);
+            try {
+                CourseDate courseDate = courseDateRepository.findOne(courseId);
+                StudentPrecense studentPrecense = studentPrecenseRepository.findByCourseDate(courseDate);
+                courseDateView.setStatus(studentPrecense.getStatus());
+            } catch (NoResultException e) {
+                if (logger.isWarnEnabled()) {
+                    logger.warn(e.getMessage() + "StudentPrecense with courseDateId = " + courseId + " not found");
+                }
+            }
+
+            courseDateViews.add(courseDateView);
+        }
+        mvc.addObject("datesList", courseDateViews);
+    }
+
     @RequestMapping(value = "/check/{courseDateId}", method = RequestMethod.POST)
     public ModelAndView precensecheck(@PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("precense/checkPrecense");
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -138,23 +145,20 @@ public class PresenceController {
     public ModelAndView update(@ModelAttribute("studentWrapper") CheckPrecenseViewWrapper studentWrapper,
                                @PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("precense/checkPrecense");
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-
-
         preparePrecensesList(courseDateId, mvc);
         mvc.addObject("message", "precense.updated");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
 
-    private void preparePrecensesList(@PathVariable("courseDateId") int courseDateId, ModelAndView mvc) {
+    private void preparePrecensesList(int courseDateId, ModelAndView mvc) {
         CourseDate courseDate = courseDateRepository.findOne(courseDateId);
-        Subject subject = courseDate.getSubject();
-        List<StudentCourse> studentCourses = studentCourseRepository.findBySubject(subject);
+        List<StudentCourse> studentCourses = studentCourseRepository.findByTeacherCourse(courseDate.getTeacherCourse());
         List<CheckPrecenseView> students = new ArrayList<>();
 
         for (StudentCourse studentCourse : studentCourses) {

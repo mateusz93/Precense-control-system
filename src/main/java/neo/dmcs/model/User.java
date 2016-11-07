@@ -15,9 +15,13 @@ public class User {
     private String password;
     private Timestamp lastLogin;
     private String status;
-    private Contact contact;
     private Field field;
+    private String group;
     private int yearOfStudy;
+    private String email;
+    private String phone;
+    private String street;
+    private String city;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -112,45 +116,48 @@ public class User {
         this.status = status;
     }
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "contactID")
-    public Contact getContact() {
-        return contact;
+    @Column(name = "`group`")
+    public String getGroup() {
+        return group;
     }
 
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    public void setGroup(String group) {
+        this.group = group;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User that = (User) o;
-
-        if (id != that.id) return false;
-        if (login != null ? !login.equals(that.login) : that.login != null) return false;
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (lastLogin != null ? !lastLogin.equals(that.lastLogin) : that.lastLogin != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-
-        return true;
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (login != null ? login.hashCode() : 0);
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (lastLogin != null ? lastLogin.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        return result;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column(name = "phone")
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @Column(name = "street")
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    @Column(name = "city")
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

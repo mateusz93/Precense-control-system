@@ -7,8 +7,6 @@ public class TeacherCourseView {
 
     private int ID;
     private String subjectName;
-    private String departmentName;
-    private String type;
     private int coursesQuantity;
 
     public int getID() {
@@ -25,22 +23,6 @@ public class TeacherCourseView {
 
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public int getCoursesQuantity() {

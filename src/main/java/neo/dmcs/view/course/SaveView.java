@@ -6,8 +6,6 @@ package neo.dmcs.view.course;
 public class SaveView {
 
     private String subjectName;
-    private String departmentName;
-    private String type;
     private String teacherName;
     private String description;
     private int coursesQuantity;
@@ -19,22 +17,6 @@ public class SaveView {
 
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getTeacherName() {
@@ -80,8 +62,6 @@ public class SaveView {
         if (coursesQuantity != saveView.coursesQuantity) return false;
         if (id != saveView.id) return false;
         if (!subjectName.equals(saveView.subjectName)) return false;
-        if (!departmentName.equals(saveView.departmentName)) return false;
-        if (!type.equals(saveView.type)) return false;
         if (!teacherName.equals(saveView.teacherName)) return false;
         return description.equals(saveView.description);
 
@@ -90,8 +70,6 @@ public class SaveView {
     @Override
     public int hashCode() {
         int result = subjectName.hashCode();
-        result = 31 * result + departmentName.hashCode();
-        result = 31 * result + type.hashCode();
         result = 31 * result + teacherName.hashCode();
         result = 31 * result + description.hashCode();
         result = 31 * result + coursesQuantity;
@@ -103,8 +81,6 @@ public class SaveView {
     public String toString() {
         return "SaveView{" +
                 "subjectName='" + subjectName + '\'' +
-                ", departmentName='" + departmentName + '\'' +
-                ", type='" + type + '\'' +
                 ", teacherName='" + teacherName + '\'' +
                 ", description='" + description + '\'' +
                 ", coursesQuantity=" + coursesQuantity +

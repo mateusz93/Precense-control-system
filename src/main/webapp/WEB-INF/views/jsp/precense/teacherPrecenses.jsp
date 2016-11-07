@@ -7,10 +7,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Obecności</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="/resources/css/menu.css" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
+        <link rel="stylesheet" href="/resources/css/menu.css"/>
+        <script src="/resources/js/jquery.1.11.3.min.js"></script>
+        <script src="/resources/js/bootstrap.3.3.7.min.js"></script>
         <script src="/resources/js/pagination.js"></script>
         <script src="/resources/js/filter.js"></script>
     </head>
@@ -28,17 +28,13 @@
                 <thead>
                     <tr>
                         <th>Nazwa</th>
-                        <th>Wydział</th>
-                        <th>Typ zajęć</th>
-                        <th>Ilość zajęć</th>
+                        <th>Liczba zajęć</th>
                     </tr>
                 </thead>
                 <tbody id="paginationTable" class="searchable">
                     <c:forEach var="courses" items="${coursesList}">
                         <tr>
                             <td><c:out value="${courses.subjectName}"  /></td>
-                            <td><c:out value="${courses.departmentName}" /></td>
-                            <td><c:out value="${courses.type}" /></td>
                             <td><c:out value="${courses.quantity}"  /></td>
                             <form action="/precenses/info/${courses.id}" method="post">
                                 <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info">Pokaż terminy</button></td>

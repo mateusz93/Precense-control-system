@@ -1,7 +1,11 @@
 package neo.dmcs.service;
 
-import neo.dmcs.repository.CustomRepository;
+import neo.dmcs.model.StudentCourse;
+import neo.dmcs.model.Subject;
+import neo.dmcs.model.TeacherCourse;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.StudentCourseRepository;
+import neo.dmcs.repository.TeacherCourseRepository;
 import neo.dmcs.view.precense.StudentPrecensesView;
 import neo.dmcs.view.precense.TeacherPrecensesView;
 import org.slf4j.Logger;
@@ -21,44 +25,29 @@ public class PrecenseService {
     private static final Logger logger = LoggerFactory.getLogger(PrecenseService.class);
 
     @Autowired
-    private CustomRepository customRepository;
+    private StudentCourseRepository studentCourseRepository;
+
+    @Autowired
+    private TeacherCourseRepository teacherCourseRepository;
 
     public List<StudentPrecensesView> getStudentPrecenses(User user) {
-        List<Object[]> objects = customRepository.findStudentPrecensesByUserId(user.getId());
-        return getStudentCastedResult(objects);
+        List<StudentPrecensesView> studentPrecensesViews = new ArrayList<>();
+        List<StudentCourse> studentCourses = studentCourseRepository.findByStudent(user);
+        for (StudentCourse studentCourse : studentCourses) {
+            Subject subject = studentCourse.getTeacherCourse().getSubject();
+            TeacherCourse teacherCourse = teacherCourseRepository.findBySubjectAndStudentGroup(subject, user.getGroup());
+            StudentPrecensesView studentPrecensesView = new StudentPrecensesView();
+            studentPrecensesView.setSubjectName(subject.getName());
+            studentPrecensesView.setTeacherName(teacherCourse.getTeacher().getFirstName() + " " + teacherCourse.getTeacher().getLastName());
+            studentPrecensesView.setCourseId(teacherCourse.getId());
+            studentPrecensesView.setQuantity(subject.getQuantity());
+            studentPrecensesViews.add(studentPrecensesView);
+        }
+        return studentPrecensesViews;
     }
 
     public List<TeacherPrecensesView> getTeacherPrecenses(User user) {
-        List<Object[]> objects = customRepository.findTeacherPrecensesByUserId(user.getId());
-        return getTeacherCastedResult(objects);
-    }
 
-    private List<TeacherPrecensesView> getTeacherCastedResult(List<Object[]> objects) {
-        List<TeacherPrecensesView> resultList = new ArrayList<TeacherPrecensesView>();
-        for (Object[] object : objects) {
-            TeacherPrecensesView tpv = new TeacherPrecensesView();
-            tpv.setId((Integer) object[0]);
-            tpv.setSubjectName(String.valueOf(object[1]));
-            tpv.setDepartmentName(String.valueOf(object[2]));
-            tpv.setType(String.valueOf(object[3]));
-            tpv.setQuantity((Integer) object[4]);
-            resultList.add(tpv);
-        }
-        return resultList;
-    }
-
-    private List<StudentPrecensesView> getStudentCastedResult(List<Object[]> objects) {
-        List<StudentPrecensesView> resultList = new ArrayList<StudentPrecensesView>();
-        for (Object[] object : objects) {
-            StudentPrecensesView spv = new StudentPrecensesView();
-            spv.setSubjectName(String.valueOf(object[0]));
-            spv.setDepartmentName(String.valueOf(object[1]));
-            spv.setType(String.valueOf(object[2]));
-            spv.setCourseId((Integer) object[3]);
-            spv.setQuantity((Integer) object[4]);
-            spv.setTeacherName(String.valueOf(object[5]));
-            resultList.add(spv);
-        }
-        return resultList;
+        return null;
     }
 }

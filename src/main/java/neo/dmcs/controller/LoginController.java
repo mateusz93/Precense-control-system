@@ -1,11 +1,9 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.repository.ContactRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.exception.*;
-import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.service.LoginService;
 import neo.dmcs.view.security.LoginView;
 import org.slf4j.Logger;
@@ -30,10 +28,10 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
+
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private ContactRepository contactRepository;
+
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView logIn() {
@@ -46,8 +44,7 @@ public class LoginController {
 
         try {
             loginService.validate(form);
-            Contact contact = contactRepository.findByEmail(form.getEmail());
-            User user = userRepository.findByContact(contact);
+            User user = userRepository.findByEmail(form.getEmail());
             session.setAttribute("username", user.getLogin());
             session.setAttribute("userType", user.getType());
         } catch (FieldEmptyException e) {

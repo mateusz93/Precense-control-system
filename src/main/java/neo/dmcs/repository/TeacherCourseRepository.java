@@ -9,5 +9,6 @@ import java.util.List;
 public interface TeacherCourseRepository extends CrudRepository<TeacherCourse, Integer> {
 
     List<TeacherCourse> findBySubject(Subject subject);
+    TeacherCourse findBySubjectAndStudentGroup(Subject subject, String studentGroup);
     List<TeacherCourse> findByTeacher(User teacher);
 }

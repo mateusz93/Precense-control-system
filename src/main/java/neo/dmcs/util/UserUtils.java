@@ -24,12 +24,12 @@ public class UserUtils {
         this.userRepository = userRepository;
     }
 
-    public static boolean isLogged(String username) {
-        return StringUtils.isNotBlank(username);
+    public static boolean isNotLogged(String username) {
+        return !StringUtils.isNotBlank(username);
     }
 
-    public static boolean isLogged(User user) {
-        return user != null && StringUtils.isNotBlank(user.getLogin());
+    public static boolean isNotLogged(User user) {
+        return !(user != null && StringUtils.isNotBlank(user.getLogin()));
     }
 
     public static User getUserFromSession(HttpSession httpSession) {

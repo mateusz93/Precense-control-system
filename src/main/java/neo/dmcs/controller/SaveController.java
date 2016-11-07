@@ -1,12 +1,12 @@
 package neo.dmcs.controller;
 
-import neo.dmcs.repository.StudentCourseRepository;
-import neo.dmcs.repository.TeacherCourseRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.model.StudentCourse;
 import neo.dmcs.model.TeacherCourse;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.StudentCourseRepository;
+import neo.dmcs.repository.TeacherCourseRepository;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.service.SaveService;
 import neo.dmcs.view.course.SaveView;
 import org.apache.commons.lang3.StringUtils;
@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+
+import static neo.dmcs.util.UserUtils.getUserFromSession;
+import static neo.dmcs.util.UserUtils.isNotLogged;
 
 /**
  * @Author Mateusz Wieczorek, 14.05.16.
@@ -45,13 +49,11 @@ public class SaveController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView save(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/studentSaves");
-
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userRepository.findByLogin(username);
         prepareView(mvc, user);
         return mvc;
     }
@@ -59,18 +61,15 @@ public class SaveController {
     @RequestMapping(value = "/{courseId}", method = RequestMethod.POST)
     public ModelAndView signOut(@PathVariable("courseId") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/studentSaves");
-
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userRepository.findByLogin(username);
         TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
         StudentCourse studentCourse = new StudentCourse();
         studentCourse.setStudent(user);
-        studentCourse.setSubject(teacherCourse.getSubject());
-        studentCourse.setSaveTime(new Timestamp((new Date()).getTime()));
+        studentCourse.setTeacherCourse(teacherCourse);
         studentCourseRepository.save(studentCourse);
 
         prepareView(mvc, user);

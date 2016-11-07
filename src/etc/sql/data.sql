@@ -2,100 +2,71 @@ USE data;
 
 SET foreign_key_checks = 0;
 
-INSERT INTO `data`.`Contact` (`ID`, `Email`, `phone`, `street`, `city`) VALUES ('1', 'mati@edu.p.lodz.pl', '767332112', 'kardynalna', 'Warszawa');
-INSERT INTO `data`.`Contact` (`ID`, `Email`, `phone`, `street`, `city`) VALUES ('2', 'ziomeczek12@edu.p.lodz.pl', '556677888', 'kozietulskiego', 'Łódź');
-INSERT INTO `data`.`Contact` (`ID`, `Email`, `phone`, `street`, `city`) VALUES ('3', '123763@edu.p.lodz.pl', '701889203', 'kaliska', 'Poznań');
+INSERT INTO `data`.`User` (`fieldID`, `login`, `firstName`, `lastName`, `type`, `password`, `yearOfStudy`, `group`, `email`, `Status`)
+   VALUES (1, 'mateuszek', 'Mateusz', 'Wieczorek', 'Student', '92d7ddd2a010c59511dc2905b7e14f64', 1, 'I_2013', 'mati@edu.p.lodz.pl', 'ACTIVE');
+INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `type`, `password`, `email`, `Status`)
+   VALUES ('grzegorzmaslowski', 'Grzegorz', 'Maslowski', 'Teacher', '92d7ddd2a010c59511dc2905b7e14f64', 'grzegorz@edu.p.lodz.pl', 'ACTIVE');
+INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `type`, `password`, `email`, `Status`)
+   VALUES ('igordudek', 'Igor', 'Dudek', 'Admin', '92d7ddd2a010c59511dc2905b7e14f64', 'igor@edu.p.lodz.pl', 'ACTIVE');
 
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('1', 'Laboratorium', '15', '14');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('2', 'Cwiczenia', '30', '28');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('3', 'Wyklad', '15', '0');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('4', 'Laboratorium', '15', '14');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('8', 'Cwiczenia', '7', '6');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('8', 'Wyklad', '15', '0');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('7', 'Laboratorium', '15', '14');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('7', 'Wyklad', '30', '0');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('6', 'Laboratorium', '15', '14');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('6', 'Wyklad', '30', '0');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('1', 'Wyklad', '30', '0');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('2', 'Wyklad', '30', '0');
-INSERT INTO `data`.`TeacherCourse` (`subjectID`, `type`, `coursesQuantity`, `minPresence`) VALUES ('3', 'Laboratorium', '30', '28');
+INSERT INTO `data`.`TeacherCourse` (`subjectID`, `teacherID`, `studentGroup`, `description`) VALUES ('1', '2', 'I_2013', 'Nowy kurs 1');
+INSERT INTO `data`.`TeacherCourse` (`subjectID`, `teacherID`, `studentGroup`, `description`) VALUES ('2', '2', 'I_2013', 'Jakis kurs 2');
+INSERT INTO `data`.`TeacherCourse` (`subjectID`, `teacherID`, `studentGroup`, `description`) VALUES ('3', '2', 'I_2013', 'Kursik 3');
 
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:01:19');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:01:30');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:02:07');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:02:18');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:02:27');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:03:03');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:03:10');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:03:17');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:03:24');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:03:30');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:04:08');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:04:17');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:04:28');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:05:05');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:05:17');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:05:28');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:09:02');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:09:03');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:09:07');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:09:10');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:09:15');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:09:19');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:09:24');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:09:27');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:09:30');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:10:02');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:10:03');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:10:05');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:10:08');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:10:14');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:10:17');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:10:22');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:10:27');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:11:01');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:11:03');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:11:08');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:11:13');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:11:15');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:11:19');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:11:22');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:11:24');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:11:30');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:12:01');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:12:04');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:12:06');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:12:10');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:12:17');
-INSERT INTO `data`.`CourseDate` (`courseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '12:15:00', '13:45:00', '2015:12:22');
+INSERT INTO `data`.`StudentCourse` (`teacherCourseID`, `studentID`) VALUES ('1', '1');
+INSERT INTO `data`.`StudentCourse` (`teacherCourseID`, `studentID`) VALUES ('2', '1');
+INSERT INTO `data`.`StudentCourse` (`teacherCourseID`, `studentID`) VALUES ('3', '1');
 
-INSERT INTO `data`.`Department` (`name`) VALUES ('Elektrotechniki, Elektroniki, Informatyki i Automatyki');
-INSERT INTO `data`.`Department` (`name`) VALUES ('Fizyki Technicznej i Matematyki Stosowanej');
-INSERT INTO `data`.`Department` (`Name`) VALUES ('Mechaniczny');
-INSERT INTO `data`.`Department` (`Name`) VALUES ('Biotechnologii');
-INSERT INTO `data`.`Department` (`Name`) VALUES ('Chemii');
+INSERT INTO `data`.`Subject` (`Name`, `fieldID`, `yearOfStudy`, `quantity`, `minQuantity`, `description`)
+   VALUES ('Analiza matematyczna', 1, 1, 30, 28, 'Zajecia z analizy matematycznej, obowiazkowej dla kazdego kierunku inxynierskiego');
+INSERT INTO `data`.`Subject` (`Name`, `fieldID`, `yearOfStudy`, `quantity`, `minQuantity`, `description`)
+   VALUES ('Podstawy programowania', 2, 1, 30, 28, 'Podstawy jezyka C');
+INSERT INTO `data`.`Subject` (`Name`, `fieldID`, `yearOfStudy`, `quantity`, `minQuantity`, `description`)
+   VALUES ('Zaawansowane programowanie obiektowe', 2, 1, 30, 28, 'Obiektowosc, watki, kolekcje w jezyku JAVA');
 
-INSERT INTO `data`.`Subject` (`Name`, `departmentID`, `description`) VALUES ('Analiza matematyczna', '1', 'Zajecia z analizy matematycznej, obowiazkowej dla kazdego kierunku inxynierskiego');
-INSERT INTO `data`.`Subject` (`Name`, `departmentID`, `description`) VALUES ('Podstawy programowania', '1', 'Podstawy jezyka C');
-INSERT INTO `data`.`Subject` (`Name`, `departmentID`, `description`) VALUES ('Zaawansowane programowanie obiektowe', '1', 'Obiektowosc, watki, kolekcje w jezyku JAVA');
-INSERT INTO `data`.`Subject` (`Name`, `departmentID`, `description`) VALUES ('Bazy danych', '1', 'MySQL');
-INSERT INTO `data`.`Subject` (`Name`, `departmentID`, `description`) VALUES ('Fizyka 1', '2', 'Mechanika kwantowa');
-INSERT INTO `data`.`Subject` (`Name`, `departmentID`, `description`) VALUES ('Projektowanie aplikacji internetowych', '1', 'Podstawy tworzenia aplikacji internetowych w jezyku JAVA');
-INSERT INTO `data`.`Subject` (`Name`, `departmentID`) VALUES ('Statystyka', '1');
-INSERT INTO `data`.`Subject` (`Name`, `departmentID`, `description`) VALUES ('Kryptografia', '3', 'Szyfr cezara, szyfr afiniczny, klucz publiczny i prywatny');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:01:19');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:01:30');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:02:07');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:02:18');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:02:27');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('1', '08:15:00', '09:45:00', '2015:03:03');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:03:10');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:03:17');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:03:24');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:03:30');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('2', '08:15:00', '09:45:00', '2015:04:08');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('3', '08:15:00', '09:45:00', '2015:04:17');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('3', '08:15:00', '09:45:00', '2015:04:28');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('3', '08:15:00', '09:45:00', '2015:05:05');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('3', '08:15:00', '09:45:00', '2015:05:17');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('3', '08:15:00', '09:45:00', '2015:05:28');
+INSERT INTO `data`.`CourseDate` (`teacherCourseID`, `startTime`, `finishTime`, `date`) VALUES ('3', '08:15:00', '09:45:00', '2015:09:02');
 
-INSERT INTO `data`.`User` (`login`, `contactID`, `firstName`, `lastName`, `type`, `password`, `Status`) VALUES ('mateuszek', '1', 'Mateusz', 'Wieczorek', 'Student', 'maslo123', 'ACTIVE');
-INSERT INTO `data`.`User` (`login`, `contactID`, `firstName`, `lastName`, `type`, `password`, `Status`) VALUES ('G12', '2', 'Grzegorz', 'Maslowski', 'Teacher', 'passwd', 'ACTIVE');
-INSERT INTO `data`.`User` (`login`, `contactID`, `firstName`, `lastName`, `type`, `password`, `Status`) VALUES ('Igor', '3', 'Igor', 'Dudek', 'Teacher', 'dudekigor', 'ACTIVE');
+INSERT INTO `data`.`Field` (`name`) VALUES ('Informatyka');
+INSERT INTO `data`.`Field` (`name`) VALUES ('Elektronika');
+INSERT INTO `data`.`Field` (`name`) VALUES ('Grafika');
+INSERT INTO `data`.`Field` (`name`) VALUES ('Matematyka stosowana');
 
-INSERT INTO `data`.`StudentCourse` (`studentID`, `courseID`) VALUES ('4', '5');
-INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('4', '2');
-INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('4', '3');
-INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('4', '1');
-INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('4', '23');
-INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('5', '7');
-INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('5', '27');
-INSERT INTO `data`.`StudentCourse` (`teacherID`, `courseID`) VALUES ('5', '24');
+INSERT INTO `data`.`Grade` (`subjectID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 1, 5, false);
+INSERT INTO `data`.`Grade` (`subjectID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 1, 1, false);
+INSERT INTO `data`.`Grade` (`subjectID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 1, 2, false);
+INSERT INTO `data`.`Grade` (`subjectID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 1, 3, false);
+INSERT INTO `data`.`Grade` (`subjectID`,  `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 5, false);
+INSERT INTO `data`.`Grade` (`subjectID`,  `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 1, false);
+INSERT INTO `data`.`Grade` (`subjectID`,  `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 4, false);
+INSERT INTO `data`.`Grade` (`subjectID`,  `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 4, false);
+
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (1, 1, 'Obecny');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (2, 1, 'Obecny');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (3, 1, 'Obecny');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (4, 1, 'Obecny');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (5, 1, 'Nieobecny');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (6, 1, 'Nieobecny');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (7, 1, 'Nieobecny');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (8, 1, 'Nieobecny');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (9, 1, 'Spozniony');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (10, 1, 'Spozniony');
+INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (11, 1, 'Spozniony');
 
 INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.from.adress', 'dmcs.p.lodz.pl@gmail.com');
 INSERT INTO `data`.`AppProperty` (`name`, `value`) VALUES ('email.from.username', 'dmcs.p.lodz.pl');

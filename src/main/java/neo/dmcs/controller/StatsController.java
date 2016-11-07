@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 
 import static neo.dmcs.util.UserUtils.getUserFromSession;
-import static neo.dmcs.util.UserUtils.isLogged;
+import static neo.dmcs.util.UserUtils.isNotLogged;
 
 /**
  * @Author Mateusz Wieczorek on 11/5/16.
@@ -29,7 +29,7 @@ public class StatsController {
     public ModelAndView save(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
         User user = getUserFromSession(httpSession);
-        if (!isLogged(user)) {
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }

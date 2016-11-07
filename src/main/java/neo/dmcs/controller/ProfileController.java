@@ -6,7 +6,6 @@ import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.IncorrectPasswordException;
 import neo.dmcs.model.Notification;
 import neo.dmcs.model.User;
-import neo.dmcs.repository.ContactRepository;
 import neo.dmcs.repository.NotificationRepository;
 import neo.dmcs.repository.UserRepository;
 import neo.dmcs.service.ProfileService;
@@ -33,6 +32,7 @@ import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
 
 import static neo.dmcs.util.UserUtils.getUserFromSession;
+import static neo.dmcs.util.UserUtils.isNotLogged;
 
 /**
  * @Author Mateusz Wieczorek
@@ -48,9 +48,6 @@ public class ProfileController {
     private UserRepository userRepository;
 
     @Autowired
-    private ContactRepository contactRepository;
-
-    @Autowired
     private NotificationRepository notificationRepository;
 
     @Autowired
@@ -60,7 +57,7 @@ public class ProfileController {
     public ModelAndView profile(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("user/profile");
         User user = getUserFromSession(httpSession);
-        if (user == null) {
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -73,7 +70,7 @@ public class ProfileController {
                                        HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("user/profile");
         User user = getUserFromSession(httpSession);
-        if (user == null) {
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -108,7 +105,7 @@ public class ProfileController {
                                             HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("user/profile");
         User user = getUserFromSession(httpSession);
-        if (user == null) {
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -124,7 +121,7 @@ public class ProfileController {
                                         HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("user/profile");
         User user = getUserFromSession(httpSession);
-        if (user == null) {
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -165,7 +162,7 @@ public class ProfileController {
                                          HttpSession session) {
         ModelAndView mvc = new ModelAndView("user/profile");
         User user = getUserFromSession(session);
-        if (user == null) {
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -300,12 +297,12 @@ public class ProfileController {
         mvc.addObject("firstName", user.getFirstName());
         mvc.addObject("lastName", user.getLastName());
         mvc.addObject("ID", user.getId());
-        mvc.addObject("email", user.getContact().getEmail());
+        mvc.addObject("email", user.getEmail());
         mvc.addObject("type", user.getType());
-        mvc.addObject("city", user.getContact().getCity());
-        mvc.addObject("group", user.getContact().getGroup());
-        mvc.addObject("phone", user.getContact().getPhone());
-        mvc.addObject("street", user.getContact().getStreet());
+        mvc.addObject("city", user.getCity());
+        mvc.addObject("group", user.getGroup());
+        mvc.addObject("phone", user.getPhone());
+        mvc.addObject("street", user.getStreet());
         return user;
     }
 

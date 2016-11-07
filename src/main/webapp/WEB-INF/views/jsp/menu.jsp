@@ -23,11 +23,11 @@
                 <li><a href="/courses">Przedmioty</a></li>
                 <li><a href="/grades">Oceny</a></li>
                 <li><a href="/stats">Statystyki</a></li>
-<!--
-                <% if ("Student".equals(session.getAttribute("userType"))) { %>
+
+                <% if ("Admin".equals(session.getAttribute("userType"))) { %>
                     <li><a href="/saves">Zapisy na zajęcia</a></li>
                 <%} %>
--->
+
             </ul>
         </div>
     </div>

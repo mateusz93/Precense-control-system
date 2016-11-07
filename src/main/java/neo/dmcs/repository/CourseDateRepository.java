@@ -2,9 +2,11 @@ package neo.dmcs.repository;
 
 import neo.dmcs.model.CourseDate;
 import neo.dmcs.model.Subject;
+import neo.dmcs.model.TeacherCourse;
+
 import java.util.List;
 
 public interface CourseDateRepository extends CrudRepository<CourseDate, Integer> {
 
-    List<CourseDate> findBySubject(Subject subject);
+    List<CourseDate> findByTeacherCourse(TeacherCourse teacherCourse);
 }

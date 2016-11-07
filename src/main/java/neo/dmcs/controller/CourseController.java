@@ -26,7 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static neo.dmcs.util.UserUtils.isLogged;
+import static neo.dmcs.util.UserUtils.getUserFromSession;
+import static neo.dmcs.util.UserUtils.isNotLogged;
 
 /**
  * @Author Mateusz Wieczorek on 25.03.16.
@@ -42,13 +43,7 @@ public class CourseController {
     private UserRepository userRepository;
 
     @Autowired
-    private CustomRepository customRepository;
-
-    @Autowired
     private CourseDateRepository courseDateRepository;
-
-    //@Autowired
-    //private DepartmentRepository departmentRepository;
 
     @Autowired
     private SubjectRepository subjectRepository;
@@ -65,12 +60,11 @@ public class CourseController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView course(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userRepository.findByLogin(username);
         prepareView(mvc, user);
         return mvc;
     }
@@ -78,21 +72,20 @@ public class CourseController {
     @RequestMapping(value = "/info/{teacherCourseId}", method = RequestMethod.POST)
     public ModelAndView info(@PathVariable("teacherCourseId") int teacherCourseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userRepository.findByLogin(username);
         if (user.getType().equals(UserType.Student.name())) {
             mvc.setViewName("course/studentCourseDates");
             TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
-            List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourse.getSubject());
+            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
             mvc.addObject("datesList", courseDates);
         } else {
             mvc.setViewName("course/teacherCourseDates");
             TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
-            List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourse.getSubject());
+            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
             mvc.addObject("teacherCourseId", teacherCourseId);
             mvc.addObject("datesList", courseDates);
         }
@@ -103,28 +96,26 @@ public class CourseController {
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public ModelAndView newCourse(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/addCourse");
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        //List<Department> departments = (List<Department>) departmentRepository.findAll();
-       // mvc.addObject("departments", departments);
         return mvc;
     }
 
     @RequestMapping(value = "/delete/{dateId}", method = RequestMethod.POST)
     public ModelAndView delete(@PathVariable("dateId") int dateId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
-        String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
         CourseDate courseDate = courseDateRepository.findOne(dateId);
         courseDateRepository.delete(courseDate);
-        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseDate.getSubject().getId());
-        List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourse.getSubject());
+        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseDate.getTeacherCourse().getId());
+        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
         mvc.addObject("datesList", courseDates);
 
         return mvc;
@@ -135,13 +126,13 @@ public class CourseController {
     public ModelAndView unSubscribe(@PathVariable("courseId") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
         String username = (String) httpSession.getAttribute("username");
-        if (!isLogged(username)) {
+        if (!isNotLogged(username)) {
             mvc.setViewName("security/login");
             return mvc;
         }
         User user = userRepository.findByLogin(username);
         TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
-        StudentCourse studentCourse = studentCourseRepository.findByStudentAndSubject(user, teacherCourse);
+        StudentCourse studentCourse = studentCourseRepository.findByStudentAndTeacherCourse(user, teacherCourse);
         studentCourseRepository.delete(studentCourse);
 
         prepareView(mvc, user);
@@ -158,7 +149,7 @@ public class CourseController {
     public ModelAndView newCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/addCourse");
         String username = (String) session.getAttribute("username");
-        if (!isLogged(username)) {
+        if (!isNotLogged(username)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -175,8 +166,8 @@ public class CourseController {
     @RequestMapping(value = "/addOne/{teacherCourseId}", method = RequestMethod.POST)
     public ModelAndView newOne(@PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/addCourseDate");
-        String username = (String) session.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(session);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
@@ -187,20 +178,20 @@ public class CourseController {
     @RequestMapping(value = "/addCourseDate/{teacherCourseId}", method = RequestMethod.POST)
     public ModelAndView newCourseDate(@ModelAttribute("courseDateForm") CourseDateView form, @PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
-        String username = (String) session.getAttribute("username");
-        if (!isLogged(username)) {
+        User user = getUserFromSession(session);
+        if (isNotLogged(user)) {
             mvc.setViewName("security/login");
             return mvc;
         }
         TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
         CourseDate courseDate = new CourseDate();
-        courseDate.setTeacherCourse(teacherCourse.getSubject());
+        courseDate.setTeacherCourse(teacherCourse);
         courseDate.setStartTime(form.getStartTime());
         courseDate.setFinishTime(form.getFinishTime());
         courseDate.setDate(form.getDate());
         courseDateRepository.save(courseDate);
 
-        List<CourseDate> courseDates = courseDateRepository.findBySubject(teacherCourse.getSubject());
+        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
         mvc.addObject("datesList", courseDates);
         mvc.addObject("message", "course.courseDateAdded");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
@@ -215,11 +206,8 @@ public class CourseController {
 
         TeacherCourse teacherCourse = new TeacherCourse();
         teacherCourse.setDescription(newCourseForm.getDescription());
-        teacherCourse.setCoursesQuantity(newCourseForm.getQuantity());
-        teacherCourse.setMinPresence(newCourseForm.getMin());
         teacherCourse.setSubject(subject);
         teacherCourse.setTeacher(user);
-        teacherCourse.setType(newCourseForm.getType());
         teacherCourseRepository.save(teacherCourse);
     }
 

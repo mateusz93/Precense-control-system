@@ -1,12 +1,13 @@
 package neo.dmcs.service;
 
-import neo.dmcs.repository.ContactRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.enums.UserType;
-import neo.dmcs.exception.*;
-import neo.dmcs.model.Contact;
+import neo.dmcs.exception.DifferentPasswordsException;
+import neo.dmcs.exception.EmailExistsException;
+import neo.dmcs.exception.FieldEmptyException;
+import neo.dmcs.exception.IncorrectPasswordException;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.util.Encryptor;
 import neo.dmcs.view.security.RegisterView;
 import org.junit.After;
@@ -33,20 +34,14 @@ public class RegisterServiceTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ContactRepository contactRepository;
-    @Autowired
     private RegisterService registerService;
 
     private User user;
 
     @Before
     public void setUp() {
-        Contact contact = new Contact();
-        contact.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
-        contactRepository.save(contact);
-
-        user = new neo.dmcs.model.User();
-        user.setContact(contact);
+        user = new User();
+        user.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         user.setStatus(UserStatus.ACTIVE.name());
         try {
             user.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
@@ -131,8 +126,7 @@ public class RegisterServiceTest {
 
         registerService.accept(registerView);
 
-        Contact contact2 = contactRepository.findByEmail(registerView.getEmail());
-        User user2 = userRepository.findByContact(contact2);
+        User user2 = userRepository.findByEmail(registerView.getEmail());
 
         assertTrue(user2.getLogin().equals("zxcvbnmfghjkajshdh0"));
         

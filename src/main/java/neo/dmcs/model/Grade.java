@@ -13,6 +13,7 @@ public class Grade {
     private int id;
     private Subject subject;
     private Grade previousGrade;
+    private User user;
     private int value;
     private boolean isFinalGrade;
     private Timestamp time;
@@ -36,6 +37,16 @@ public class Grade {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "studentID")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -75,30 +86,4 @@ public class Grade {
         this.time = time;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Grade grade = (Grade) o;
-
-        if (id != grade.id) return false;
-        if (value != grade.value) return false;
-        if (isFinalGrade != grade.isFinalGrade) return false;
-        if (!subject.equals(grade.subject)) return false;
-        if (!previousGrade.equals(grade.previousGrade)) return false;
-        return time.equals(grade.time);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + subject.hashCode();
-        result = 31 * result + previousGrade.hashCode();
-        result = 31 * result + value;
-        result = 31 * result + (isFinalGrade ? 1 : 0);
-        result = 31 * result + time.hashCode();
-        return result;
-    }
 }

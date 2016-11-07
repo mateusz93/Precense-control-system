@@ -10,7 +10,9 @@ public class Subject {
     private String name;
     private String description;
     private Field field;
-    private int year;
+    private int yearOfStudy;
+    private int quantity;
+    private int minQuantity;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -51,13 +53,30 @@ public class Subject {
         this.field = field;
     }
 
-    @Column(name = "year")
-    public int getYear() {
-        return year;
+    @Column(name = "yearOfStudy")
+    public int getYearOfStudy() {
+        return yearOfStudy;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setYearOfStudy(int yearOfStudy) {
+        this.yearOfStudy = yearOfStudy;
     }
 
+    @Column(name = "quantity")
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    @Column(name = "minQuantity")
+    public int getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(int minQuantity) {
+        this.minQuantity = minQuantity;
+    }
 }

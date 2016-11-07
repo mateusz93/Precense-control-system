@@ -1,12 +1,10 @@
 package neo.dmcs.service;
 
-import neo.dmcs.repository.ContactRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.IncorrectPasswordException;
-import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.util.Encryptor;
 import neo.dmcs.util.PasswordValidator;
 import neo.dmcs.view.user.ProfileGeneralView;
@@ -29,10 +27,7 @@ public class ProfileService {
     private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
 
     @Autowired
-    private UserRepository usersDao;
-
-    @Autowired
-    private ContactRepository contactRepository;
+    private UserRepository userRepository;
 
     public void update(ProfileGeneralView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException {
         deleteWhiteCharacters(form);
@@ -42,21 +37,18 @@ public class ProfileService {
         }
 
         User user = getUpdatedUser(form);
-        usersDao.save(user);
+        userRepository.save(user);
     }
 
     private User getUpdatedUser(ProfileGeneralView form) {
-        Contact contact = contactRepository.findByEmail(form.getEmail());
-        User user = usersDao.findByContact(contact);
-        contact.setGroup(form.getGroup());
-        contact.setPhone(form.getPhone());
-        contact.setCity(form.getCity());
-        contact.setStreet(form.getStreet());
-        contactRepository.save(contact);
-        contact = contactRepository.findByEmail(form.getEmail());
-        user.setContact(contact);
+        User user = userRepository.findByEmail(form.getEmail());
+        user.setGroup(form.getGroup());
+        user.setPhone(form.getPhone());
+        user.setCity(form.getCity());
+        user.setStreet(form.getStreet());
         user.setFirstName(form.getFirstName());
         user.setLastName(form.getLastName());
+        userRepository.save(user);
         return user;
     }
 
@@ -88,8 +80,8 @@ public class ProfileService {
             throw new IncorrectPasswordException();
         }
         String username = (String) httpSession.getAttribute("username");
-        User user = usersDao.findByLogin(username);
+        User user = userRepository.findByLogin(username);
         user.setPassword(Encryptor.encryption(form.getNewPassword()));
-        usersDao.save(user);
+        userRepository.save(user);
     }
 }

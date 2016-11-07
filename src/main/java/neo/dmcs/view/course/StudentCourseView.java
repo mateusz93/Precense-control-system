@@ -5,43 +5,35 @@ package neo.dmcs.view.course;
  */
 public class StudentCourseView {
 
-    private String subjectName;
-    private String departmentName;
-    private String type;
-    private int courseID;
+    private int subjectID;
+    private String name;
+    private String description;
     private int coursesQuantity;
+    private int minCoursesQuantity;
     private String teacherName;
 
-    public String getSubjectName() {
-        return subjectName;
+    public String getName() {
+        return name;
     }
 
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public int getSubjectID() {
+        return subjectID;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setSubjectID(int subjectID) {
+        this.subjectID = subjectID;
     }
 
-    public String getType() {
-        return type;
+    public String getDescription() {
+        return description;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getCourseID() {
-        return courseID;
-    }
-
-    public void setCourseID(int courseID) {
-        this.courseID = courseID;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getCoursesQuantity() {
@@ -58,5 +50,13 @@ public class StudentCourseView {
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public int getMinCoursesQuantity() {
+        return minCoursesQuantity;
+    }
+
+    public void setMinCoursesQuantity(int minCoursesQuantity) {
+        this.minCoursesQuantity = minCoursesQuantity;
     }
 }

@@ -1,12 +1,10 @@
 package neo.dmcs.service;
 
-import neo.dmcs.repository.ContactRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.exception.*;
-import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.util.Encryptor;
 import neo.dmcs.view.security.LoginView;
 import org.junit.After;
@@ -33,20 +31,14 @@ public class LoginServiceTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ContactRepository contactRepository;
-    @Autowired
     private LoginService loginService;
 
     private User user;
 
     @Before
     public void setUp() {
-        Contact contact = new Contact();
-        contact.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
-        contactRepository.save(contact);
-
-        user = new neo.dmcs.model.User();
-        user.setContact(contact);
+        user = new User();
+        user.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         user.setStatus(UserStatus.ACTIVE.name());
         try {
             user.setPassword(Encryptor.encryption("zxcvbnmZ123$"));

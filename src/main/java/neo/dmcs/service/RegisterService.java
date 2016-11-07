@@ -1,14 +1,12 @@
 package neo.dmcs.service;
 
-import neo.dmcs.repository.ContactRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.EmailExistsException;
 import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.IncorrectPasswordException;
-import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.util.Encryptor;
 import neo.dmcs.util.PasswordValidator;
 import neo.dmcs.view.security.RegisterView;
@@ -32,42 +30,28 @@ public class RegisterService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ContactRepository contactRepository;
-
     public void accept(RegisterView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException, EmailExistsException {
         validate(form);
-
         String username = generateUsername(form.getFirstName(), form.getLastName());
-
-        Contact contact = getContact(form);
-        contactRepository.save(contact);
-        User user = getUser(form, username);
+        User user = createUser(form, username);
         userRepository.save(user);
     }
 
-    private neo.dmcs.model.User getUser(RegisterView form, String username) {
+    private User createUser(RegisterView form, String username) {
         try {
-            Contact contact = contactRepository.findByEmail(form.getEmail());
-            neo.dmcs.model.User user = new neo.dmcs.model.User();
+            User user = new User();
+            user.setEmail(form.getEmail());
             user.setFirstName(form.getFirstName());
             user.setLastName(form.getLastName());
             user.setType(form.getType());
             user.setLogin(username);
             user.setPassword(Encryptor.encryption(form.getPassword()));
             user.setStatus(UserStatus.INACTIVE.toString());
-            user.setContact(contact);
             return user;
         } catch (NoSuchAlgorithmException e) {
             logger.error(e.toString());
         }
         return null;
-    }
-
-    private Contact getContact(RegisterView form) {
-        Contact contact = new Contact();
-        contact.setEmail(form.getEmail());
-        return contact;
     }
 
     private void validate(RegisterView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException, EmailExistsException {
@@ -101,7 +85,7 @@ public class RegisterService {
 
     private void checkEmail(String email) throws EmailExistsException {
         try {
-            contactRepository.findByEmail(email);
+            userRepository.findByEmail(email);
         } catch (NoResultException e) {
             return;
         }
@@ -111,7 +95,7 @@ public class RegisterService {
     private String generateUsername(String firstName, String lastName) {
         String username = firstName + lastName;
 
-        for (int i = 0; i < 100000; ++i) {
+        for (int i = 0; i < 100; ++i) {
             try {
                 userRepository.findByLogin(username);
             } catch (NoResultException e) {

@@ -1,11 +1,9 @@
 package neo.dmcs.service;
 
-import neo.dmcs.repository.ContactRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.exception.*;
-import neo.dmcs.model.Contact;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.UserRepository;
 import neo.dmcs.util.Encryptor;
 import neo.dmcs.view.security.LoginView;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.NoResultException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -30,9 +27,6 @@ public class LoginService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ContactRepository contactRepository;
-
 
     public void validate(LoginView form) throws IncorrectEmailException, IncorrectPasswordException, IncorrectUserTypeException, UserNotActivedException, FieldEmptyException {
 
@@ -40,8 +34,7 @@ public class LoginService {
             throw new FieldEmptyException("Field can not be empty");
         }
 
-        Contact contact = getContact(form.getEmail());
-        User user = userRepository.findByContact(contact);
+        User user = userRepository.findByEmail(form.getEmail());
 
         try {
             if (!Encryptor.encryption(form.getPassword()).equals(user.getPassword())) {
@@ -61,14 +54,6 @@ public class LoginService {
 
         user.setLastLogin(new Timestamp((new Date()).getTime()));
         userRepository.save(user);
-    }
-
-    private Contact getContact(String email) throws IncorrectEmailException {
-        try {
-            return contactRepository.findByEmail(email);
-        } catch (NoResultException e) {
-            throw new IncorrectEmailException();
-        }
     }
 
 }
