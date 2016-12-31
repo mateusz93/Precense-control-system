@@ -1,4 +1,4 @@
-package neo.dmcs.controller;
+package neo.dmcs.statistic;
 
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.User;

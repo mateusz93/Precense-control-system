@@ -1,8 +1,8 @@
 package neo.dmcs.service;
 
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
+import com.twilio.sdk.Twilio;
+import com.twilio.sdk.resource.api.v2010.account.Message;
+import com.twilio.sdk.type.PhoneNumber;
 import neo.dmcs.repository.AppPropertyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class SMSService {
         PhoneNumber from = new PhoneNumber(phoneNumber);
         PhoneNumber to = new PhoneNumber(recipient);
 
-        Message message = Message.create(to, from, content).execute();
+        Message message = Message.create(ACCOUNT_SID, to, from, content).execute();
 
         if (message.getStatus().equals(Message.Status.FAILED)) {
             logger.info("Sending sms failed. " + message.getErrorMessage());
