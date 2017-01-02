@@ -13,7 +13,7 @@
         <script src="/resources/js/api.js"></script>
         <script src="/resources/js/pagination.js"></script>
         <script src="/resources/js/filter.js"></script>
-        <script src="/resources/js/studentsGrades.js"></script>
+        <script src="/resources/js/studentsGradesAverage.js"></script>
         <script src="/resources/js/studentsPrecenses.js"></script>
     </head>
     <body>
@@ -30,10 +30,19 @@
             <div class="col-md-8 personal-info">
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="tab1">
-                        <div id="precenses"></div>
+
                     </div>
                     <div class="tab-pane fade" id="tab2">
-                        <div id="chart_div"></div>
+                        <div class="col-md-7">
+                            <h5>Statystyki końcowych ocen</h5>
+                            <div id="finalGradesAverage">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <h5>Statystyki wszystkich ocen</h5>
+                            <div id="globalGradesAverage">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

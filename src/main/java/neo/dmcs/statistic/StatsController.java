@@ -1,9 +1,12 @@
 package neo.dmcs.statistic;
 
 import neo.dmcs.enums.UserType;
+import neo.dmcs.model.Grade;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.GradeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static neo.dmcs.util.UserUtils.getUserFromSession;
 import static neo.dmcs.util.UserUtils.isNotLogged;
@@ -24,6 +29,9 @@ import static neo.dmcs.util.UserUtils.isNotLogged;
 public class StatsController {
 
     private final Logger logger = LoggerFactory.getLogger(StatsController.class);
+
+    @Autowired
+    private GradeRepository gradeRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView save(HttpSession httpSession) {
@@ -41,36 +49,57 @@ public class StatsController {
         return mvc;
     }
 
-    @RequestMapping(value = "/someData", method = RequestMethod.GET, produces = "application/json")
-    public String someData(HttpSession httpSession) {
+    @RequestMapping(value = "/finalGradesAverage", method = RequestMethod.GET, produces = "application/json")
+    public String finalGradesAverage(HttpSession httpSession) {
+        User user = getUserFromSession(httpSession);
+        List<Grade> grades = gradeRepository.findByUser(user);
+        grades = grades.stream().filter(grade -> grade.isFinalGrade()).collect(Collectors.toList());
+        long sixGrade = grades.stream().filter(grade -> grade.getValue() == 6).count();
+        long fiveGrade = grades.stream().filter(grade -> grade.getValue() == 5).count();
+        long fourGrade = grades.stream().filter(grade -> grade.getValue() == 4).count();
+        long threeGrade = grades.stream().filter(grade -> grade.getValue() == 3).count();
+        long twoGrade = grades.stream().filter(grade -> grade.getValue() == 2).count();
+        long oneGrade = grades.stream().filter(grade -> grade.getValue() == 1).count();
+
         return "    {\n" +
                 "        \"cols\": [\n" +
                 "        {\"id\":\"\",\"label\":\"Topping\",\"pattern\":\"\",\"type\":\"string\"},\n" +
                 "        {\"id\":\"\",\"label\":\"Slices\",\"pattern\":\"\",\"type\":\"number\"}\n" +
                 "      ],\n" +
                 "        \"rows\": [\n" +
-                "        {\"c\":[{\"v\":\"Mushrooms\",\"f\":null},{\"v\":3,\"f\":null}]},\n" +
-                "        {\"c\":[{\"v\":\"Onions\",\"f\":null},{\"v\":1,\"f\":null}]},\n" +
-                "        {\"c\":[{\"v\":\"Olives\",\"f\":null},{\"v\":1,\"f\":null}]},\n" +
-                "        {\"c\":[{\"v\":\"Zucchini\",\"f\":null},{\"v\":1,\"f\":null}]},\n" +
-                "        {\"c\":[{\"v\":\"Pepperoni\",\"f\":null},{\"v\":2,\"f\":null}]}\n" +
+                "        {\"c\":[{\"v\":\"Liczba szostek\",\"f\":null},{\"v\":" + sixGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba piatek\",\"f\":null},{\"v\":" + fiveGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba czworek\",\"f\":null},{\"v\":" + fourGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba trojek\",\"f\":null},{\"v\":" + threeGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba dwojek\",\"f\":null},{\"v\":" + twoGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba jedynek\",\"f\":null},{\"v\":" + oneGrade + ",\"f\":null}]}\n" +
                 "      ]\n" +
                 "    }";
     }
 
-    @RequestMapping(value = "/precenses", method = RequestMethod.GET, produces = "application/json")
-    public String precenses(HttpSession httpSession) {
+    @RequestMapping(value = "/globalGradesAverage", method = RequestMethod.GET, produces = "application/json")
+    public String globalGradesAverage(HttpSession httpSession) {
+        User user = getUserFromSession(httpSession);
+        List<Grade> grades = gradeRepository.findByUser(user);
+        long sixGrade = grades.stream().filter(grade -> grade.getValue() == 6).count();
+        long fiveGrade = grades.stream().filter(grade -> grade.getValue() == 5).count();
+        long fourGrade = grades.stream().filter(grade -> grade.getValue() == 4).count();
+        long threeGrade = grades.stream().filter(grade -> grade.getValue() == 3).count();
+        long twoGrade = grades.stream().filter(grade -> grade.getValue() == 2).count();
+        long oneGrade = grades.stream().filter(grade -> grade.getValue() == 1).count();
+
         return "    {\n" +
                 "        \"cols\": [\n" +
                 "        {\"id\":\"\",\"label\":\"Topping\",\"pattern\":\"\",\"type\":\"string\"},\n" +
                 "        {\"id\":\"\",\"label\":\"Slices\",\"pattern\":\"\",\"type\":\"number\"}\n" +
                 "      ],\n" +
                 "        \"rows\": [\n" +
-                "        {\"c\":[{\"v\":\"Dupa\",\"f\":null},{\"v\":5,\"f\":null}]},\n" +
-                "        {\"c\":[{\"v\":\"Oczko\",\"f\":null},{\"v\":1,\"f\":null}]},\n" +
-                "        {\"c\":[{\"v\":\"Elo\",\"f\":null},{\"v\":1,\"f\":null}]},\n" +
-                "        {\"c\":[{\"v\":\"Matka\",\"f\":null},{\"v\":2,\"f\":null}]},\n" +
-                "        {\"c\":[{\"v\":\"Ojciec\",\"f\":null},{\"v\":3,\"f\":null}]}\n" +
+                "        {\"c\":[{\"v\":\"Liczba szostek\",\"f\":null},{\"v\":" + sixGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba piatek\",\"f\":null},{\"v\":" + fiveGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba czworek\",\"f\":null},{\"v\":" + fourGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba trojek\",\"f\":null},{\"v\":" + threeGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba dwojek\",\"f\":null},{\"v\":" + twoGrade + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Liczba jedynek\",\"f\":null},{\"v\":" + oneGrade + ",\"f\":null}]}\n" +
                 "      ]\n" +
                 "    }";
     }
