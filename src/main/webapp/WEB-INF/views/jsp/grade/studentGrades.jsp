@@ -16,5 +16,37 @@
     </head>
     <body>
         <jsp:include page="../menu.jsp"/>
+        <div class="container">
+            <br><br>
+            <jsp:include page="../alert/allAlerts.jsp"/>
+            <hr>
+            <div class="input-group input-group-lg add-on">
+                <div class="input-group"> <span class="input-group-addon">Filter</span>
+                    <input id="filter" type="text" class="form-control">
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Prowadzący</th>
+                    </tr>
+                </thead>
+                <tbody id="paginationTable" class="searchable">
+                    <c:forEach var="grade" items="${gradesList}">
+                        <tr>
+                            <td><c:out value="${grade.name}"  /></td>
+                            <td><c:out value="${grade.teacherName}"  /></td>
+                            <form action="/grades/info/${grade.courseId}" method="get">
+                                <td><button type="submit" class="btn btn-info">Pokaż oceny</button></td>
+                            </form>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-12 text-center">
+            <ul class="pagination" id="pager"></ul>
+        </div>
     </body>
 </html>
