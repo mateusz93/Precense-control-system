@@ -1,7 +1,7 @@
 package neo.dmcs.repository;
 
 import neo.dmcs.model.Grade;
-import neo.dmcs.model.Subject;
+import neo.dmcs.model.TeacherCourse;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface GradeRepository extends JpaRepository<Grade, Integer> {
 
-    List<Grade> findBySubject(Subject subject);
+    List<Grade> findByTeacherCourse(TeacherCourse teacherCourse);
     List<Grade> findByPreviousGrade(Grade previousGrade);
     List<Grade> findByValue(Integer value);
 

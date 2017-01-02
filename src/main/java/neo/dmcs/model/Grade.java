@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class Grade {
 
     private int id;
-    private Subject subject;
+    private TeacherCourse teacherCourse;
     private Grade previousGrade;
     private User user;
     private int value;
@@ -30,13 +30,13 @@ public class Grade {
     }
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "subjectID")
-    public Subject getSubject() {
-        return subject;
+    @JoinColumn(name = "teacherCourseID")
+    public TeacherCourse getTeacherCourse() {
+        return teacherCourse;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setTeacherCourse(TeacherCourse teacherCourse) {
+        this.teacherCourse = teacherCourse;
     }
 
     @OneToOne(fetch = FetchType.EAGER)

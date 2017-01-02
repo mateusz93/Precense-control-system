@@ -104,7 +104,7 @@ CREATE TABLE `StudentPrecense` (
 
 CREATE TABLE `Grade` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `subjectID` int(10) unsigned NOT NULL,
+  `teacherCourseID` int(10) unsigned NOT NULL,
   `previousGradeID` int(10) unsigned DEFAULT NULL,
   `studentID` int(10) unsigned NOT NULL,
   `value` int(3) unsigned NOT NULL,
@@ -112,10 +112,10 @@ CREATE TABLE `Grade` (
   `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID_UNIQUE` (`ID`),
-  KEY `subjectID` (`subjectID`),
+  KEY `teacherCourseID` (`teacherCourseID`),
   KEY `previousGradeID` (`previousGradeID`),
   KEY `studentID` (`studentID`),
-  CONSTRAINT `fk_subject_grade` FOREIGN KEY (`subjectID`) REFERENCES `Subject` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_teacher_course_grade` FOREIGN KEY (`teacherCourseID`) REFERENCES `TeacherCourse` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_grade_grade` FOREIGN KEY (`previousGradeID`) REFERENCES `Grade` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_student_grade` FOREIGN KEY (`studentID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

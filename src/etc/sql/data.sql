@@ -47,14 +47,14 @@ INSERT INTO `data`.`Field` (`name`) VALUES ('Elektronika');
 INSERT INTO `data`.`Field` (`name`) VALUES ('Grafika');
 INSERT INTO `data`.`Field` (`name`) VALUES ('Matematyka stosowana');
 
-INSERT INTO `data`.`Grade` (`subjectID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 1, 5, false);
-INSERT INTO `data`.`Grade` (`subjectID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 1, 1, false);
-INSERT INTO `data`.`Grade` (`subjectID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 1, 2, false);
-INSERT INTO `data`.`Grade` (`subjectID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 1, 3, false);
-INSERT INTO `data`.`Grade` (`subjectID`,  `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 5, false);
-INSERT INTO `data`.`Grade` (`subjectID`,  `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 1, false);
-INSERT INTO `data`.`Grade` (`subjectID`,  `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 4, false);
-INSERT INTO `data`.`Grade` (`subjectID`,  `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 4, false);
+INSERT INTO `data`.`Grade` (`teacherCourseID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 1, 5, false);
+INSERT INTO `data`.`Grade` (`teacherCourseID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 1, 1, false);
+INSERT INTO `data`.`Grade` (`teacherCourseID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 1, 2, false);
+INSERT INTO `data`.`Grade` (`teacherCourseID`, `previousGradeID`, `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 1, 3, false);
+INSERT INTO `data`.`Grade` (`teacherCourseID`,  `studentID`, `value`, `isFinalGrade`) VALUES (3, 1, 5, false);
+INSERT INTO `data`.`Grade` (`teacherCourseID`,  `studentID`, `value`, `isFinalGrade`) VALUES (2, 1, 1, false);
+INSERT INTO `data`.`Grade` (`teacherCourseID`,  `studentID`, `value`, `isFinalGrade`) VALUES (1, 1, 4, false);
+INSERT INTO `data`.`Grade` (`teacherCourseID`,  `studentID`, `value`, `isFinalGrade`) VALUES (3, 1, 4, false);
 
 INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (1, 1, 'Obecny');
 INSERT INTO `data`.`StudentPrecense` (`courseDateID`, `studentID`, `status`) VALUES (2, 1, 'Obecny');
