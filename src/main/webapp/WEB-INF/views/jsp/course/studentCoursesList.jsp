@@ -31,19 +31,18 @@
                         <th>Nazwa</th>
                         <th>Liczba zajęć</th>
                         <th>Prowadzący</th>
+                        <th>Opis</th>
                     </tr>
                 </thead>
                 <tbody id="paginationTable" class="searchable">
                     <c:forEach var="course" items="${coursesList}">
                         <tr>
-                            <td><c:out value="${course.subjectName}"  /></td>
+                            <td><c:out value="${course.name}"  /></td>
                             <td><c:out value="${course.coursesQuantity}"  /></td>
                             <td><c:out value="${course.teacherName}"  /></td>
-                            <form action="/courses/info/${course.courseID}" method="post">
+                            <td><c:out value="${course.description}"  /></td>
+                            <form action="/courses/info/${course.courseId}" method="post">
                                 <td><button type="submit" class="btn btn-info">Pokaż terminy</button></td>
-                            </form>
-                            <form action="/courses/unSubscribe/${course.courseID}" method="post">
-                                <td><button type="submit" class="btn btn-danger">Wypisz się</button></td>
                             </form>
                         </tr>
                     </c:forEach>

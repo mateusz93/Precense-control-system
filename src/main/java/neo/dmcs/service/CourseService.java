@@ -48,6 +48,7 @@ public class CourseService {
             courseView.setCoursesQuantity(c.getSubject().getQuantity());
             courseView.setID(c.getId());
             courseView.setSubjectName(c.getSubject().getName());
+            courseViews.add(courseView);
         }
         return courseViews;
     }
@@ -57,13 +58,12 @@ public class CourseService {
         for (StudentCourse c : courses) {
             StudentCourseView courseView = new StudentCourseView();
             courseView.setCoursesQuantity(c.getTeacherCourse().getSubject().getQuantity());
-            courseView.setMinCoursesQuantity(c.getTeacherCourse().getSubject().getMinQuantity());
             courseView.setDescription(c.getTeacherCourse().getSubject().getDescription());
             courseView.setName(c.getTeacherCourse().getSubject().getName());
-            courseView.setSubjectID(c.getTeacherCourse().getSubject().getId());
-            TeacherCourse teacherCourse = teacherCourseRepository.findBySubjectAndStudentGroup(c.getTeacherCourse().getSubject(), user.getGroup());
-            courseView.setTeacherName(teacherCourse.getTeacher().getFirstName() + " " +
-                    teacherCourse.getTeacher().getLastName());
+            courseView.setCourseId(c.getTeacherCourse().getId());
+            courseView.setTeacherName(c.getTeacherCourse().getTeacher().getFirstName() + " " +
+                    c.getTeacherCourse().getTeacher().getLastName());
+            courseViews.add(courseView);
         }
         return courseViews;
     }
