@@ -3,7 +3,7 @@ package neo.dmcs.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "TeacherCourse", schema = "data")
+@Table(name = "teachercourse", schema = "data")
 public class TeacherCourse {
 
     private int id;

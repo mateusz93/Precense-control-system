@@ -6,7 +6,7 @@ import javax.persistence.*;
  * @Author Mateusz Wieczorek on 10/29/16.
  */
 @Entity
-@Table(name = "Field", schema = "data")
+@Table(name = "field", schema = "data")
 public class Field {
 
     private int id;

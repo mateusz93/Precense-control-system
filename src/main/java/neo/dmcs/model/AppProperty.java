@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "AppProperty", schema = "data")
+@Table(name = "appproperty", schema = "data")
 public class AppProperty {
 
     private int id;

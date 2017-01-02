@@ -3,7 +3,7 @@ package neo.dmcs.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "EventDictionary", schema = "data")
+@Table(name = "eventdictionary", schema = "data")
 public class EventDictionary {
 
     private int id;

@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 @Entity
-@Table(name = "CourseDate", schema = "data")
+@Table(name = "coursedate", schema = "data")
 public class CourseDate {
 
     private int id;

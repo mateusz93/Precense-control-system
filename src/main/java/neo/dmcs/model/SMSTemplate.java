@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "SMSTemplate", schema = "data")
+@Table(name = "smstemplate", schema = "data")
 public class SMSTemplate {
 
     private int id;

@@ -160,4 +160,9 @@ public class User {
     public void setCity(String city) {
         this.city = city;
     }
+
+    @Transient
+    public String getFullName() {
+        return firstName + lastName;
+    }
 }
