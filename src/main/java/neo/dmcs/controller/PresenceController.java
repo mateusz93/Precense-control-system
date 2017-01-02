@@ -113,11 +113,13 @@ public class PresenceController {
             courseDateView.setDate(cd.getDate());
             courseDateView.setFinishTime(cd.getFinishTime());
             courseDateView.setStartTime(cd.getStartTime());
-            courseDateView.setCourseDateID(courseId);
+            courseDateView.setCourseDateID(cd.getId());
             try {
-                CourseDate courseDate = courseDateRepository.findOne(courseId);
+                CourseDate courseDate = courseDateRepository.findOne(cd.getId());
                 StudentPrecense studentPrecense = studentPrecenseRepository.findByCourseDate(courseDate);
-                courseDateView.setStatus(studentPrecense.getStatus());
+                if (studentPrecense != null) {
+                    courseDateView.setStatus(studentPrecense.getStatus());
+                }
             } catch (NoResultException e) {
                 if (logger.isWarnEnabled()) {
                     logger.warn(e.getMessage() + "StudentPrecense with courseDateId = " + courseId + " not found");
