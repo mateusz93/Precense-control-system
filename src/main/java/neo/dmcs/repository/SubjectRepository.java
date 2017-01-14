@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SubjectRepository extends JpaRepository<Subject, Integer> {
 
-    List<Subject> findByName(String name);
+    Subject findByName(String name);
 }

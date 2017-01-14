@@ -20,15 +20,23 @@
             <form id="newCourseForm" action="/courses/save" method="post" commandName="newCourseForm" role="form" method="post">
                 <div class="form-group">
                     <label>Nazwa przedmiotu</label>
-                    <input type="text" id="subjectName" name="subjectName" class="form-control">
+                    <select class="form-control" name="subjectName" value="${subjects}">
+                        <c:forEach var="s" items="${subjectList}">
+                            <option type="text" name="subjectName" value="${s.name}">${s.name}</option>
+                        </c:forEach>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label>Liczba lekcji</label>
-                    <input type="text" id="quantity" name="quantity" class="form-control">
+                    <label>Nauczyciel</label>
+                    <select class="form-control" name="teacherLogin" value="${teachers}">
+                        <c:forEach var="t" items="${teacherList}">
+                            <option type="text" name="teacherLogin" value="${t.login}">${t.firstName} ${t.lastName}</option>
+                        </c:forEach>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label>Minimalna ilość obecności</label>
-                    <input type="text" id="min" name="min" class="form-control">
+                    <label>Grupa studencka</label>
+                    <input type="text" id="studentGroup" name="studentGroup" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Opis</label>

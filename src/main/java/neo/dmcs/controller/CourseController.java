@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 import static neo.dmcs.util.UserUtils.getUserFromSession;
@@ -101,6 +102,16 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
+        List<Subject> subjects = subjectRepository.findAll();
+        mvc.addObject("subjectList", subjects);
+        List<User> users = userRepository.findAll();
+        List<User> teachers = new ArrayList<>();
+        for (User user1 : users) {
+            if (UserType.Teacher.toString().equals(user1.getType())) {
+                teachers.add(user1);
+            }
+        }
+        mvc.addObject("teacherList", teachers);
         return mvc;
     }
 
@@ -144,24 +155,27 @@ public class CourseController {
     }
     */
 
-    /*
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView newCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/addCourse");
         String username = (String) session.getAttribute("username");
-        if (!isNotLogged(username)) {
+        if (isNotLogged(username)) {
             mvc.setViewName("security/login");
             return mvc;
         }
-        User user = userRepository.findByLogin(username);
-        saveNewCourse(newCourseForm, user);
-        List<Department> departments = (List<Department>) departmentRepository.findAll();
-        mvc.addObject("departments", departments);
+        User teacher = userRepository.findByLogin(newCourseForm.getTeacherLogin());
+        Subject subject = subjectRepository.findByName(newCourseForm.getSubjectName());
+        TeacherCourse teacherCourse = new TeacherCourse();
+        teacherCourse.setDescription(newCourseForm.getDescription());
+        teacherCourse.setStudentGroup(newCourseForm.getStudentGroup());
+        teacherCourse.setSubject(subject);
+        teacherCourse.setTeacher(teacher);
+
+        teacherCourseRepository.save(teacherCourse);
         mvc.addObject("message", "course.added");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
-    */
 
     @RequestMapping(value = "/addOne/{teacherCourseId}", method = RequestMethod.POST)
     public ModelAndView newOne(@PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
@@ -214,9 +228,17 @@ public class CourseController {
     private void prepareView(ModelAndView mvc, User user) {
         if (UserType.Student.name().equals(user.getType())) {
             prepareStudentView(mvc, user);
-        } else {
+        } else if (UserType.Teacher.name().equals(user.getType())) {
             prepareTeacherView(mvc, user);
+        } else {
+            prepareAdminView(mvc, user);
         }
+    }
+
+    private void prepareAdminView(ModelAndView mvc, User user) {
+        List<TeacherCourse> coursesList = teacherCourseRepository.findAll();
+        mvc.setViewName("course/adminCoursesList");
+        mvc.addObject("coursesList", coursesList);
     }
 
     private void prepareStudentView(ModelAndView mvc, User user) {
