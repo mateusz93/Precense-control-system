@@ -5,52 +5,19 @@ package neo.dmcs.view.course;
  */
 public class SubjectView {
 
-    private String subjectName;
-    private String departmentName;
-    private String type;
-    private int coursesQuantity;
-    private String teacherName;
+    private String name;
     private String description;
-    private int id;
+    private String field;
+    private int yearOfStudy;
+    private int quantity;
+    private int minQuantity;
 
-    public String getSubjectName() {
-        return subjectName;
+    public String getName() {
+        return name;
     }
 
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getCoursesQuantity() {
-        return coursesQuantity;
-    }
-
-    public void setCoursesQuantity(int coursesQuantity) {
-        this.coursesQuantity = coursesQuantity;
-    }
-
-    public String getTeacherName() {
-        return teacherName;
-    }
-
-    public void setTeacherName(String teacherName) {
-        this.teacherName = teacherName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -61,11 +28,35 @@ public class SubjectView {
         this.description = description;
     }
 
-    public int getId() {
-        return id;
+    public String getField() {
+        return field;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public int getYearOfStudy() {
+        return yearOfStudy;
+    }
+
+    public void setYearOfStudy(int yearOfStudy) {
+        this.yearOfStudy = yearOfStudy;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(int minQuantity) {
+        this.minQuantity = minQuantity;
     }
 }

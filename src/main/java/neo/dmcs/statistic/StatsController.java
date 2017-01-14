@@ -2,8 +2,10 @@ package neo.dmcs.statistic;
 
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.Grade;
+import neo.dmcs.model.StudentCourse;
 import neo.dmcs.model.User;
 import neo.dmcs.repository.GradeRepository;
+import neo.dmcs.repository.StudentCourseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +37,9 @@ public class StatsController {
 
     @Autowired
     private GradeRepository gradeRepository;
+
+    @Autowired
+    private StudentCourseRepository studentCourseRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView save(HttpSession httpSession) {
@@ -102,6 +110,57 @@ public class StatsController {
                 "        {\"c\":[{\"v\":\"Liczba jedynek\",\"f\":null},{\"v\":" + oneGrade + ",\"f\":null}]}\n" +
                 "      ]\n" +
                 "    }";
+    }
+
+    @RequestMapping(value = "/subjectGradesAverage", method = RequestMethod.GET, produces = "application/json")
+    public String subjectGradesAverage(HttpSession httpSession) {
+        User user = getUserFromSession(httpSession);
+        List<StudentCourse> studentCourses = studentCourseRepository.findByStudent(user);
+        List<SubjectGradeStat> subjectGradeStats = new ArrayList<>();
+        for (StudentCourse studentCourse : studentCourses) {
+            SubjectGradeStat subjectGradeStat = new SubjectGradeStat();
+            List<Grade> grades = gradeRepository.findByTeacherCourse(studentCourse.getTeacherCourse());
+            subjectGradeStat.setName(studentCourse.getTeacherCourse().getSubject().getName());
+            subjectGradeStat.setAverage(grades.stream().mapToInt(Grade::getValue).average().getAsDouble());
+            double roundedValue = new BigDecimal(String.valueOf(subjectGradeStat.getAverage())).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            subjectGradeStat.setAverage(roundedValue);
+            subjectGradeStats.add(subjectGradeStat);
+        }
+        String result = "[['Name', 'Average', {role: 'style'}],";
+
+        for(SubjectGradeStat subjectGradeStat : subjectGradeStats) {
+            result += "['" + subjectGradeStat.getName() + "', " + subjectGradeStat.getAverage() + ", " +
+                    subjectGradeStat.getColor() + "],";
+        }
+        result = result.substring(0, result.length()-1);
+        return result +=  "]";
+    }
+
+    private class SubjectGradeStat {
+
+        private String name;
+        private double average;
+        private final String color = "#76A7FA";
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public double getAverage() {
+            return average;
+        }
+
+        public void setAverage(double average) {
+            this.average = average;
+        }
+
+        public String getColor() {
+            return color;
+        }
     }
 
 }

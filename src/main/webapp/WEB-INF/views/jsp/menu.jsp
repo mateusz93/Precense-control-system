@@ -18,16 +18,21 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
 
-                <li><a href="/profile">Profil</a></li>
-                <li><a href="/precenses">Obecności</a></li>
-                <li><a href="/courses">Przedmioty</a></li>
-                <li><a href="/grades">Oceny</a></li>
-                <li><a href="/stats">Statystyki</a></li>
+                <% if ("Student".equals(session.getAttribute("userType")) ||
+                       "Teacher".equals(session.getAttribute("userType"))) { %>
 
-                <% if ("Admin".equals(session.getAttribute("userType"))) { %>
-                    <li><a href="/saves">Zapisy na zajęcia</a></li>
+                    <li><a href="/profile">Profil</a></li>
+                    <li><a href="/precenses">Obecności</a></li>
+                    <li><a href="/courses">Przedmioty</a></li>
+                    <li><a href="/grades">Oceny</a></li>
+                    <li><a href="/stats">Statystyki</a></li>
                 <%} %>
 
+                <% if ("Admin".equals(session.getAttribute("userType"))) { %>
+                    <li><a href="/subjects">Przedmioty</a></li>
+                    <li><a href="/courses">Kursy</a></li>
+
+                <%} %>
             </ul>
         </div>
     </div>

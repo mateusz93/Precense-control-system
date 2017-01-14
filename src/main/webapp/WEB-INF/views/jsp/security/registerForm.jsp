@@ -5,6 +5,7 @@
     <select class="form-control" name="type" value="${type}">
         <option value="Student">Student</option>
         <option value="Teacher">Nauczyciel</option>
+        <option value="Admin">Admin</option>
     </select>
 </div>
 <div class="form-group">
