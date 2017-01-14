@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -88,6 +89,23 @@ public class SubjectController {
         mvc.addObject("fieldList", fields);
         mvc.addObject("message", "subject.added");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
+        return mvc;
+    }
+
+    @RequestMapping(value = "/delete/{subjectId}", method = RequestMethod.POST)
+    public ModelAndView deleteSubject(@PathVariable("subjectId") String subjectId, HttpSession session) {
+        ModelAndView mvc = new ModelAndView("subject/addSubject");
+        String username = (String) session.getAttribute("username");
+        if (isNotLogged(username)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+
+        Subject subject = subjectRepository.findOne(Integer.valueOf(subjectId));
+        subjectRepository.delete(subject);
+        mvc.addObject("message", "subject.deleted");
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
+        prepareView(mvc, null);
         return mvc;
     }
 

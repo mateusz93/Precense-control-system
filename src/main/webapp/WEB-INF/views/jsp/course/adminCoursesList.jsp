@@ -44,6 +44,9 @@
                             <td><c:out value="${course.teacher.firstName} ${course.teacher.lastName}"  /></td>
                             <td><c:out value="${course.studentGroup}"  /></td>
                             <td><c:out value="${course.description}"  /></td>
+                            <form action="/courses/deleteCourse/${course.id}" method="post">
+                                <td><button value="${course.id}" type="submit" class="btn btn-info">Usuń</button></td>
+                            </form>
                         </tr>
                     </c:forEach>
                 </tbody>

@@ -48,7 +48,9 @@
                             <td><c:out value="${subject.minQuantity}"  /></td>
                             <td><c:out value="${subject.quantity}"  /></td>
                             <td><c:out value="${subject.description}"  /></td>
-
+                            <form action="/subjects/delete/${subject.id}" method="post">
+                                <td><button value="${subject.id}" type="submit" class="btn btn-info">Usuń</button></td>
+                            </form>
                         </tr>
                     </c:forEach>
                 </tbody>

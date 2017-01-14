@@ -116,8 +116,8 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/delete/{dateId}", method = RequestMethod.POST)
-    public ModelAndView delete(@PathVariable("dateId") int dateId, HttpSession httpSession) {
-        ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
+    public ModelAndView deleteCourse(@PathVariable("dateId") int dateId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("course/adminCoursesList");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
             mvc.setViewName("security/login");
@@ -129,6 +129,22 @@ public class CourseController {
         List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
         mvc.addObject("datesList", courseDates);
 
+        return mvc;
+    }
+
+    @RequestMapping(value = "/deleteCourse/{id}", method = RequestMethod.POST)
+    public ModelAndView delete(@PathVariable("id") int courseId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
+        teacherCourseRepository.delete(teacherCourse);
+        mvc.addObject("message", "course.deleted");
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
+        prepareAdminView(mvc, user);
         return mvc;
     }
 
