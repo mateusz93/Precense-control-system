@@ -5,16 +5,16 @@ package neo.dmcs.view.precense;
  */
 public class CheckPrecenseView {
 
-    private int ID;
+    private String ID;
     private String firstName;
     private String lastName;
     private String precenseStatus;
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 

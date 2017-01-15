@@ -212,7 +212,7 @@ public class PresenceController {
     }
 
     @RequestMapping(value = "/update/{courseDateId}", method = RequestMethod.POST)
-    public ModelAndView update(@ModelAttribute("studentWrapper") CheckPrecenseViewWrapper studentWrapper,
+    public ModelAndView update(@ModelAttribute("studentWrapper") CheckPrecenseView studentWrapper,
                                @PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("precense/checkPrecense");
         User user = getUserFromSession(httpSession);
@@ -220,12 +220,35 @@ public class PresenceController {
             mvc.setViewName("security/login");
             return mvc;
         }
+        updatePrecenses(studentWrapper, courseDateId);
+
         preparePrecensesList(courseDateId, mvc);
         mvc.addObject("message", "precense.updated");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
 
+    private void updatePrecenses(CheckPrecenseView studentWrapper, int courseDateId) {
+        String[] ids = studentWrapper.getID().split(",");
+        String[] firstNames = studentWrapper.getFirstName().split(",");
+        String[] lastNames = studentWrapper.getLastName().split(",");
+        String[] statuses = studentWrapper.getPrecenseStatus().split(",");
+
+        for (int i = 0; i < ids.length; ++i) {
+            User user = userRepository.findOne(Integer.valueOf(ids[i]));
+            CourseDate courseDate = courseDateRepository.findOne(courseDateId);
+            StudentPrecense studentPrecense = studentPrecenseRepository.findByCourseDateAndStudent(courseDate, user);
+            if (studentPrecense != null) {
+                studentPrecense.setStatus(statuses[i]);
+            } else {
+                studentPrecense = new StudentPrecense();
+                studentPrecense.setStatus(statuses[i]);
+                studentPrecense.setCourseDate(courseDate);
+                studentPrecense.setStudent(user);
+            }
+            studentPrecenseRepository.save(studentPrecense);
+        }
+    }
 
 
     private void preparePrecensesList(int courseDateId, ModelAndView mvc) {
@@ -236,12 +259,13 @@ public class PresenceController {
         for (StudentCourse studentCourse : studentCourses) {
             User student = userRepository.findOne(studentCourse.getStudent().getId());
             CheckPrecenseView checkPrecenseView = new CheckPrecenseView();
+            checkPrecenseView.setID(String.valueOf(student.getId()));
             checkPrecenseView.setFirstName(student.getFirstName());
             checkPrecenseView.setLastName(student.getLastName());
-            try {
-                checkPrecenseView.setPrecenseStatus(studentPrecenseRepository.findByCourseDate(courseDate).getStatus());
-            } catch (NoResultException e) {
-                logger.debug("Student " + student.getFirstName() + " " + student.getLastName() + " nie ma sprawdzonej obecności w tym terminie");
+
+            StudentPrecense studentPrecense = studentPrecenseRepository.findByCourseDate(courseDate);
+            if (studentPrecense != null) {
+                checkPrecenseView.setPrecenseStatus(studentPrecense.getStatus());
             }
             students.add(checkPrecenseView);
         }

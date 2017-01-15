@@ -11,4 +11,5 @@ public interface StudentPrecenseRepository extends JpaRepository<StudentPrecense
 
     List<StudentPrecense> findByStudent(User student);
     StudentPrecense findByCourseDate(CourseDate courseDate);
+    StudentPrecense findByCourseDateAndStudent(CourseDate courseDate, User student);
 }
