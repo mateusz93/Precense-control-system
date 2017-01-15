@@ -2,17 +2,17 @@ package neo.dmcs.controller;
 
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
-import neo.dmcs.model.CourseDate;
-import neo.dmcs.model.StudentCourse;
-import neo.dmcs.model.StudentPrecense;
-import neo.dmcs.model.User;
+import neo.dmcs.model.*;
 import neo.dmcs.repository.*;
+import neo.dmcs.service.CourseService;
+import neo.dmcs.service.EmailService;
 import neo.dmcs.service.PrecenseService;
+import neo.dmcs.service.SMSService;
 import neo.dmcs.view.course.CourseDateView;
+import neo.dmcs.view.course.TeacherCourseView;
 import neo.dmcs.view.precense.CheckPrecenseView;
 import neo.dmcs.view.precense.CheckPrecenseViewWrapper;
 import neo.dmcs.view.precense.StudentPrecensesView;
-import neo.dmcs.view.precense.TeacherPrecensesView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +59,18 @@ public class PresenceController {
 
     @Autowired
     private PrecenseService precenseService;
+
+    @Autowired
+    private CourseService courseService;
+
+    @Autowired
+    private SMSService smsService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView precense(HttpSession httpSession) {
@@ -143,6 +155,62 @@ public class PresenceController {
         return mvc;
     }
 
+    @RequestMapping(value = "/courseDates/{courseId}", method = RequestMethod.POST)
+    public ModelAndView courseDates(@PathVariable("courseId") int courseId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView();
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        if (user.getType().equals(UserType.Student.name())) {
+            mvc.setViewName("course/studentCourseDates");
+            TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
+            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
+            mvc.addObject("datesList", courseDates);
+        } else {
+            mvc.setViewName("precense/teacherCourseDates");
+            TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
+            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
+            mvc.addObject("teacherCourseId", courseId);
+            mvc.addObject("datesList", courseDates);
+        }
+
+        return mvc;
+    }
+
+    @RequestMapping(value = "/cancel/{courseDateId}", method = RequestMethod.POST)
+    public ModelAndView cancel(@PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("precense/checkPrecense");
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        sendNotifications(courseDateId);
+
+        prepareTeacherView(mvc, user);
+        return mvc;
+    }
+
+    private void sendNotifications(int courseDateId) {
+        CourseDate courseDate = courseDateRepository.findOne(courseDateId);
+        TeacherCourse teacherCourse = courseDate.getTeacherCourse();
+        List<StudentCourse> studentCourses = studentCourseRepository.findByTeacherCourse(teacherCourse);
+        for (StudentCourse studentCourse : studentCourses) {
+            Notification notification = notificationRepository.findByUser(studentCourse.getStudent());
+            if(notification != null && notification.getCourseCanceled().contains("SMS")) {
+                smsService.sendSMS(studentCourse.getStudent().getPhone(), "Odwołano zajęcia "
+                        + teacherCourse.getSubject().getName() + " w dniu " + courseDate.getDate());
+            }
+            if(notification != null && notification.getCourseCanceled().contains("EMAIL")) {
+                emailService.sendEmail(studentCourse.getStudent().getEmail(), "Odwołano zajęcia",
+                        "Odwołano zajęcia " + teacherCourse.getSubject().getName() + " w dniu " + courseDate.getDate());
+            }
+        }
+
+    }
+
     @RequestMapping(value = "/update/{courseDateId}", method = RequestMethod.POST)
     public ModelAndView update(@ModelAttribute("studentWrapper") CheckPrecenseViewWrapper studentWrapper,
                                @PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
@@ -157,6 +225,8 @@ public class PresenceController {
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
+
+
 
     private void preparePrecensesList(int courseDateId, ModelAndView mvc) {
         CourseDate courseDate = courseDateRepository.findOne(courseDateId);
@@ -196,9 +266,9 @@ public class PresenceController {
     }
 
     private void prepareTeacherView(ModelAndView mvc, User user) {
-        List<TeacherPrecensesView> precensesList = precenseService.getTeacherPrecenses(user);
-        mvc.setViewName("precense/teacherPrecenses");
-        mvc.addObject("coursesList", precensesList);
+        List<TeacherCourseView> coursesList = courseService.getTeacherCoursesList(user);
+        mvc.setViewName("precense/teacherCoursesList");
+        mvc.addObject("coursesList", coursesList);
     }
 
 }
