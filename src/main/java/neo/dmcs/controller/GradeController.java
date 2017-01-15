@@ -3,9 +3,12 @@ package neo.dmcs.controller;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
 import neo.dmcs.repository.*;
+import neo.dmcs.service.CourseService;
 import neo.dmcs.service.GradeService;
+import neo.dmcs.view.course.TeacherCourseView;
 import neo.dmcs.view.grade.StudentGradeDetailsView;
 import neo.dmcs.view.grade.StudentGradeView;
+import neo.dmcs.view.grade.TeacherGradesView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,9 @@ public class GradeController {
     private GradeService gradeService;
 
     @Autowired
+    private CourseService courseService;
+
+    @Autowired
     private GradeRepository gradeRepository;
 
     @Autowired
@@ -59,8 +65,8 @@ public class GradeController {
         }
         if (user.getType().equals(UserType.Student.name())) {
             prepareStudentGrades(user, mvc);
-        } else {
-            //gradeService.prepareTeacherPrecenseStatuses(courseId, mvc);
+        } else if (user.getType().equals(UserType.Teacher.name())){
+            prepareTeacherView(mvc, user);
         }
         return mvc;
     }
@@ -80,6 +86,66 @@ public class GradeController {
         }
 
         return mvc;
+    }
+
+    @RequestMapping(value = "/{courseId}", method = RequestMethod.GET)
+    public ModelAndView grades(@PathVariable("courseId") int courseId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("grade/studentGradesDetails");
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        if (user.getType().equals(UserType.Student.name())) {
+            prepareStudentGradesDetails(courseId, mvc);
+        } else if (user.getType().equals(UserType.Teacher.name())){
+           prepareTeacherGrades(mvc, courseId, user);
+        }
+
+        return mvc;
+    }
+
+    private void prepareTeacherGrades(ModelAndView mvc, int courseId, User user) {
+        List<TeacherGradesView> gradesViews = new ArrayList<>();
+        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
+        List<Grade> grades = gradeRepository.findByTeacherCourse(teacherCourse);
+        for (Grade grade : grades) {
+            if (hasUser(gradesViews, grade.getUser())) {
+                TeacherGradesView teacherGradesView = getTeacherGradeView(gradesViews, grade.getUser());
+                teacherGradesView.setGrades(teacherGradesView.getGrades() + ", " + grade.getValue());
+            } else {
+                TeacherGradesView teacherGradesView = new TeacherGradesView();
+                teacherGradesView.setCourseId(String.valueOf(courseId));
+                if (grade.isFinalGrade()) {
+                    teacherGradesView.setFinalGrade(String.valueOf(grade.getValue()));
+                }
+                teacherGradesView.setFirstName(grade.getUser().getFirstName());
+                teacherGradesView.setLastName(grade.getUser().getLastName());
+                teacherGradesView.setGrades(String.valueOf(grade.getValue()));
+                teacherGradesView.setStudentId(String.valueOf(grade.getUser().getId()));
+                gradesViews.add(teacherGradesView);
+            }
+        }
+        mvc.addObject("students", gradesViews);
+        mvc.setViewName("grade/teacherGrades");
+    }
+
+    private TeacherGradesView getTeacherGradeView(List<TeacherGradesView> gradesViews, User user) {
+        for (TeacherGradesView teacherGradesView : gradesViews) {
+            if (teacherGradesView.getStudentId().equals(String.valueOf(user.getId()))) {
+                return teacherGradesView;
+            }
+        }
+        return null;
+    }
+
+    private boolean hasUser(List<TeacherGradesView> gradesViews, User user) {
+        for (TeacherGradesView teacherGradesView : gradesViews) {
+            if (teacherGradesView.getStudentId().equals(String.valueOf(user.getId()))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void prepareStudentGrades(User user, ModelAndView mvc) {
@@ -110,5 +176,11 @@ public class GradeController {
             StudentGradeDetailsViews.add(studentGradeDetailsView);
         }
         mvc.addObject("gradesDetailsList", StudentGradeDetailsViews);
+    }
+
+    private void prepareTeacherView(ModelAndView mvc, User user) {
+        List<TeacherCourseView> coursesList = courseService.getTeacherCoursesList(user);
+        mvc.setViewName("grade/teacherCoursesList");
+        mvc.addObject("coursesList", coursesList);
     }
 }

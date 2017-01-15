@@ -16,5 +16,6 @@ public interface GradeRepository extends JpaRepository<Grade, Integer> {
     List<Grade> findByPreviousGrade(Grade previousGrade);
     List<Grade> findByValue(Integer value);
     List<Grade> findByUser(User user);
+    List<Grade> findByTeacherCourseAndUser(TeacherCourse teacherCourse, User user);
 
 }

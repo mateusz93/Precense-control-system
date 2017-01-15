@@ -19,7 +19,6 @@
             <br><br>
             <jsp:include page="../alert/allAlerts.jsp"/>
             <hr>
-            <br>
             <div class="input-group input-group-lg add-on">
                 <div class="input-group"> <span class="input-group-addon">Filter</span>
                     <input id="filter" type="text" class="form-control" >

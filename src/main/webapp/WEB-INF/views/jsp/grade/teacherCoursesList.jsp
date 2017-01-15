@@ -27,22 +27,17 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Student</th>
-                        <th>Oceny</th>
-                        <th>Ocena końcowa</th>
+                        <th>Nazwa</th>
+                        <th>Liczba zajęć</th>
                     </tr>
                 </thead>
                 <tbody id="paginationTable" class="searchable">
-                    <c:forEach var="student" items="${students}">
+                    <c:forEach var="course" items="${coursesList}">
                         <tr>
-                            <td><c:out value="${student.firstName} ${student.lastName}"  /></td>
-                            <td><c:out value="${student.grades}"  /></td>
-                            <td><c:out value="${student.finalGrade}"  /></td>
-                            <form action="/grades/new/${student.courseId}/${student.studentId}" method="post">
-                                <td><button type="submit" class="btn btn-info">Dodaj ocenę</button></td>
-                            </form>
-                            <form action="/grades/newFinal/${student.courseId}/${student.studentId}" method="post">
-                                <td><button type="submit" class="btn btn-info">Wystaw ocenę końcową</button></td>
+                            <td><c:out value="${course.subjectName}"  /></td>
+                            <td><c:out value="${course.coursesQuantity}"  /></td>
+                            <form action="/grades/${course.ID}" method="get">
+                                <td><button value="${course.ID}" type="submit" class="btn btn-info">Wyświetl oceny</button></td>
                             </form>
                         </tr>
                     </c:forEach>
