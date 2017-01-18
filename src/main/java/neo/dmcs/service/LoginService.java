@@ -37,7 +37,7 @@ public class LoginService {
         User user = userRepository.findByEmail(form.getEmail());
 
         try {
-            if (!Encryptor.encryption(form.getPassword()).equals(user.getPassword())) {
+            if (user == null || !Encryptor.encryption(form.getPassword()).equals(user.getPassword())) {
                 throw new IncorrectPasswordException();
             }
         } catch (NoSuchAlgorithmException e) {
