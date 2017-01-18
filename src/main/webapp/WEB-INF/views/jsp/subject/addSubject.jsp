@@ -16,7 +16,7 @@
         <div class="container">
             <br><br>
             <jsp:include page="../alert/allAlerts.jsp"/>
-            <h3>Nowy kurs</h3>
+            <h3>Nowy przedmiot</h3>
             <form id="newSubjectForm" action="/subjects/save" method="post" commandName="newSubjectForm" role="form" method="post">
                 <div class="form-group">
                     <label>Nazwa przedmiotu</label>

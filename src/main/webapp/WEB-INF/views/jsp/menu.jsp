@@ -29,6 +29,7 @@
                 <%} %>
 
                 <% if ("Admin".equals(session.getAttribute("userType"))) { %>
+                    <li><a href="/profile">Profil</a></li>
                     <li><a href="/subjects">Przedmioty</a></li>
                     <li><a href="/courses">Kursy</a></li>
 
