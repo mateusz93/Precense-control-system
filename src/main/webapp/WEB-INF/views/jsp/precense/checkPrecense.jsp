@@ -25,6 +25,7 @@
                     <input id="filter" type="text" class="form-control" >
                 </div>
             </div>
+            <br>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -87,6 +88,7 @@
                         </c:forEach>
                         <input type="hidden" name="courseDateId" value="${courseDateId}"/>
                         <button value="submit" type="submit" class="btn btn-success">Zatwierdź</button>
+                        <br>
                     </form>
                 </tbody>
             </table>
