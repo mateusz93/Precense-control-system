@@ -1,5 +1,6 @@
 package neo.dmcs.controller;
 
+import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
 import neo.dmcs.repository.*;
@@ -8,12 +9,14 @@ import neo.dmcs.service.GradeService;
 import neo.dmcs.view.course.TeacherCourseView;
 import neo.dmcs.view.grade.StudentGradeDetailsView;
 import neo.dmcs.view.grade.StudentGradeView;
+import neo.dmcs.view.grade.TeacherAddGradeView;
 import neo.dmcs.view.grade.TeacherGradesView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,6 +106,62 @@ public class GradeController {
         } else if (user.getType().equals(UserType.Teacher.name())){
            prepareTeacherGrades(mvc, courseId, user);
         }
+
+        return mvc;
+    }
+
+    @RequestMapping(value = "/new/{courseId}/{studentId}", method = RequestMethod.GET)
+    public ModelAndView grades(@PathVariable("courseId") int courseId,
+                               @PathVariable("studentId") int studentId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("grade/studentGradesDetails");
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        if (user.getType().equals(UserType.Student.name())) {
+            prepareStudentGradesDetails(courseId, mvc);
+        } else if (user.getType().equals(UserType.Teacher.name())){
+            User user1 = userRepository.findOne(studentId);
+            mvc.addObject("courseId", courseId);
+            mvc.addObject("studentId", studentId);
+            mvc.addObject("studentName", user1.getFullName());
+            mvc.setViewName("grade/teacherAddGrade");
+        }
+
+        return mvc;
+    }
+
+    @RequestMapping(value = "/save/{courseId}/{studentId}", method = RequestMethod.POST)
+    public ModelAndView saveGrade(@PathVariable("courseId") int courseId,
+                                  @PathVariable("studentId") int studentId,
+                                  @ModelAttribute("addGrade") TeacherAddGradeView teacherAddGradeView,
+                                  HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView();
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
+        User user1 = userRepository.findOne(studentId);
+
+        Grade grade = new Grade();
+        grade.setTeacherCourse(teacherCourse);
+        grade.setTime(new Timestamp(System.currentTimeMillis()));
+        grade.setValue(Integer.valueOf(teacherAddGradeView.getValue()));
+        grade.setUser(user1);
+        if ("Tak".equals(teacherAddGradeView.getIsFinal())) {
+            grade.setFinalGrade(true);
+        } else {
+            grade.setFinalGrade(false);
+        }
+
+        gradeRepository.save(grade);
+        prepareTeacherGrades(mvc, courseId, user);
+
+        mvc.addObject("message", "grade.add");
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
 
         return mvc;
     }

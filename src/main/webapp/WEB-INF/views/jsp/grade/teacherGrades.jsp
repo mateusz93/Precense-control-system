@@ -38,11 +38,8 @@
                             <td><c:out value="${student.firstName} ${student.lastName}"  /></td>
                             <td><c:out value="${student.grades}"  /></td>
                             <td><c:out value="${student.finalGrade}"  /></td>
-                            <form action="/grades/new/${student.courseId}/${student.studentId}" method="post">
+                            <form action="/grades/new/${student.courseId}/${student.studentId}" method="get">
                                 <td><button type="submit" class="btn btn-info">Dodaj ocenę</button></td>
-                            </form>
-                            <form action="/grades/newFinal/${student.courseId}/${student.studentId}" method="post">
-                                <td><button type="submit" class="btn btn-info">Wystaw ocenę końcową</button></td>
                             </form>
                         </tr>
                     </c:forEach>
