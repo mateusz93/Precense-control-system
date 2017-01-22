@@ -222,11 +222,44 @@ public class PresenceController {
         }
         updatePrecenses(studentWrapper, courseDateId);
 
+        sendnotifications(studentWrapper, courseDateId);
+
         preparePrecensesList(courseDateId, mvc);
         mvc.addObject("message", "precense.updated");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
+
+    private void sendnotifications(CheckPrecenseView studentWrapper, int courseDateId) {
+        String[] ids = studentWrapper.getID().split(",");
+        String[] statuses = studentWrapper.getPrecenseStatus().split(",");
+
+        for (int i = 0; i < ids.length; ++i) {
+            if ("Nieobecny".equalsIgnoreCase(statuses[i])) {
+                User user = userRepository.findOne(Integer.valueOf(ids[i]));
+                Notification notification = notificationRepository.findByUser(user);
+                CourseDate courseDate = courseDateRepository.findOne(courseDateId);
+                if (notification.getAbsence().contains("EMAIL")) {
+                    sendAbsenceEmail(user, courseDate);
+                }
+                if (notification.getAbsence().contains("SMS")) {
+                    sendAbsenceSMS(user, courseDate);
+                }
+            }
+        }
+    }
+
+    private void sendAbsenceSMS(User user, CourseDate courseDate) {
+        smsService.sendSMS(user.getPhone(), "Wystawiono nieobecność na zajęciach z przedmiotu: "
+                + courseDate.getTeacherCourse().getSubject().getName() + " w dniu: " + courseDate.getDate());
+    }
+
+    private void sendAbsenceEmail(User user, CourseDate courseDate) {
+        emailService.sendEmail(user.getEmail(), "Nieobecność na zajęciach",
+                "Wystawiono nieobecność na zajęciach z przedmiotu: " + courseDate.getTeacherCourse().getSubject().getName()
+                + " w dniu: " + courseDate.getDate());
+    }
+
 
     private void updatePrecenses(CheckPrecenseView studentWrapper, int courseDateId) {
         String[] ids = studentWrapper.getID().split(",");
