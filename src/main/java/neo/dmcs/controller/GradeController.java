@@ -5,7 +5,9 @@ import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
 import neo.dmcs.repository.*;
 import neo.dmcs.service.CourseService;
+import neo.dmcs.service.EmailService;
 import neo.dmcs.service.GradeService;
+import neo.dmcs.service.SMSService;
 import neo.dmcs.view.course.TeacherCourseView;
 import neo.dmcs.view.grade.StudentGradeDetailsView;
 import neo.dmcs.view.grade.StudentGradeView;
@@ -59,6 +61,15 @@ public class GradeController {
 
     @Autowired
     private StudentCourseRepository studentCourseRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private SMSService smsService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView course(HttpSession session) {
@@ -150,6 +161,9 @@ public class GradeController {
         grade.setTeacherCourse(teacherCourse);
         grade.setTime(new Timestamp(System.currentTimeMillis()));
         grade.setValue(Integer.valueOf(teacherAddGradeView.getValue()));
+        if (grade.getValue() == 1) {
+            sendGradeNotification(user1, teacherCourse.getSubject().getName());
+        }
         grade.setUser(user1);
         if ("Tak".equals(teacherAddGradeView.getIsFinal())) {
             grade.setFinalGrade(true);
@@ -164,6 +178,17 @@ public class GradeController {
         mvc.addObject("messageType", MessageType.SUCCESS.name());
 
         return mvc;
+    }
+
+    private void sendGradeNotification(User user, String subjectName) {
+        Notification notification = notificationRepository.findByUser(user);
+        if (notification.getBadMark().contains("EMAIL")) {
+            emailService.sendEmail(user.getEmail(), "Ocena niedostateczna",
+                    "Otrzymałeś ocenę niedostateczną z przedmiotu " + subjectName);
+        }
+        if (notification.getCriticalPresenceLevel().contains("SMS")) {
+            smsService.sendSMS(user.getPhone(), "Otrzymałeś ocenę niedostateczną z przedmiotu " + subjectName);
+        }
     }
 
     private void prepareTeacherGrades(ModelAndView mvc, int courseId, User user) {
