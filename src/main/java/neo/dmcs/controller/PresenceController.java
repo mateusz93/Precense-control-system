@@ -222,7 +222,7 @@ public class PresenceController {
         }
         updatePrecenses(studentWrapper, courseDateId);
 
-        sendnotifications(studentWrapper, courseDateId);
+        sendNotifications(studentWrapper, courseDateId);
 
         preparePrecensesList(courseDateId, mvc);
         mvc.addObject("message", "precense.updated");
@@ -230,7 +230,42 @@ public class PresenceController {
         return mvc;
     }
 
-    private void sendnotifications(CheckPrecenseView studentWrapper, int courseDateId) {
+    private void sendNotifications(CheckPrecenseView studentWrapper, int courseDateId) {
+        absenceNotifications(studentWrapper, courseDateId);
+        criticalPresenceLevelNotifications(courseDateId);
+    }
+
+    private void criticalPresenceLevelNotifications(int courseDateId) {
+        CourseDate courseDate = courseDateRepository.findOne(courseDateId);
+        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(courseDate.getTeacherCourse());
+        int maxAbsence = courseDate.getTeacherCourse().getSubject().getQuantity()
+                - courseDate.getTeacherCourse().getSubject().getMinQuantity();
+        List<StudentCourse> studentCourses = studentCourseRepository.findByTeacherCourse(courseDate.getTeacherCourse());
+        int absence;
+        for (StudentCourse sc : studentCourses) {
+            absence = 0;
+            for (CourseDate cd : courseDates) {
+                StudentPrecense studentPrecense = studentPrecenseRepository.findByCourseDateAndStudent(cd, sc.getStudent());
+                if ("Nieobecny".equalsIgnoreCase(studentPrecense.getStatus())) {
+                    absence++;
+                }
+            }
+            if (absence == maxAbsence) {
+                Notification notification = notificationRepository.findByUser(sc.getStudent());
+                if (notification.getCriticalPresenceLevel().contains("EMAIL")) {
+                    emailService.sendEmail(sc.getStudent().getEmail(), "Krytyczny poziom nieobecności",
+                            "Twój poziom nieobecności z przedmiotu " + courseDate.getTeacherCourse().getSubject().getName()
+                            + " osiągnął poziom krytyczny.");
+                }
+                if (notification.getCriticalPresenceLevel().contains("SMS")) {
+                    smsService.sendSMS(sc.getStudent().getPhone(), "Twój poziom nieobecności z przedmiotu "
+                            + courseDate.getTeacherCourse().getSubject().getName() + " osiągnął poziom krytyczny.");
+                }
+            }
+        }
+    }
+
+    private void absenceNotifications(CheckPrecenseView studentWrapper, int courseDateId) {
         String[] ids = studentWrapper.getID().split(",");
         String[] statuses = studentWrapper.getPrecenseStatus().split(",");
 
