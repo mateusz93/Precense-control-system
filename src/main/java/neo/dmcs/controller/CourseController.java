@@ -2,12 +2,11 @@ package neo.dmcs.controller;
 
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
-import neo.dmcs.model.CourseDate;
-import neo.dmcs.model.Subject;
-import neo.dmcs.model.TeacherCourse;
-import neo.dmcs.model.User;
+import neo.dmcs.model.*;
 import neo.dmcs.repository.*;
 import neo.dmcs.service.CourseService;
+import neo.dmcs.service.EmailService;
+import neo.dmcs.service.SMSService;
 import neo.dmcs.view.course.CourseDateView;
 import neo.dmcs.view.course.NewCourseView;
 import neo.dmcs.view.course.StudentCourseView;
@@ -57,6 +56,15 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private SMSService smsService;
+
+    @Autowired
+    private EmailService emailService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView course(HttpSession httpSession) {
@@ -112,6 +120,24 @@ public class CourseController {
             }
         }
         mvc.addObject("teacherList", teachers);
+        return mvc;
+    }
+
+    @RequestMapping(value = "/edit/{dateId}", method = RequestMethod.POST)
+    public ModelAndView editCourse(@PathVariable("dateId") int dateId, HttpSession httpSession) {
+        ModelAndView mvc = new ModelAndView("course/addCourseDate");
+        User user = getUserFromSession(httpSession);
+        if (isNotLogged(user)) {
+            mvc.setViewName("security/login");
+            return mvc;
+        }
+        CourseDate courseDate = courseDateRepository.findOne(dateId);
+        mvc.addObject("date", courseDate.getDate());
+        mvc.addObject("startTime", courseDate.getStartTime());
+        mvc.addObject("finishTime", courseDate.getFinishTime());
+        mvc.addObject("teacherCourseId", courseDate.getTeacherCourse().getId());
+        mvc.addObject("dateId", dateId);
+        mvc.addObject("isEdited", "True");
         return mvc;
     }
 
@@ -213,19 +239,53 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
+        CourseDate courseDate;
         TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
-        CourseDate courseDate = new CourseDate();
-        courseDate.setTeacherCourse(teacherCourse);
-        courseDate.setStartTime(form.getStartTime());
-        courseDate.setFinishTime(form.getFinishTime());
-        courseDate.setDate(form.getDate());
-        courseDateRepository.save(courseDate);
+        if ("True".equalsIgnoreCase(form.getIsEdited())) {
+            courseDate = courseDateRepository.findOne(Integer.valueOf(form.getDateId()));
+            sendEditCourseDateNotification(teacherCourse, form, courseDate);
+            courseDate.setDate(form.getDate());
+            courseDate.setStartTime(form.getStartTime());
+            courseDate.setFinishTime(form.getFinishTime());
+            courseDateRepository.save(courseDate);
+            mvc.addObject("message", "course.courseDateEdited");
+            mvc.addObject("messageType", MessageType.SUCCESS.name());
+        } else {
+            courseDate = new CourseDate();
+            courseDate.setTeacherCourse(teacherCourse);
+            courseDate.setStartTime(form.getStartTime());
+            courseDate.setFinishTime(form.getFinishTime());
+            courseDate.setDate(form.getDate());
+            courseDateRepository.save(courseDate);
+            mvc.addObject("message", "course.courseDateAdded");
+            mvc.addObject("messageType", MessageType.SUCCESS.name());
+        }
 
         List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
         mvc.addObject("datesList", courseDates);
-        mvc.addObject("message", "course.courseDateAdded");
-        mvc.addObject("messageType", MessageType.SUCCESS.name());
+
         return mvc;
+    }
+
+    private void sendEditCourseDateNotification(TeacherCourse teacherCourse, CourseDateView form, CourseDate courseDate) {
+        List<StudentCourse> studentCourses = studentCourseRepository.findByTeacherCourse(teacherCourse);
+        for(StudentCourse studentCourse : studentCourses) {
+            Notification notification = notificationRepository.findByUser(studentCourse.getStudent());
+            if (notification.getChangeCourseDate().contains("EMAIL")) {
+                emailService.sendEmail(studentCourse.getStudent().getEmail(), "Zmieniono termin zajęć",
+                        "Zmieniono termin zajęć przedmiotu: " + studentCourse.getTeacherCourse().getSubject().getName()
+                        + ". Poprzedni termin: " + courseDate.getDate() + ". Start: " + courseDate.getStartTime()
+                        + ". Koniec: " + courseDate.getFinishTime() + ". Nowy termin: " + form.getDate() + ". Start: "
+                        + form.getStartTime() + ". Koniec: " + form.getFinishTime());
+            }
+            if (notification.getChangeCourseDate().contains("SMS")) {
+                smsService.sendSMS(studentCourse.getStudent().getEmail(),
+                        "Zmieniono termin zajęć przedmiotu: " + studentCourse.getTeacherCourse().getSubject().getName()
+                                + ". Poprzedni termin: " + courseDate.getDate() + ". Start: " + courseDate.getStartTime()
+                                + ". Koniec: " + courseDate.getFinishTime() + ". Nowy termin: " + form.getDate() + ". Start: "
+                                + form.getStartTime() + ". Koniec: " + form.getFinishTime());
+            }
+        }
     }
 
     private void saveNewCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, User user) {

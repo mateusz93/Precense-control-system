@@ -47,11 +47,11 @@
                             <td class="col-md-2"><c:out value="${date.date}"  /></td>
                             <td class="col-md-2"><c:out value="${date.startTime}" /></td>
                             <td class="col-md-2"><c:out value="${date.finishTime}" /></td>
-                        <!--
+
                             <form action="/courses/edit/${date.id}" method="post">
                                 <td class="col-md-1"><button name="editID" value="${date.id}" type="submit" class="btn btn-warning">Edytuj</button></td>
                             </form>
-                        -->
+
                             <form action="/courses/delete/${date.id}" method="post">
                                 <td class="col-md-1"><button name="deleteID" value="${date.id}" type="submit" class="btn btn-danger">Usuń</button></td>
                             </form>

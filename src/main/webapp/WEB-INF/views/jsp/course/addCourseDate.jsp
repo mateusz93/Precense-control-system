@@ -29,6 +29,8 @@
                     <label>Czas zakończenia</label>
                     <input type="text" placeholder="Format: GG:MM:SS" name="finishTime" value="${finishTime}" class="form-control">
                 </div>
+                <input type="hidden" name="isEdited" value="${isEdited}" class="form-control">
+                <input type="hidden" name="dateId" value="${dateId}" class="form-control">
                 <td><button type="submit"  class="btn btn-success">Zatwierdź</button></td>
             </form>
         </div>

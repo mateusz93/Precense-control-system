@@ -13,6 +13,8 @@ public class CourseDateView {
     private Time startTime;
     private Time finishTime;
     private int courseDateID;
+    private String isEdited;
+    private String dateId;
 
     public Date getDate() {
         return date;
@@ -52,6 +54,22 @@ public class CourseDateView {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getIsEdited() {
+        return isEdited;
+    }
+
+    public void setIsEdited(String isEdited) {
+        this.isEdited = isEdited;
+    }
+
+    public String getDateId() {
+        return dateId;
+    }
+
+    public void setDateId(String dateId) {
+        this.dateId = dateId;
     }
 
     @Override
