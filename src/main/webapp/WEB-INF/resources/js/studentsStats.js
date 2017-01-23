@@ -7,6 +7,19 @@ google.charts.setOnLoadCallback(drawChart);
 function drawChart() {
 
     var jsonData = $.ajax({
+      url: "http://localhost:8080/stats/globalPresenceAverage",
+      dataType: "json",
+      async: false
+      }).responseText;
+
+    // Create our data table out of JSON data loaded from server.
+    var data = new google.visualization.DataTable(jsonData);
+
+    // Instantiate and draw our chart, passing in some options.
+    var chart = new google.visualization.PieChart(document.getElementById('globalPresenceAverage'));
+    chart.draw(data, {width: 400, height: 300});
+
+    var jsonData = $.ajax({
       url: "http://localhost:8080/stats/globalGradesAverage",
       dataType: "json",
       async: false

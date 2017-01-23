@@ -3,9 +3,11 @@ package neo.dmcs.statistic;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.Grade;
 import neo.dmcs.model.StudentCourse;
+import neo.dmcs.model.StudentPrecense;
 import neo.dmcs.model.User;
 import neo.dmcs.repository.GradeRepository;
 import neo.dmcs.repository.StudentCourseRepository;
+import neo.dmcs.repository.StudentPrecenseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class StatsController {
     @Autowired
     private StudentCourseRepository studentCourseRepository;
 
+    @Autowired
+    private StudentPrecenseRepository studentPrecenseRepository;
+
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView save(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
@@ -55,6 +60,27 @@ public class StatsController {
             mvc.setViewName("stats/teacherStats");
         }
         return mvc;
+    }
+
+    @RequestMapping(value = "/globalPresenceAverage", method = RequestMethod.GET, produces = "application/json")
+    public String globalPresenceAverage(HttpSession httpSession) {
+        User user = getUserFromSession(httpSession);
+        List<StudentPrecense> studentPrecenses = studentPrecenseRepository.findByStudent(user);
+        long absent = studentPrecenses.stream().filter(s -> s.getStatus().equalsIgnoreCase("Nieobecny")).count();
+        long present = studentPrecenses.stream().filter(s -> s.getStatus().equalsIgnoreCase("Obecny")).count();
+        long late = studentPrecenses.stream().filter(s -> s.getStatus().equalsIgnoreCase("Spozniony")).count();
+
+        return "    {\n" +
+                "        \"cols\": [\n" +
+                "        {\"id\":\"\",\"label\":\"Topping\",\"pattern\":\"\",\"type\":\"string\"},\n" +
+                "        {\"id\":\"\",\"label\":\"Slices\",\"pattern\":\"\",\"type\":\"number\"}\n" +
+                "      ],\n" +
+                "        \"rows\": [\n" +
+                "        {\"c\":[{\"v\":\"Nieobecnosci\",\"f\":null},{\"v\":" + absent + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Obecnosci\",\"f\":null},{\"v\":" + present + ",\"f\":null}]},\n" +
+                "        {\"c\":[{\"v\":\"Spoznienia\",\"f\":null},{\"v\":" + late + ",\"f\":null}]},\n" +
+                "      ]\n" +
+                "    }";
     }
 
     @RequestMapping(value = "/finalGradesAverage", method = RequestMethod.GET, produces = "application/json")
