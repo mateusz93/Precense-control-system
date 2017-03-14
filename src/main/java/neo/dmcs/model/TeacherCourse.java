@@ -1,63 +1,31 @@
 package neo.dmcs.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "teachercourse", schema = "data")
+@Data
 public class TeacherCourse {
-
-    private int id;
-    private Subject subject;
-    private String studentGroup;
-    private User teacher;
-    private String description;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "ID")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subjectID")
-    public Subject getSubject() {
-        return subject;
-    }
+    private Subject subject;
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
+    @Column(name = "studentGroup")
+    private String studentGroup;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacherID")
-    public User getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(User teacher) {
-        this.teacher = teacher;
-    }
+    private User teacher;
 
     @Column(name = "description")
-    public String getDescription() {
-        return description;
-    }
+    private String description;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Column(name = "studentGroup")
-    public String getStudentGroup() {
-        return studentGroup;
-    }
-
-    public void setStudentGroup(String studentGroup) {
-        this.studentGroup = studentGroup;
-    }
 }

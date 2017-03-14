@@ -1,5 +1,7 @@
 package neo.dmcs.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.model.StudentCourse;
 import neo.dmcs.model.TeacherCourse;
 import neo.dmcs.model.User;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
@@ -18,16 +21,14 @@ import java.util.List;
 /**
  * @Author Mateusz Wieczorek, 14.05.16.
  */
+@Slf4j
+@RequiredArgsConstructor
+@Transactional
 @Service
 public class SaveService {
 
-    private static final Logger logger = LoggerFactory.getLogger(SaveService.class);
-
-    @Autowired
-    private TeacherCourseRepository teacherCourseRepository;
-
-    @Autowired
-    private StudentCourseRepository studentCourseRepository;
+    private final TeacherCourseRepository teacherCourseRepository;
+    private final StudentCourseRepository studentCourseRepository;
 
     public List<SaveView> getSubjects(User user) {
         List<Object[]> objects = null;//customRepository.findTeacherCourses();

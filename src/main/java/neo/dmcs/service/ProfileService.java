@@ -1,5 +1,7 @@
 package neo.dmcs.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.IncorrectPasswordException;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
@@ -21,13 +24,13 @@ import java.security.NoSuchAlgorithmException;
 /**
  * @Author Mateusz Wieczorek, 21.04.16.
  */
+@Slf4j
+@RequiredArgsConstructor
+@Transactional
 @Service
 public class ProfileService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
-
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public void update(ProfileGeneralView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException {
         deleteWhiteCharacters(form);

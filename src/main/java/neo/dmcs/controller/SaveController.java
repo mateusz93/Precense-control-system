@@ -1,5 +1,7 @@
 package neo.dmcs.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.model.StudentCourse;
 import neo.dmcs.model.TeacherCourse;
@@ -29,22 +31,16 @@ import static neo.dmcs.util.UserUtils.isNotLogged;
 /**
  * @Author Mateusz Wieczorek, 14.05.16.
  */
+@Slf4j
+@RequiredArgsConstructor
 @Controller
-@Transactional
 @RequestMapping("/saves")
 public class SaveController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private TeacherCourseRepository teacherCourseRepository;
-
-    @Autowired
-    private StudentCourseRepository studentCourseRepository;
-
-    @Autowired
-    private SaveService saveService;
+    private final UserRepository userRepository;
+    private final TeacherCourseRepository teacherCourseRepository;
+    private final StudentCourseRepository studentCourseRepository;
+    private final SaveService saveService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView save(HttpSession httpSession) {

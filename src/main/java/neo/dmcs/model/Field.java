@@ -1,5 +1,7 @@
 package neo.dmcs.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -7,28 +9,15 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "field", schema = "data")
+@Data
 public class Field {
-
-    private int id;
-    private String name;
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "ID")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;
 
     @Column(name = "name")
-    public String getName() {
-        return name;
-    }
+    private String name;
 
-    public void setName(String name) {
-        this.name = name;
-    }
 }

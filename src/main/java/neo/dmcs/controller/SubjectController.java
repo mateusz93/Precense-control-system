@@ -1,5 +1,7 @@
 package neo.dmcs.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.model.Field;
 import neo.dmcs.model.Subject;
@@ -27,18 +29,14 @@ import static neo.dmcs.util.UserUtils.isNotLogged;
 /**
  * @Author Mateusz Wieczorek on 14.01.2017.
  */
+@Slf4j
+@RequiredArgsConstructor
 @Controller
-@Transactional
 @RequestMapping("/subjects")
 public class SubjectController {
 
-    private final Logger logger = LoggerFactory.getLogger(SubjectController.class);
-
-    @Autowired
-    private SubjectRepository subjectRepository;
-
-    @Autowired
-    private FieldRepository fieldRepository;
+    private final SubjectRepository subjectRepository;
+    private final FieldRepository fieldRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView course(HttpSession httpSession) {

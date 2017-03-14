@@ -1,5 +1,7 @@
 package neo.dmcs.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
@@ -35,42 +37,22 @@ import static neo.dmcs.util.UserUtils.isNotLogged;
 /**
  * @Author Mateusz Wieczorek on 25.03.16.
  */
+@Slf4j
+@RequiredArgsConstructor
 @Controller
-@Transactional
 @RequestMapping("/precenses")
 public class PresenceController {
 
-    private final Logger logger = LoggerFactory.getLogger(PresenceController.class);
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CourseDateRepository courseDateRepository;
-
-    @Autowired
-    private StudentPrecenseRepository studentPrecenseRepository;
-
-    @Autowired
-    private TeacherCourseRepository teacherCourseRepository;
-
-    @Autowired
-    private StudentCourseRepository studentCourseRepository;
-
-    @Autowired
-    private PrecenseService precenseService;
-
-    @Autowired
-    private CourseService courseService;
-
-    @Autowired
-    private SMSService smsService;
-
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private NotificationRepository notificationRepository;
+    private final UserRepository userRepository;
+    private final CourseDateRepository courseDateRepository;
+    private final StudentPrecenseRepository studentPrecenseRepository;
+    private final TeacherCourseRepository teacherCourseRepository;
+    private final StudentCourseRepository studentCourseRepository;
+    private final PrecenseService precenseService;
+    private final CourseService courseService;
+    private final SMSService smsService;
+    private final EmailService emailService;
+    private final NotificationRepository notificationRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView precense(HttpSession httpSession) {
@@ -133,9 +115,7 @@ public class PresenceController {
                     courseDateView.setStatus(studentPrecense.getStatus());
                 }
             } catch (NoResultException e) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(e.getMessage() + "StudentPrecense with courseDateId = " + courseId + " not found");
-                }
+                log.warn(e.getMessage() + "StudentPrecense with courseDateId = " + courseId + " not found");
             }
 
             courseDateViews.add(courseDateView);

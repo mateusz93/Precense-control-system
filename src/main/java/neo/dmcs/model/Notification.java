@@ -1,5 +1,7 @@
 package neo.dmcs.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -7,79 +9,31 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "notification", schema = "data")
+@Data
 public class Notification {
-
-    private int id;
-    private User user;
-    private String courseCanceled;
-    private String changeCourseDate;
-    private String absence;
-    private String criticalPresenceLevel;
-    private String badMark;
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "ID")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userID")
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    private User user;
 
     @Column(name = "courseCanceled")
-    public String getCourseCanceled() {
-        return courseCanceled;
-    }
-
-    public void setCourseCanceled(String courseCanceled) {
-        this.courseCanceled = courseCanceled;
-    }
+    private String courseCanceled;
 
     @Column(name = "changeCourseDate")
-    public String getChangeCourseDate() {
-        return changeCourseDate;
-    }
-
-    public void setChangeCourseDate(String changeCourseDate) {
-        this.changeCourseDate = changeCourseDate;
-    }
+    private String changeCourseDate;
 
     @Column(name = "absence")
-    public String getAbsence() {
-        return absence;
-    }
-
-    public void setAbsence(String absence) {
-        this.absence = absence;
-    }
+    private String absence;
 
     @Column(name = "criticalPresenceLevel")
-    public String getCriticalPresenceLevel() {
-        return criticalPresenceLevel;
-    }
-
-    public void setCriticalPresenceLevel(String criticalPresenceLevel) {
-        this.criticalPresenceLevel = criticalPresenceLevel;
-    }
+    private String criticalPresenceLevel;
 
     @Column(name = "badMark")
-    public String getBadMark() {
-        return badMark;
-    }
+    private String badMark;
 
-    public void setBadMark(String badMark) {
-        this.badMark = badMark;
-    }
 }

@@ -5,10 +5,10 @@ package neo.dmcs.util;
  */
 public class PasswordValidator {
 
-    final static String pattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,20}";
+    private final static String PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,20}";
 
     public static boolean validate(String password) {
-        return password.matches(pattern);
+        return password.matches(PATTERN);
     }
 
 }

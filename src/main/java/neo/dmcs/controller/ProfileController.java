@@ -1,5 +1,7 @@
 package neo.dmcs.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.FieldEmptyException;
@@ -37,21 +39,15 @@ import static neo.dmcs.util.UserUtils.isNotLogged;
 /**
  * @Author Mateusz Wieczorek
  */
+@Slf4j
+@RequiredArgsConstructor
 @Controller
-@Transactional
 @RequestMapping("/profile")
 public class ProfileController {
 
-    private final Logger logger = LoggerFactory.getLogger(ProfileController.class);
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private NotificationRepository notificationRepository;
-
-    @Autowired
-    private ProfileService profileService;
+    private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
+    private final ProfileService profileService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView profile(HttpSession httpSession) {
@@ -77,23 +73,23 @@ public class ProfileController {
         try {
             profileService.update(form);
         } catch (FieldEmptyException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "emptyField");
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (DifferentPasswordsException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "register.differentPasswords");
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (IncorrectPasswordException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "register.incorrectPassword");
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         }
 
-        logger.debug("Profile updated");
+        log.debug("Profile updated");
         mvc.addObject("message", "profile.updated");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         prepareProfileView(mvc, user);
@@ -129,28 +125,28 @@ public class ProfileController {
         try {
             profileService.updatePassword(form, httpSession);
         } catch (FieldEmptyException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "emptyField");
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (DifferentPasswordsException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "register.differentPasswords");
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (IncorrectPasswordException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "register.incorrectPassword");
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (NoSuchAlgorithmException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "error");
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         }
 
-        logger.debug("Password updated");
+        log.debug("Password updated");
         mvc.addObject("message", "profile.password.updated");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         prepareProfileView(mvc, user);

@@ -1,11 +1,14 @@
 package neo.dmcs.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.repository.AppPropertyRepository;
 import neo.dmcs.repository.EmailTemplateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Properties;
 import javax.mail.Message;
@@ -19,19 +22,16 @@ import javax.mail.internet.MimeMessage;
 /**
  * @Author by Mateusz Wieczorek on 9/27/16.
  */
+@Slf4j
+@RequiredArgsConstructor
+@Transactional
 @Service
 public class EmailService {
 
-    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
-
-    @Autowired
-    private EmailTemplateRepository emailTemplateRepository;
-
-    @Autowired
-    private AppPropertyRepository appPropertyRepository;
+    private final EmailTemplateRepository emailTemplateRepository;
+    private final AppPropertyRepository appPropertyRepository;
 
     public void sendEmail(String recipient, String subject, String content) {
-
         String from = appPropertyRepository.findByName("email.from.adress").getValue();
         String username = appPropertyRepository.findByName("email.from.username").getValue();
         String password = appPropertyRepository.findByName("email.from.password").getValue();
@@ -50,9 +50,9 @@ public class EmailService {
             message.setSubject(subject);
             message.setText(content);
             Transport.send(message);
-            logger.info("Sent message successfully to " + recipient);
+            log.info("Sent message successfully to " + recipient);
         } catch (MessagingException e) {
-            logger.error("Message not sent");
+            log.error("Message not sent");
             throw new RuntimeException(e);
         }
     }

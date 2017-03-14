@@ -1,5 +1,7 @@
 package neo.dmcs.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -8,82 +10,33 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "Grade", schema = "data")
+@Data
 public class Grade {
-
-    private int id;
-    private TeacherCourse teacherCourse;
-    private Grade previousGrade;
-    private User user;
-    private int value;
-    private boolean isFinalGrade;
-    private Timestamp time;
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "ID")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "teacherCourseID")
-    public TeacherCourse getTeacherCourse() {
-        return teacherCourse;
-    }
-
-    public void setTeacherCourse(TeacherCourse teacherCourse) {
-        this.teacherCourse = teacherCourse;
-    }
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "studentID")
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    private TeacherCourse teacherCourse;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "previousGradeID")
-    public Grade getPreviousGrade() {
-        return previousGrade;
-    }
+    private Grade previousGrade;
 
-    public void setPreviousGrade(Grade previousGrade) {
-        this.previousGrade = previousGrade;
-    }
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "studentID")
+    private User user;
 
     @Column(name = "value")
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
+    private int value;
 
     @Column(name = "isFinalGrade")
-    public boolean isFinalGrade() {
-        return isFinalGrade;
-    }
-
-    public void setFinalGrade(boolean finalGrade) {
-        isFinalGrade = finalGrade;
-    }
+    private boolean isFinalGrade;
 
     @Column(name = "time")
-    public Timestamp getTime() {
-        return time;
-    }
-
-    public void setTime(Timestamp time) {
-        this.time = time;
-    }
+    private Timestamp time;
 
 }

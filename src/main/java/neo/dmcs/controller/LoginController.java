@@ -1,5 +1,7 @@
 package neo.dmcs.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.exception.*;
 import neo.dmcs.model.User;
@@ -20,17 +22,14 @@ import javax.servlet.http.HttpSession;
 /**
  * @Author Mateusz Wieczorek, 30.03.16.
  */
+@Slf4j
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/login")
 public class LoginController {
 
-    private final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
-    @Autowired
-    private LoginService loginService;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final LoginService loginService;
+    private final UserRepository userRepository;
 
 
     @RequestMapping(method = RequestMethod.GET)
@@ -48,31 +47,31 @@ public class LoginController {
             session.setAttribute("username", user.getLogin());
             session.setAttribute("userType", user.getType());
         } catch (FieldEmptyException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "emptyField");
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/login");
             return mvc;
         } catch (IncorrectEmailException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "login.incorrectEmail");
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/login");
             return mvc;
         } catch (IncorrectUserTypeException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "login.incorrectUserType");
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/login");
             return mvc;
         } catch (UserNotActivedException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "login.userNotActive");
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/login");
             return mvc;
         } catch (IncorrectPasswordException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             mvc.addObject("message", "register.incorrectPassword");
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/login");

@@ -1,5 +1,7 @@
 package neo.dmcs.statistic;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.Grade;
 import neo.dmcs.model.StudentCourse;
@@ -11,7 +13,6 @@ import neo.dmcs.repository.StudentPrecenseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,21 +31,15 @@ import static neo.dmcs.util.UserUtils.isNotLogged;
 /**
  * @Author Mateusz Wieczorek on 11/5/16.
  */
-@Transactional
+@Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/stats")
 public class StatsController {
 
-    private final Logger logger = LoggerFactory.getLogger(StatsController.class);
-
-    @Autowired
-    private GradeRepository gradeRepository;
-
-    @Autowired
-    private StudentCourseRepository studentCourseRepository;
-
-    @Autowired
-    private StudentPrecenseRepository studentPrecenseRepository;
+    private final GradeRepository gradeRepository;
+    private final StudentCourseRepository studentCourseRepository;
+    private final StudentPrecenseRepository studentPrecenseRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView save(HttpSession httpSession) {

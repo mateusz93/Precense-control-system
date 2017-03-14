@@ -1,5 +1,7 @@
 package neo.dmcs.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.EmailExistsException;
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.security.NoSuchAlgorithmException;
@@ -22,13 +25,13 @@ import java.security.NoSuchAlgorithmException;
 /**
  * @Author Mateusz Wieczorek, 30.03.16.
  */
+@Slf4j
+@RequiredArgsConstructor
+@Transactional
 @Service
 public class RegisterService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
-
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public void accept(RegisterView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException, EmailExistsException {
         validate(form);
@@ -49,7 +52,7 @@ public class RegisterService {
             user.setStatus(UserStatus.INACTIVE.toString());
             return user;
         } catch (NoSuchAlgorithmException e) {
-            logger.error(e.toString());
+            log.error(e.toString());
         }
         return null;
     }

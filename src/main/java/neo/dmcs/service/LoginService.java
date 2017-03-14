@@ -1,5 +1,7 @@
 package neo.dmcs.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.exception.*;
 import neo.dmcs.model.User;
@@ -11,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
@@ -19,14 +22,13 @@ import java.util.Date;
 /**
  * @Author Mateusz Wieczorek, 30.03.16.
  */
+@Slf4j
+@RequiredArgsConstructor
+@Transactional
 @Service
 public class LoginService {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
-
-    @Autowired
     private UserRepository userRepository;
-
 
     public void validate(LoginView form) throws IncorrectEmailException, IncorrectPasswordException, IncorrectUserTypeException, UserNotActivedException, FieldEmptyException {
 
@@ -41,7 +43,7 @@ public class LoginService {
                 throw new IncorrectPasswordException();
             }
         } catch (NoSuchAlgorithmException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
 
         if (!user.getType().equals(form.getType())) {

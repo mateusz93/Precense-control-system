@@ -1,5 +1,7 @@
 package neo.dmcs.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.EmailExistsException;
@@ -22,8 +24,9 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * @Author Mateusz Wieczorek, 08.04.16.
  */
+@Slf4j
+@RequiredArgsConstructor
 @Controller
-@Transactional
 @SessionAttributes("username")
 @RequestMapping("/register")
 public class RegisterController {
@@ -31,13 +34,8 @@ public class RegisterController {
     /* Obsluga błedów */
     // http://www.mkyong.com/spring-mvc/spring-mvc-form-check-if-a-field-has-an-error/
 
-    private final Logger logger = LoggerFactory.getLogger(RegisterController.class);
-
-    @Autowired
-    private RegisterService registerService;
-    @Autowired
-    private LoginService loginService;
-
+    private final RegisterService registerService;
+    private final LoginService loginService;
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView register(@ModelAttribute("newEmail") String email) {
@@ -52,28 +50,28 @@ public class RegisterController {
         try {
             registerService.accept(form);
         } catch (FieldEmptyException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             setFields(form, mvc);
             mvc.addObject("message", "emptyField");
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/register");
             return mvc;
         } catch (DifferentPasswordsException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             setFields(form, mvc);
             mvc.addObject("message", "register.differentPasswords");
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/register");
             return mvc;
         } catch (IncorrectPasswordException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             setFields(form, mvc);
             mvc.addObject("message", "register.incorrectPassword");
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/register");
             return mvc;
         } catch (EmailExistsException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             setFields(form, mvc);
             mvc.addObject("message", "register.emailUsed");
             mvc.addObject("messageType", MessageType.DANGER.name());
@@ -81,7 +79,7 @@ public class RegisterController {
             return mvc;
         }
 
-        logger.debug("Form accepted");
+        log.debug("Form accepted");
         cleanFields(form, mvc);
         mvc.addObject("message", "register.userCreated");
         mvc.addObject("messageType", MessageType.SUCCESS.name());
