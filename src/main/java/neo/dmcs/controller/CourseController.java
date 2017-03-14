@@ -1,5 +1,7 @@
 package neo.dmcs.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
@@ -32,39 +34,21 @@ import static neo.dmcs.util.UserUtils.isNotLogged;
 /**
  * @Author Mateusz Wieczorek on 25.03.16.
  */
+@Slf4j
+@RequiredArgsConstructor
 @Controller
-@Transactional
 @RequestMapping("/courses")
 public class CourseController {
 
-    private final Logger logger = LoggerFactory.getLogger(CourseController.class);
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CourseDateRepository courseDateRepository;
-
-    @Autowired
-    private SubjectRepository subjectRepository;
-
-    @Autowired
-    private TeacherCourseRepository teacherCourseRepository;
-
-    @Autowired
-    private StudentCourseRepository studentCourseRepository;
-
-    @Autowired
-    private CourseService courseService;
-
-    @Autowired
-    private NotificationRepository notificationRepository;
-
-    @Autowired
-    private SMSService smsService;
-
-    @Autowired
-    private EmailService emailService;
+    private final UserRepository userRepository;
+    private final CourseDateRepository courseDateRepository;
+    private final SubjectRepository subjectRepository;
+    private final TeacherCourseRepository teacherCourseRepository;
+    private final StudentCourseRepository studentCourseRepository;
+    private final CourseService courseService;
+    private final NotificationRepository notificationRepository;
+    private final SMSService smsService;
+    private final EmailService emailService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView course(HttpSession httpSession) {
