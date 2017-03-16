@@ -18,6 +18,7 @@ import neo.dmcs.view.precense.StudentPrecensesView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -54,6 +55,7 @@ public class PresenceController {
     private final EmailService emailService;
     private final NotificationRepository notificationRepository;
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView precense(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
@@ -66,6 +68,7 @@ public class PresenceController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(value = "/info/{courseId}", method = RequestMethod.POST)
     public ModelAndView precenseInfo(@PathVariable("courseId") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
@@ -74,7 +77,7 @@ public class PresenceController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        if (user.getType().equals(UserType.Student.name())) {
+        if (user.getType().toString().equals(UserType.Student.name())) {
             prepareStudentPrecenseStatuses(courseId, mvc);
         } else {
             prepareTeacherPrecenseStatuses(courseId, mvc);
@@ -123,6 +126,7 @@ public class PresenceController {
         mvc.addObject("datesList", courseDateViews);
     }
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(value = "/check/{courseDateId}", method = RequestMethod.POST)
     public ModelAndView precensecheck(@PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("precense/checkPrecense");
@@ -135,6 +139,7 @@ public class PresenceController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(value = "/courseDates/{courseId}", method = RequestMethod.POST)
     public ModelAndView courseDates(@PathVariable("courseId") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
@@ -143,7 +148,7 @@ public class PresenceController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        if (user.getType().equals(UserType.Student.name())) {
+        if (user.getType().toString().equals(UserType.Student.name())) {
             mvc.setViewName("course/studentCourseDates");
             TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
             List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
@@ -159,6 +164,7 @@ public class PresenceController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/cancel/{courseDateId}", method = RequestMethod.POST)
     public ModelAndView cancel(@PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("precense/checkPrecense");
@@ -191,6 +197,7 @@ public class PresenceController {
 
     }
 
+    @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/update/{courseDateId}", method = RequestMethod.POST)
     public ModelAndView update(@ModelAttribute("studentWrapper") CheckPrecenseView studentWrapper,
                                @PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {

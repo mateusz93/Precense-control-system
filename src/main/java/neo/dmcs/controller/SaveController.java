@@ -13,6 +13,7 @@ import neo.dmcs.service.SaveService;
 import neo.dmcs.view.course.SaveView;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ public class SaveController {
     private final StudentCourseRepository studentCourseRepository;
     private final SaveService saveService;
 
+    @PreAuthorize("hasAuthority('STUDENT')")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView save(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/studentSaves");
@@ -54,6 +56,7 @@ public class SaveController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('STUDENT')")
     @RequestMapping(value = "/{courseId}", method = RequestMethod.POST)
     public ModelAndView signOut(@PathVariable("courseId") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/studentSaves");

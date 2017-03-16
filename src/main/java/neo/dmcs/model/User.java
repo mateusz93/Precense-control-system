@@ -1,6 +1,7 @@
 package neo.dmcs.model;
 
 import lombok.Data;
+import neo.dmcs.enums.Role;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -25,7 +26,8 @@ public class User {
     private String lastName;
 
     @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private Role type;
 
     @Column(name = "password")
     private String password;

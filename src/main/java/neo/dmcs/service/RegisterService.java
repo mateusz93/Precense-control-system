@@ -2,7 +2,9 @@ package neo.dmcs.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import neo.dmcs.enums.Role;
 import neo.dmcs.enums.UserStatus;
+import neo.dmcs.enums.UserType;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.EmailExistsException;
 import neo.dmcs.exception.FieldEmptyException;
@@ -46,7 +48,7 @@ public class RegisterService {
             user.setEmail(form.getEmail());
             user.setFirstName(form.getFirstName());
             user.setLastName(form.getLastName());
-            user.setType(form.getType());
+            user.setType(UserType.Student.toString().equalsIgnoreCase(form.getType()) ? Role.STUDENT : Role.TEACHER);
             user.setLogin(username);
             user.setPassword(Encryptor.encryption(form.getPassword()));
             user.setStatus(UserStatus.INACTIVE.toString());

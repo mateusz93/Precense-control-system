@@ -12,6 +12,7 @@ import neo.dmcs.view.course.SubjectView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,6 +39,7 @@ public class SubjectController {
     private final SubjectRepository subjectRepository;
     private final FieldRepository fieldRepository;
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView course(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
@@ -50,6 +52,7 @@ public class SubjectController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public ModelAndView newSubject(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("subject/addSubject");
@@ -65,6 +68,7 @@ public class SubjectController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView newSubject(@ModelAttribute("newSubjectForm") SubjectView subjectView, HttpSession session) {
         ModelAndView mvc = new ModelAndView("subject/addSubject");
@@ -90,6 +94,7 @@ public class SubjectController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/delete/{subjectId}", method = RequestMethod.POST)
     public ModelAndView deleteSubject(@PathVariable("subjectId") String subjectId, HttpSession session) {
         ModelAndView mvc = new ModelAndView("subject/addSubject");

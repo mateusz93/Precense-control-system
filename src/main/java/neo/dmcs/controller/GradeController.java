@@ -18,6 +18,7 @@ import neo.dmcs.view.grade.TeacherGradesView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -55,6 +56,7 @@ public class GradeController {
     private final EmailService emailService;
     private final SMSService smsService;
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView course(HttpSession session) {
         ModelAndView mvc = new ModelAndView("grade/studentGrades");
@@ -63,14 +65,15 @@ public class GradeController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        if (user.getType().equals(UserType.Student.name())) {
+        if (user.getType().toString().equals(UserType.Student.name())) {
             prepareStudentGrades(user, mvc);
-        } else if (user.getType().equals(UserType.Teacher.name())){
+        } else if (user.getType().toString().equals(UserType.Teacher.name())){
             prepareTeacherView(mvc, user);
         }
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('STUDENT')")
     @RequestMapping(value = "/info/{courseId}", method = RequestMethod.GET)
     public ModelAndView gradesInfo(@PathVariable("courseId") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("grade/studentGradesDetails");
@@ -79,15 +82,12 @@ public class GradeController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        if (user.getType().equals(UserType.Student.name())) {
-            prepareStudentGradesDetails(courseId, mvc);
-        } else {
-            //gradeService.prepareTeacherPrecenseStatuses(courseId, mvc);
-        }
+        prepareStudentGradesDetails(courseId, mvc);
 
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(value = "/{courseId}", method = RequestMethod.GET)
     public ModelAndView grades(@PathVariable("courseId") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("grade/studentGradesDetails");
@@ -96,15 +96,16 @@ public class GradeController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        if (user.getType().equals(UserType.Student.name())) {
+        if (user.getType().toString().equals(UserType.Student.name())) {
             prepareStudentGradesDetails(courseId, mvc);
-        } else if (user.getType().equals(UserType.Teacher.name())){
+        } else if (user.getType().toString().equals(UserType.Teacher.name())){
            prepareTeacherGrades(mvc, courseId, user);
         }
 
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(value = "/new/{courseId}/{studentId}", method = RequestMethod.GET)
     public ModelAndView grades(@PathVariable("courseId") int courseId,
                                @PathVariable("studentId") int studentId, HttpSession httpSession) {
@@ -114,9 +115,9 @@ public class GradeController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        if (user.getType().equals(UserType.Student.name())) {
+        if (user.getType().toString().equals(UserType.Student.name())) {
             prepareStudentGradesDetails(courseId, mvc);
-        } else if (user.getType().equals(UserType.Teacher.name())){
+        } else if (user.getType().toString().equals(UserType.Teacher.name())){
             User user1 = userRepository.findOne(studentId);
             mvc.addObject("courseId", courseId);
             mvc.addObject("studentId", studentId);
@@ -127,6 +128,7 @@ public class GradeController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/save/{courseId}/{studentId}", method = RequestMethod.POST)
     public ModelAndView saveGrade(@PathVariable("courseId") int courseId,
                                   @PathVariable("studentId") int studentId,

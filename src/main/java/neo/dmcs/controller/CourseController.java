@@ -16,6 +16,7 @@ import neo.dmcs.view.course.TeacherCourseView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,6 +51,7 @@ public class CourseController {
     private final SMSService smsService;
     private final EmailService emailService;
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView course(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
@@ -62,6 +64,7 @@ public class CourseController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(value = "/info/{teacherCourseId}", method = RequestMethod.POST)
     public ModelAndView info(@PathVariable("teacherCourseId") int teacherCourseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
@@ -70,7 +73,7 @@ public class CourseController {
             mvc.setViewName("security/login");
             return mvc;
         }
-        if (user.getType().equals(UserType.Student.name())) {
+        if (user.getType().toString().equals(UserType.Student.name())) {
             mvc.setViewName("course/studentCourseDates");
             TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
             List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
@@ -86,6 +89,7 @@ public class CourseController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public ModelAndView newCourse(HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/addCourse");
@@ -107,6 +111,7 @@ public class CourseController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('STUDENT')")
     @RequestMapping(value = "/edit/{dateId}", method = RequestMethod.POST)
     public ModelAndView editCourse(@PathVariable("dateId") int dateId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/addCourseDate");
@@ -125,6 +130,7 @@ public class CourseController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/delete/{dateId}", method = RequestMethod.POST)
     public ModelAndView deleteCourse(@PathVariable("dateId") int dateId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/adminCoursesList");
@@ -142,6 +148,7 @@ public class CourseController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/deleteCourse/{id}", method = RequestMethod.POST)
     public ModelAndView delete(@PathVariable("id") int courseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
@@ -158,29 +165,7 @@ public class CourseController {
         return mvc;
     }
 
-    /*
-    @RequestMapping(value = "/unSubscribe/{courseId}", method = RequestMethod.POST)
-    public ModelAndView unSubscribe(@PathVariable("courseId") int courseId, HttpSession httpSession) {
-        ModelAndView mvc = new ModelAndView();
-        String username = (String) httpSession.getAttribute("username");
-        if (!isNotLogged(username)) {
-            mvc.setViewName("security/login");
-            return mvc;
-        }
-        User user = userRepository.findByLogin(username);
-        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
-        StudentCourse studentCourse = studentCourseRepository.findByStudentAndTeacherCourse(user, teacherCourse);
-        studentCourseRepository.delete(studentCourse);
-
-        prepareView(mvc, user);
-
-        mvc.addObject("message", "course.unSubscribed");
-        mvc.addObject("messageType", MessageType.WARNING.name());
-
-        return mvc;
-    }
-    */
-
+    @PreAuthorize("hasAuthority('STUDENT')")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView newCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/addCourse");
@@ -203,6 +188,7 @@ public class CourseController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('STUDENT')")
     @RequestMapping(value = "/addOne/{teacherCourseId}", method = RequestMethod.POST)
     public ModelAndView newOne(@PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/addCourseDate");
@@ -215,6 +201,7 @@ public class CourseController {
         return mvc;
     }
 
+    @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/addCourseDate/{teacherCourseId}", method = RequestMethod.POST)
     public ModelAndView newCourseDate(@ModelAttribute("courseDateForm") CourseDateView form, @PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
