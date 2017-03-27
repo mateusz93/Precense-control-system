@@ -7,17 +7,17 @@ import neo.dmcs.exception.*;
 import neo.dmcs.model.User;
 import neo.dmcs.repository.UserRepository;
 import neo.dmcs.service.LoginService;
+import neo.dmcs.service.ReCaptchaService;
 import neo.dmcs.view.security.LoginView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * @Author Mateusz Wieczorek, 30.03.16.
@@ -29,8 +29,8 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
     private final LoginService loginService;
+    private final ReCaptchaService reCaptchaService;
     private final UserRepository userRepository;
-
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView logIn() {
@@ -38,10 +38,16 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/logIn", method = RequestMethod.POST)
-    public ModelAndView login(@ModelAttribute("loginForm") LoginView form, HttpSession session) {
+    public ModelAndView login(@ModelAttribute("loginForm") LoginView form, HttpServletRequest request, HttpSession session) {
         ModelAndView mvc = new ModelAndView("index");
 
         try {
+            if (!reCaptchaService.verify(request)) {
+                mvc.addObject("message", "recaptcha.incorrect");
+                mvc.addObject("messageType", MessageType.DANGER.name());
+                mvc.setViewName("security/login");
+                return mvc;
+            }
             loginService.validate(form);
             User user = userRepository.findByEmail(form.getEmail());
             session.setAttribute("username", user.getLogin());
@@ -76,10 +82,14 @@ public class LoginController {
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/login");
             return mvc;
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            mvc.addObject("message", "error");
+            mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/login");
         }
         return mvc;
     }
-
 
     @RequestMapping(value = "/logOut", method = RequestMethod.GET)
     public ModelAndView logout(HttpSession session) {

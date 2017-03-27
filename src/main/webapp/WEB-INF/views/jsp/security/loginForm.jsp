@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML>
 
 <div class="form-group">
     <select class="form-control" name="type" value="${type}">
-        <option value="Student">Student</option>
-        <option value="Teacher">Nauczyciel</option>
-        <option value="Admin">Admin</option>
+        <option value="STUDENT">Student</option>
+        <option value="TEACHER">Nauczyciel</option>
+        <option value="ADMIN">Admin</option>
     </select>
 </div>
 <div class="form-group">
@@ -13,6 +12,9 @@
 </div>
 <div class="form-group">
     <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Hasło">
+</div>
+<div class="form-group">
+    <div class="g-recaptcha" data-sitekey="6LfTixkUAAAAAAnoLauOxDDtGY5kV37xoRpNy6ew"></div>
 </div>
 <div class="form-group">
     <div class="row">

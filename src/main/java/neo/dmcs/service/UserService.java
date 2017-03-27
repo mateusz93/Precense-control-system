@@ -29,10 +29,10 @@ public class UserService implements UserDetailsService {
     private final UserRepository repository;
 
     public boolean canAccessUser(CurrentUser currentUser, int userId) {
-        return currentUser != null
-                && (currentUser.getRole() == Role.ADMIN || currentUser.getId() == userId);
+        return currentUser != null && (currentUser.getRole() == Role.ADMIN || currentUser.getId() == userId);
     }
 
+    @Override
     public CurrentUser loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = repository.findByLogin(username);
         if (user == null) {

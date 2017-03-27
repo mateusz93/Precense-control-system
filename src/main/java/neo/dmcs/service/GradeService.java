@@ -18,6 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class GradeService {
 
-    private GradeRepository gradeRepository;
+    private final GradeRepository gradeRepository;
 
 }

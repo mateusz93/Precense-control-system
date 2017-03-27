@@ -28,7 +28,7 @@ import java.util.Date;
 @Service
 public class LoginService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public void validate(LoginView form) throws IncorrectEmailException, IncorrectPasswordException, IncorrectUserTypeException, UserNotActivedException, FieldEmptyException {
 
@@ -46,7 +46,7 @@ public class LoginService {
             log.error(e.getMessage());
         }
 
-        if (!user.getType().equals(form.getType())) {
+        if (!user.getType().toString().equals(form.getType())) {
             throw new IncorrectUserTypeException();
         }
 
