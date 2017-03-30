@@ -15,24 +15,20 @@ import neo.dmcs.view.grade.StudentGradeDetailsView;
 import neo.dmcs.view.grade.StudentGradeView;
 import neo.dmcs.view.grade.TeacherAddGradeView;
 import neo.dmcs.view.grade.TeacherGradesView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static neo.dmcs.util.UserUtils.getUserFromSession;
 import static neo.dmcs.util.UserUtils.isNotLogged;
@@ -55,6 +51,7 @@ public class GradeController {
     private final NotificationRepository notificationRepository;
     private final EmailService emailService;
     private final SMSService smsService;
+    private final MessageSource messageSource;
 
     @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(method = RequestMethod.GET)
@@ -133,7 +130,7 @@ public class GradeController {
     public ModelAndView saveGrade(@PathVariable("courseId") int courseId,
                                   @PathVariable("studentId") int studentId,
                                   @ModelAttribute("addGrade") TeacherAddGradeView teacherAddGradeView,
-                                  HttpSession httpSession) {
+                                  HttpSession httpSession, Locale locale) {
         ModelAndView mvc = new ModelAndView();
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
@@ -160,7 +157,7 @@ public class GradeController {
         gradeRepository.save(grade);
         prepareTeacherGrades(mvc, courseId, user);
 
-        mvc.addObject("message", "grade.add");
+        mvc.addObject("message", messageSource.getMessage("grade.add", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
 
         return mvc;

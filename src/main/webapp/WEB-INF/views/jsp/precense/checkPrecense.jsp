@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE HTML>
 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sprawdź obecność</title>
+        <title><spring:message code='view.presence.title'/></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
         <link rel="stylesheet" href="/resources/css/menu.css"/>
@@ -29,9 +30,9 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Imię</th>
-                        <th>Nazwisko</th>
-                        <th>Obecność</th>
+                        <th><spring:message code='view.profile.firstname'/></th>
+                        <th><spring:message code='view.profile.lastname'/></th>
+                        <th><spring:message code='view.presence'/></th>
                     </tr>
                 </thead>
                 <tbody id="paginationTable" class="searchable">
@@ -51,43 +52,43 @@
 
                                         <select class="form-control" name="precenseStatus" value="${precenseStatus}">
                                             <option value="" selected></option>
-                                            <option value="Obecny">Obecny</option>
-                                            <option value="Nieobecny">Nieobecny</option>
-                                            <option value="Spozniony">Spóźniony</option>
+                                            <option value="Obecny"><spring:message code='view.presence.present'/></option>
+                                            <option value="Nieobecny"><spring:message code='view.presence.absence'/></option>
+                                            <option value="Spozniony"><spring:message code='view.presence.late'/></option>
                                         </select>
                                     </c:if>
 
                                     <c:if test="${student.precenseStatus == 'Spozniony'}">
                                         <select class="form-control" name="precenseStatus" value="${precenseStatus}">
                                             <option value=""></option>
-                                            <option value="Obecny">Obecny</option>
-                                            <option value="Nieobecny">Nieobecny</option>
-                                            <option value="Spozniony" selected>Spóźniony</option>
+                                            <option value="Obecny"><spring:message code='view.presence.present'/></option>
+                                            <option value="Nieobecny"><spring:message code='view.presence.absence'/></option>
+                                            <option value="Spozniony" selected><spring:message code='view.presence.late'/></option>
                                         </select>
                                     </c:if>
 
                                     <c:if test="${student.precenseStatus == 'Nieobecny'}">
                                         <select class="form-control" name="precenseStatus" value="${precenseStatus}">
                                             <option value=""></option>
-                                            <option value="Obecny">Obecny</option>
-                                            <option value="Nieobecny" selected>Nieobecny</option>
-                                            <option value="Spozniony">Spóźniony</option>
+                                            <option value="Obecny"><spring:message code='view.presence.present'/></option>
+                                            <option value="Nieobecny" selected><spring:message code='view.presence.absence'/></option>
+                                            <option value="Spozniony"><spring:message code='view.presence.late'/></option>
                                         </select>
                                     </c:if>
 
                                     <c:if test="${student.precenseStatus == 'Obecny'}">
                                         <select class="form-control" name="precenseStatus" value="${precenseStatus}">
                                             <option value=""></option>
-                                            <option value="Obecny" selected>Obecny</option>
-                                            <option value="Nieobecny">Nieobecny</option>
-                                            <option value="Spozniony">Spóźniony</option>
+                                            <option value="Obecny" selected><spring:message code='view.presence.present'/></option>
+                                            <option value="Nieobecny"><spring:message code='view.presence.absence'/></option>
+                                            <option value="Spozniony"><spring:message code='view.presence.late'/></option>
                                         </select>
                                     </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
                         <input type="hidden" name="courseDateId" value="${courseDateId}"/>
-                        <button value="submit" type="submit" class="btn btn-success">Zatwierdź</button>
+                        <button value="submit" type="submit" class="btn btn-success"><spring:message code='view.subject.apply'/></button>
                         <br>
                     </form>
                 </tbody>

@@ -9,12 +9,9 @@ import neo.dmcs.model.User;
 import neo.dmcs.repository.FieldRepository;
 import neo.dmcs.repository.SubjectRepository;
 import neo.dmcs.view.course.SubjectView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Locale;
 
 import static neo.dmcs.util.UserUtils.getUserFromSession;
 import static neo.dmcs.util.UserUtils.isNotLogged;
@@ -38,6 +36,7 @@ public class SubjectController {
 
     private final SubjectRepository subjectRepository;
     private final FieldRepository fieldRepository;
+    private final MessageSource messageSource;
 
     @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('ADMIN')")
     @RequestMapping(method = RequestMethod.GET)
@@ -70,7 +69,7 @@ public class SubjectController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ModelAndView newSubject(@ModelAttribute("newSubjectForm") SubjectView subjectView, HttpSession session) {
+    public ModelAndView newSubject(@ModelAttribute("newSubjectForm") SubjectView subjectView, HttpSession session, Locale locale) {
         ModelAndView mvc = new ModelAndView("subject/addSubject");
         String username = (String) session.getAttribute("username");
         if (isNotLogged(username)) {
@@ -89,14 +88,14 @@ public class SubjectController {
         subjectRepository.save(subject);
         List<Field> fields = fieldRepository.findAll();
         mvc.addObject("fieldList", fields);
-        mvc.addObject("message", "subject.added");
+        mvc.addObject("message", messageSource.getMessage("subject.added", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/delete/{subjectId}", method = RequestMethod.POST)
-    public ModelAndView deleteSubject(@PathVariable("subjectId") String subjectId, HttpSession session) {
+    public ModelAndView deleteSubject(@PathVariable("subjectId") String subjectId, HttpSession session, Locale locale) {
         ModelAndView mvc = new ModelAndView("subject/addSubject");
         String username = (String) session.getAttribute("username");
         if (isNotLogged(username)) {
@@ -106,7 +105,7 @@ public class SubjectController {
 
         Subject subject = subjectRepository.findOne(Integer.valueOf(subjectId));
         subjectRepository.delete(subject);
-        mvc.addObject("message", "subject.deleted");
+        mvc.addObject("message", messageSource.getMessage("subject.deleted", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         prepareView(mvc, null);
         return mvc;

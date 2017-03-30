@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE HTML>
 
@@ -7,7 +8,7 @@
 
 <html>
     <head>
-        <title>Szczegóły obecności</title>
+        <title><spring:message code='view.presence.details'/</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
         <link rel="stylesheet" href="/resources/css/menu.css"/>
@@ -29,10 +30,10 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Dzień</th>
-                        <th>Czas rozpoczęcia</th>
-                        <th>Czas zakończenia</th>
-                        <th>Obecność</th>
+                        <th><spring:message code='view.presence.day'/></th>
+                        <th><spring:message code='view.presence.time.start'/></th>
+                        <th><spring:message code='view.presence.time.end'/></th>
+                        <th><spring:message code='view.presence'/></th>
                     </tr>
                 </thead>
                 <tbody id="paginationTable" class="searchable">
@@ -45,35 +46,35 @@
                                 <form role="form">
                                     <c:if test="${dates.status == 'Obecny'}">
                                         <label class="radio-inline">
-                                            <input checked disabled type="radio" name="optionRadio">Obecny
+                                            <input checked disabled type="radio" name="optionRadio"><spring:message code='view.presence.present'/>
                                         </label>
                                         <label class="radio-inline">
-                                            <input disabled type="radio" name="optionRadio">Nieobecny
+                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.absence'/
                                         </label>
                                         <label class="radio-inline">
-                                            <input disabled type="radio" name="optionRadio">Spóźniony
+                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.late'/>
                                         </label>
                                     </c:if>
                                     <c:if test="${dates.status == 'Nieobecny'}">
                                         <label class="radio-inline">
-                                            <input disabled type="radio" name="optionRadio">Obecny
+                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.present'/>
                                         </label>
                                         <label class="radio-inline">
-                                            <input checked disabled type="radio" name="optionRadio">Nieobecny
+                                            <input checked disabled type="radio" name="optionRadio"><spring:message code='view.presence.absence'/
                                         </label>
                                         <label class="radio-inline">
-                                            <input disabled type="radio" name="optionRadio">Spóźniony
+                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.late'/>
                                         </label>
                                     </c:if>
                                     <c:if test="${dates.status == 'Spozniony'}">
                                         <label class="radio-inline">
-                                            <input disabled type="radio" name="optionRadio">Obecny
+                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.present'/>
                                         </label>
                                         <label class="radio-inline">
-                                            <input disabled type="radio" name="optionRadio">Nieobecny
+                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.absence'/
                                         </label>
                                         <label class="radio-inline">
-                                            <input checked disabled type="radio" name="optionRadio">Spóźniony
+                                            <input checked disabled type="radio" name="optionRadio"><spring:message code='view.presence.late'/>
                                         </label>
                                     </c:if>
                                 </form>

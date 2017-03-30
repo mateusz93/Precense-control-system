@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE HTML>
 
 <html>
     <head>
-        <title>Terminy kursów</title>
+        <title><spring:message code='view.course.date.title'/></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
         <link rel="stylesheet" href="/resources/css/menu.css"/>
@@ -27,9 +28,9 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Dzień</th>
-                        <th>Czas rozpoczęcia</th>
-                        <th>Czas zakończenia</th>
+                        <th><spring:message code='view.presence.day'/></th>
+                        <th><spring:message code='view.course.time.start'/></th>
+                        <th><spring:message code='view.course.time.end'/></th>
                     </tr>
                 </thead>
                 <tbody id="paginationTable" class="searchable">
@@ -39,10 +40,10 @@
                             <td class="col-md-2"><c:out value="${date.startTime}" /></td>
                             <td class="col-md-2"><c:out value="${date.finishTime}" /></td>
                             <form action="/precenses/check/${date.id}" method="post">
-                                <td class="col-md-1"><button name="deleteID" value="${date.id}" type="submit" class="btn btn-info">Sprawdz obecność</button></td>
+                                <td class="col-md-1"><button name="deleteID" value="${date.id}" type="submit" class="btn btn-info"><spring:message code='view.presence.title'/></button></td>
                             </form>
                             <form action="/precenses/cancel/${date.id}" method="post">
-                                <td class="col-md-1"><button name="deleteID" value="${date.id}" type="submit" class="btn btn-danger">Odwołaj</button></td>
+                                <td class="col-md-1"><button name="deleteID" value="${date.id}" type="submit" class="btn btn-danger"><spring:message code='view.course.cancel'/></button></td>
                             </form>
                         </tr>
                     </c:forEach>

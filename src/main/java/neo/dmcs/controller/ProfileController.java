@@ -14,11 +14,8 @@ import neo.dmcs.service.ProfileService;
 import neo.dmcs.view.user.ProfileGeneralView;
 import neo.dmcs.view.user.ProfileNotificationView;
 import neo.dmcs.view.user.ProfilePasswordView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +29,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 import static neo.dmcs.util.UserUtils.getUserFromSession;
 import static neo.dmcs.util.UserUtils.isNotLogged;
@@ -48,6 +46,7 @@ public class ProfileController {
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
     private final ProfileService profileService;
+    private final MessageSource messageSource;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView profile(HttpSession httpSession) {
@@ -63,7 +62,7 @@ public class ProfileController {
 
     @RequestMapping(value = "/general", method = RequestMethod.POST)
     public ModelAndView profileGeneral(@ModelAttribute("profileForm") ProfileGeneralView form,
-                                       HttpSession httpSession) {
+                                       HttpSession httpSession, Locale locale) {
         ModelAndView mvc = new ModelAndView("user/profile");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
@@ -74,23 +73,23 @@ public class ProfileController {
             profileService.update(form);
         } catch (FieldEmptyException e) {
             log.error(e.getMessage());
-            mvc.addObject("message", "emptyField");
+            mvc.addObject("message", messageSource.getMessage("emptyField", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (DifferentPasswordsException e) {
             log.error(e.getMessage());
-            mvc.addObject("message", "register.differentPasswords");
+            mvc.addObject("message", messageSource.getMessage("register.differentPasswords", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (IncorrectPasswordException e) {
             log.error(e.getMessage());
-            mvc.addObject("message", "register.incorrectPassword");
+            mvc.addObject("message", messageSource.getMessage("register.incorrectPassword", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         }
 
         log.debug("Profile updated");
-        mvc.addObject("message", "profile.updated");
+        mvc.addObject("message", messageSource.getMessage("profile.updated", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         prepareProfileView(mvc, user);
         return mvc;
@@ -98,7 +97,7 @@ public class ProfileController {
 
     @RequestMapping(value = "/notification", method = RequestMethod.POST)
     public ModelAndView profileNotification(@ModelAttribute("profileForm") ProfileNotificationView form,
-                                            HttpSession httpSession) {
+                                            HttpSession httpSession, Locale locale) {
         ModelAndView mvc = new ModelAndView("user/profile");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
@@ -106,7 +105,7 @@ public class ProfileController {
             return mvc;
         }
         saveNewNotificationSettings(user, form);
-        mvc.addObject("message", "profile.updated");
+        mvc.addObject("message", messageSource.getMessage("profile.updated", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         prepareProfileView(mvc, user);
         return mvc;
@@ -114,7 +113,7 @@ public class ProfileController {
 
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     public ModelAndView profilePassword(@ModelAttribute("profileForm") ProfilePasswordView form,
-                                        HttpSession httpSession) {
+                                        HttpSession httpSession, Locale locale) {
         ModelAndView mvc = new ModelAndView("user/profile");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
@@ -126,28 +125,28 @@ public class ProfileController {
             profileService.updatePassword(form, httpSession);
         } catch (FieldEmptyException e) {
             log.error(e.getMessage());
-            mvc.addObject("message", "emptyField");
+            mvc.addObject("message", messageSource.getMessage("emptyField", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (DifferentPasswordsException e) {
             log.error(e.getMessage());
-            mvc.addObject("message", "register.differentPasswords");
+            mvc.addObject("message", messageSource.getMessage("register.differentPasswords", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (IncorrectPasswordException e) {
             log.error(e.getMessage());
-            mvc.addObject("message", "register.incorrectPassword");
+            mvc.addObject("message", messageSource.getMessage("register.incorrectPassword", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         } catch (NoSuchAlgorithmException e) {
             log.error(e.getMessage());
-            mvc.addObject("message", "error");
+            mvc.addObject("message", messageSource.getMessage("error", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         }
 
         log.debug("Password updated");
-        mvc.addObject("message", "profile.password.updated");
+        mvc.addObject("message", messageSource.getMessage("profile.password.updated", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         prepareProfileView(mvc, user);
         return mvc;
@@ -155,7 +154,7 @@ public class ProfileController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/upload")
     public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file,
-                                         HttpSession session) {
+                                         HttpSession session, Locale locale) {
         ModelAndView mvc = new ModelAndView("user/profile");
         User user = getUserFromSession(session);
         if (isNotLogged(user)) {
@@ -164,7 +163,7 @@ public class ProfileController {
         }
 
         if (file.isEmpty()) {
-            mvc.addObject("message", "profile.upload.empty");
+            mvc.addObject("message", messageSource.getMessage("profile.upload.empty", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
         } else {
             try {
@@ -172,10 +171,10 @@ public class ProfileController {
                         new FileOutputStream(new File("src/main/webapp/WEB-INF/resources/images/" + user.getLogin())));
                 FileCopyUtils.copy(file.getInputStream(), stream);
                 stream.close();
-                mvc.addObject("message", "profile.upload.success");
+                mvc.addObject("message", messageSource.getMessage("profile.upload.success", null, locale));
                 mvc.addObject("messageType", MessageType.SUCCESS.name());
             } catch (Exception e) {
-                mvc.addObject("message", "profile.upload.fail");
+                mvc.addObject("message", messageSource.getMessage("profile.upload.fail", null, locale));
                 mvc.addObject("messageType", MessageType.DANGER.name());
             }
         }

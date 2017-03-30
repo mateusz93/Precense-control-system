@@ -15,12 +15,9 @@ import neo.dmcs.view.course.TeacherCourseView;
 import neo.dmcs.view.precense.CheckPrecenseView;
 import neo.dmcs.view.precense.CheckPrecenseViewWrapper;
 import neo.dmcs.view.precense.StudentPrecensesView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +28,7 @@ import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static neo.dmcs.util.UserUtils.getUserFromSession;
 import static neo.dmcs.util.UserUtils.isNotLogged;
@@ -54,6 +52,7 @@ public class PresenceController {
     private final SMSService smsService;
     private final EmailService emailService;
     private final NotificationRepository notificationRepository;
+    private final MessageSource messageSource;
 
     @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(method = RequestMethod.GET)
@@ -200,7 +199,7 @@ public class PresenceController {
     @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/update/{courseDateId}", method = RequestMethod.POST)
     public ModelAndView update(@ModelAttribute("studentWrapper") CheckPrecenseView studentWrapper,
-                               @PathVariable("courseDateId") int courseDateId, HttpSession httpSession) {
+                               @PathVariable("courseDateId") int courseDateId, HttpSession httpSession, Locale locale) {
         ModelAndView mvc = new ModelAndView("precense/checkPrecense");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
@@ -212,7 +211,7 @@ public class PresenceController {
         sendNotifications(studentWrapper, courseDateId);
 
         preparePrecensesList(courseDateId, mvc);
-        mvc.addObject("message", "precense.updated");
+        mvc.addObject("message", messageSource.getMessage("precense.updated", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }

@@ -13,12 +13,9 @@ import neo.dmcs.view.course.CourseDateView;
 import neo.dmcs.view.course.NewCourseView;
 import neo.dmcs.view.course.StudentCourseView;
 import neo.dmcs.view.course.TeacherCourseView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static neo.dmcs.util.UserUtils.getUserFromSession;
 import static neo.dmcs.util.UserUtils.isNotLogged;
@@ -50,6 +48,7 @@ public class CourseController {
     private final NotificationRepository notificationRepository;
     private final SMSService smsService;
     private final EmailService emailService;
+    private final MessageSource messageSource;
 
     @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(method = RequestMethod.GET)
@@ -150,7 +149,7 @@ public class CourseController {
 
     @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/deleteCourse/{id}", method = RequestMethod.POST)
-    public ModelAndView delete(@PathVariable("id") int courseId, HttpSession httpSession) {
+    public ModelAndView delete(@PathVariable("id") int courseId, HttpSession httpSession, Locale locale) {
         ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
@@ -159,7 +158,7 @@ public class CourseController {
         }
         TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
         teacherCourseRepository.delete(teacherCourse);
-        mvc.addObject("message", "course.deleted");
+        mvc.addObject("message", messageSource.getMessage("course.deleted", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         prepareAdminView(mvc, user);
         return mvc;
@@ -167,7 +166,7 @@ public class CourseController {
 
     @PreAuthorize("hasAuthority('STUDENT')")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ModelAndView newCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, HttpSession session) {
+    public ModelAndView newCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, HttpSession session, Locale locale) {
         ModelAndView mvc = new ModelAndView("course/addCourse");
         String username = (String) session.getAttribute("username");
         if (isNotLogged(username)) {
@@ -183,7 +182,7 @@ public class CourseController {
         teacherCourse.setTeacher(teacher);
 
         teacherCourseRepository.save(teacherCourse);
-        mvc.addObject("message", "course.added");
+        mvc.addObject("message", messageSource.getMessage("course.added", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
         return mvc;
     }
@@ -203,7 +202,8 @@ public class CourseController {
 
     @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/addCourseDate/{teacherCourseId}", method = RequestMethod.POST)
-    public ModelAndView newCourseDate(@ModelAttribute("courseDateForm") CourseDateView form, @PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
+    public ModelAndView newCourseDate(@ModelAttribute("courseDateForm") CourseDateView form, @PathVariable("teacherCourseId") int teacherCourseId,
+                                      HttpSession session, Locale locale) {
         ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
         User user = getUserFromSession(session);
         if (isNotLogged(user)) {
@@ -219,7 +219,7 @@ public class CourseController {
             courseDate.setStartTime(form.getStartTime());
             courseDate.setFinishTime(form.getFinishTime());
             courseDateRepository.save(courseDate);
-            mvc.addObject("message", "course.courseDateEdited");
+            mvc.addObject("message", messageSource.getMessage("course.courseDateEdited", null, locale));
             mvc.addObject("messageType", MessageType.SUCCESS.name());
         } else {
             courseDate = new CourseDate();
@@ -228,7 +228,7 @@ public class CourseController {
             courseDate.setFinishTime(form.getFinishTime());
             courseDate.setDate(form.getDate());
             courseDateRepository.save(courseDate);
-            mvc.addObject("message", "course.courseDateAdded");
+            mvc.addObject("message", messageSource.getMessage("course.courseDateAdded", null, locale));
             mvc.addObject("messageType", MessageType.SUCCESS.name());
         }
 

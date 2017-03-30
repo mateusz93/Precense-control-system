@@ -10,16 +10,15 @@ import neo.dmcs.exception.IncorrectPasswordException;
 import neo.dmcs.service.LoginService;
 import neo.dmcs.service.RegisterService;
 import neo.dmcs.view.security.RegisterView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Locale;
 
 /**
  * @Author Mateusz Wieczorek, 08.04.16.
@@ -36,6 +35,7 @@ public class RegisterController {
 
     private final RegisterService registerService;
     private final LoginService loginService;
+    private final MessageSource messageSource;
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView register(@ModelAttribute("newEmail") String email) {
@@ -45,35 +45,35 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-    public ModelAndView registerUser(@ModelAttribute("registerForm") RegisterView form) {
+    public ModelAndView registerUser(@ModelAttribute("registerForm") RegisterView form, Locale locale) {
         ModelAndView mvc = new ModelAndView("security/register");
         try {
             registerService.accept(form);
         } catch (FieldEmptyException e) {
             log.error(e.getMessage());
             setFields(form, mvc);
-            mvc.addObject("message", "emptyField");
+            mvc.addObject("message", messageSource.getMessage("emptyField", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/register");
             return mvc;
         } catch (DifferentPasswordsException e) {
             log.error(e.getMessage());
             setFields(form, mvc);
-            mvc.addObject("message", "register.differentPasswords");
+            mvc.addObject("message", messageSource.getMessage("register.differentPasswords", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/register");
             return mvc;
         } catch (IncorrectPasswordException e) {
             log.error(e.getMessage());
             setFields(form, mvc);
-            mvc.addObject("message", "register.incorrectPassword");
+            mvc.addObject("message", messageSource.getMessage("register.incorrectPassword", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/register");
             return mvc;
         } catch (EmailExistsException e) {
             log.error(e.getMessage());
             setFields(form, mvc);
-            mvc.addObject("message", "register.emailUsed");
+            mvc.addObject("message", messageSource.getMessage("register.emailUsed", null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/register");
             return mvc;
@@ -81,7 +81,7 @@ public class RegisterController {
 
         log.debug("Form accepted");
         cleanFields(form, mvc);
-        mvc.addObject("message", "register.userCreated");
+        mvc.addObject("message", messageSource.getMessage("register.userCreated", null, locale));
         mvc.addObject("messageType", MessageType.SUCCESS.name());
 
         return mvc;

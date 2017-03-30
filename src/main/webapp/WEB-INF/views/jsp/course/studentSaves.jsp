@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE HTML>
 
 <html>
     <head>
-        <title>Zapisy</title>
+        <title><spring:message code='view.save.title'/></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
@@ -28,10 +29,10 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Nazwa</th>
-                        <th>Liczba zajęć</th>
-                        <th>Prowadzący</th>
-                        <th>Opis</th>
+                        <th><spring:message code='view.name'/></th>
+                        <th><spring:message code='view.subject.quantity'/></th>
+                        <th><spring:message code='view.teacher'/></th>
+                        <th><spring:message code='view.subject.description'/></th>
                     </tr>
                 </thead>
                 <tbody id="paginationTable" class="searchable">
@@ -42,7 +43,7 @@
                             <td><c:out value="${course.teacherName}"  /></td>
                             <td><c:out value="${course.description}"  /></td>
                             <form action="/saves/${course.id}" method="post">
-                                <td><button type="submit" class="btn btn-success">Zapisz się</button></td>
+                                <td><button type="submit" class="btn btn-success"><spring:message code='view.save.save'/></button></td>
                             </form>
                         </tr>
                     </c:forEach>

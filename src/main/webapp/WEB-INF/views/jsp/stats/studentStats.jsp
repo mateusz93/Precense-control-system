@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE HTML>
 
 <html>
     <head>
-        <title>Statystyki</title>
+        <title><spring:message code='view.stats.title'/></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
         <link rel="stylesheet" href="/resources/css/menu.css"/>
@@ -22,15 +23,15 @@
             <br><br><br>
             <div class="col-md-2">
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#tab1" data-toggle="tab">Obecności</a></li>
-                    <li><a href="#tab2" data-toggle="tab">Oceny</a></li>
+                    <li class="active"><a href="#tab1" data-toggle="tab"><spring:message code='view.stats.presences'/></a></li>
+                    <li><a href="#tab2" data-toggle="tab"><spring:message code='view.stats.grades'/></a></li>
                 </ul>
             </div>
             <div class="col-md-8 personal-info">
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="tab1">
                         <div class="col-md-7">
-                            <h4>Statystyki obecności</h4>
+                            <h4><spring:message code='view.stats.presencesStats'/></h4>
                             <div id="globalPresenceAverage">
                             </div>
                         </div>
@@ -40,12 +41,12 @@
                     </div>
                     <div class="tab-pane fade" id="tab2">
                         <div class="col-md-7">
-                            <h4>Statystyki końcowych ocen</h4>
+                            <h4><spring:message code='view.stats.grades.finalStats'/></h4>
                             <div id="finalGradesAverage">
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <h4>Statystyki wszystkich ocen</h4>
+                            <h4><spring:message code='view.stats.grades.allStats'/></h4>
                             <div id="globalGradesAverage">
                             </div>
                         </div>

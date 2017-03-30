@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page import="net.tanesha.recaptcha.*" %>
 <!DOCTYPE html>
 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Strona rejestracji</title>
+        <title><spring:message code='view.register.title'/></title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="resources/css/bootstrap.3.3.7.min.css"/>
@@ -20,7 +21,7 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Strona główna</a>
+                    <a class="navbar-brand" href="/"><spring:message code='view.page.main'/></a>
                 </div>
             </div>
         </nav>
@@ -32,10 +33,10 @@
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <a href="#" id="login-form-link">Logowanie</a>
+                                    <a href="#" id="login-form-link"><spring:message code='view.login.title'/></a>
                                 </div>
                                 <div class="col-xs-6">
-                                    <a href="#" class="active" id="register-form-link">Rejestracja</a>
+                                    <a href="#" class="active" id="register-form-link"><spring:message code='view.register.title'/></a>
                                 </div>
                             </div>
                             <hr>

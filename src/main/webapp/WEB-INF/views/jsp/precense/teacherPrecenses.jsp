@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Obecności</title>
+        <title><spring:message code='view.stats.presences'/></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
         <link rel="stylesheet" href="/resources/css/menu.css"/>
@@ -27,8 +28,8 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Nazwa</th>
-                        <th>Liczba zajęć</th>
+                        <th><spring:message code='view.name'/></th>
+                        <th><spring:message code='view.subject.quantity'/></th>
                     </tr>
                 </thead>
                 <tbody id="paginationTable" class="searchable">
@@ -37,7 +38,7 @@
                             <td><c:out value="${courses.subjectName}"  /></td>
                             <td><c:out value="${courses.quantity}"  /></td>
                             <form action="/precenses/info/${courses.id}" method="post">
-                                <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info">Pokaż terminy</button></td>
+                                <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info"><spring:message code='view.course.dates.show'/></button></td>
                             </form>
                         </tr>
                     </c:forEach>

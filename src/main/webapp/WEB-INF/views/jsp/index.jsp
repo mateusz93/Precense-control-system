@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML>
 
 <html>
     <head>
-        <title>System zarządzania przedmiotami</title>
+        <title><spring:message code='view.index.title'/></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="/resources/css/main.css"/>
@@ -15,12 +17,13 @@
         <jsp:include page="menu.jsp"/>
 
         <div class="jumbotron text-center">
-            <h1>System zarządzania przedmiotami</h1>
-            <p>Sprawdzaj obecność codziennie w łatwy sposób</p>
+            <h5>Language : <a href="?lang=pl">Polski</a> | <a href="?lang=en">English</a></h5>
+            <h1><spring:message code='view.index.title'/></h1>
+            <p><spring:message code='view.index.subtitle'/></p>
             <% if ("".equals(session.getAttribute("username")) || session.getAttribute("username") == null) { %>
                 <form class="form-inline" action="/register" method="post">
                     <input type="email" class="form-control" name="newEmail" size="50" placeholder="Email" required>
-                    <button type="submit" class="btn btn-danger">Zarejestruj</button>
+                    <button type="submit" class="btn btn-danger"><spring:message code='view.index.register'/></button>
                 </form>
             <% } %>
         </div>
@@ -57,7 +60,7 @@
         <div id="contact" class="container-fluid bg-grey">
           <div class="row">
             <div class="col-sm-5">
-              <p>Skontaktuj się z nami, odpowiemy w przeciągu 24 godzin</p>
+              <p><spring:message code='view.contact.info'/></p>
               <p><span class="glyphicon glyphicon-map-marker"></span> Łódź, PL</p>
               <p><span class="glyphicon glyphicon-home"></span> 90-924 Łódź, ul. Żeromskiego 116</p>
               <p><span class="glyphicon glyphicon-phone-alt"></span> (48) (42) 636 55 22</p>
@@ -76,7 +79,7 @@
                   <textarea class="form-control" id="content" name="content" placeholder="Treść" rows="5"></textarea><br>
                   <div class="row">
                     <div class="col-sm-12 form-group">
-                      <button class="btn btn-default pull-right" type="submit">Wyślij</button>
+                      <button class="btn btn-default pull-right" type="submit"><spring:message code='view.contact.send'/></button>
                     </div>
                   </div>
               </form>
