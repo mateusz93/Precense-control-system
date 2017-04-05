@@ -15,6 +15,7 @@ drop table `StudentCourse`;
 drop table `StudentPrecense`;
 drop table `Subject`;
 drop table `TeacherCourse`;
+drop table `Token`;
 drop table `User`;
 
 CREATE TABLE `AppLog` (
@@ -164,6 +165,16 @@ CREATE TABLE `TeacherCourse` (
   KEY `teacherID` (`teacherID`),
   CONSTRAINT `fk_subject` FOREIGN KEY (`subjectID`) REFERENCES `Subject` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_teacher` FOREIGN KEY (`teacherID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Token` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(150) NOT NULL,
+  `userID` int(10) unsigned NOT NULL,
+  `expiryDate` date NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID_UNIQUE` (`ID`),
+  CONSTRAINT `fk_student4` FOREIGN KEY (`userID`) REFERENCES `User` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `User` (

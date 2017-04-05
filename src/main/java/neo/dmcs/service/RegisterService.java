@@ -9,20 +9,21 @@ import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.EmailExistsException;
 import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.IncorrectPasswordException;
+import neo.dmcs.model.Token;
 import neo.dmcs.model.User;
+import neo.dmcs.repository.TokenRepository;
 import neo.dmcs.repository.UserRepository;
 import neo.dmcs.util.Encryptor;
 import neo.dmcs.util.PasswordValidator;
 import neo.dmcs.view.security.RegisterView;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * @Author Mateusz Wieczorek, 30.03.16.
@@ -34,12 +35,34 @@ import java.security.NoSuchAlgorithmException;
 public class RegisterService {
 
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
+    private static final String APPLICATION_ADDRESS = "http://localhost:8080";
 
-    public void accept(RegisterView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException, EmailExistsException {
+    public User activateUser(User user) {
+        user.setStatus(UserStatus.ACTIVE.name());
+        return userRepository.save(user);
+    }
+
+    public String generateToken(User user) {
+        String tokenAsString = UUID.randomUUID().toString();
+        Token token = new Token();
+        token.setUser(user);
+        token.setExpiryDate(Date.valueOf(LocalDate.now().plusDays(1)));
+        token.setToken(tokenAsString);
+        tokenRepository.save(token);
+        return tokenAsString;
+    }
+
+    public String generateActivationLink(String token) {
+        return APPLICATION_ADDRESS + "/register/registrationConfirm.html?token=" + token;
+    }
+
+
+    public User accept(RegisterView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException, EmailExistsException {
         validate(form);
         String username = generateUsername(form.getFirstName(), form.getLastName());
         User user = createUser(form, username);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     private User createUser(RegisterView form, String username) {
@@ -51,7 +74,7 @@ public class RegisterService {
             user.setType(UserType.Student.toString().equalsIgnoreCase(form.getType()) ? Role.STUDENT : Role.TEACHER);
             user.setLogin(username);
             user.setPassword(Encryptor.encryption(form.getPassword()));
-            user.setStatus(UserStatus.INACTIVE.toString());
+            user.setStatus(UserStatus.INACTIVE.name());
             return user;
         } catch (NoSuchAlgorithmException e) {
             log.error(e.toString());
@@ -89,22 +112,19 @@ public class RegisterService {
     }
 
     private void checkEmail(String email) throws EmailExistsException {
-        try {
-            userRepository.findByEmail(email);
-        } catch (NoResultException e) {
-            return;
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            throw new EmailExistsException();
         }
-        throw new EmailExistsException();
     }
 
     private String generateUsername(String firstName, String lastName) {
         String username = firstName + lastName;
 
-        for (int i = 0; i < 100; ++i) {
-            try {
-                userRepository.findByLogin(username);
-            } catch (NoResultException e) {
-                return username;
+        for (int i = 0; i < 1000; ++i) {
+            User user = userRepository.findByLogin(username);
+            if (user == null) {
+                break;
             }
             username = username + i;
         }

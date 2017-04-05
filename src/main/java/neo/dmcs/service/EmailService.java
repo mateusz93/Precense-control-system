@@ -4,23 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.repository.AppPropertyRepository;
 import neo.dmcs.repository.EmailTemplateRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import neo.dmcs.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Properties;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 /**
- * @Author by Mateusz Wieczorek on 9/27/16.
+ * @author by Mateusz Wieczorek on 9/27/16.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -30,6 +24,14 @@ public class EmailService {
 
     private final EmailTemplateRepository emailTemplateRepository;
     private final AppPropertyRepository appPropertyRepository;
+
+    public void sendActivationLink(User user, String activationToken) {
+        String recipient = user.getEmail();
+        String subject = "Link aktywacyjny";
+        String content = "Poniżej znajduje sie link aktywacyjny wazny 24h.\n\n";
+        content += activationToken + "\n\n";
+        sendEmail(recipient, subject, content);
+    }
 
     public void sendEmail(String recipient, String subject, String content) {
         String from = appPropertyRepository.findByName("email.from.adress").getValue();
