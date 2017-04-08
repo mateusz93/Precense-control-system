@@ -1,10 +1,11 @@
 package neo.dmcs.exception;
 
 /**
- * @Author Mateusz Wieczorek, 09.04.16.
+ * @author Mateusz Wieczorek, 09.04.16.
  */
-public class FieldEmptyException extends Exception {
-    public FieldEmptyException(String email) {
-        super(email);
+public class FieldEmptyException extends ValidationException {
+
+    public FieldEmptyException(String messageCode) {
+        super(messageCode);
     }
 }

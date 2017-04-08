@@ -51,7 +51,7 @@ public class RegisterServiceTest {
         user.setFirstName("zxcvbnm");
         user.setLastName("fghjkajshdh");
         user.setLogin("zxcvbnmfghjkajshdh");
-        user.setType(UserType.Student.name());
+        user.setType(UserType.STUDENT.name());
         user.setLastLogin(new Timestamp((new Date()).getTime() - 100000000));
 
         userRepository.save(user);
@@ -80,7 +80,7 @@ public class RegisterServiceTest {
         registerView.setPassword("zxcvbnm");
         registerView.setConfirmPassword("fghfgh");
         registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserType.Student.name());
+        registerView.setType(UserType.STUDENT.name());
 
         registerService.accept(registerView);
     }
@@ -94,7 +94,7 @@ public class RegisterServiceTest {
         registerView.setPassword("zxcv");
         registerView.setConfirmPassword("zxcv");
         registerView.setEmail("jhasgdjas@weq.pl");
-        registerView.setType(UserType.Student.name());
+        registerView.setType(UserType.STUDENT.name());
 
         registerService.accept(registerView);
     }
@@ -108,7 +108,7 @@ public class RegisterServiceTest {
         registerView.setPassword("Zxcvbnm123$");
         registerView.setConfirmPassword("Zxcvbnm123$");
         registerView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
-        registerView.setType(UserType.Student.name());
+        registerView.setType(UserType.STUDENT.name());
 
         registerService.accept(registerView);
     }
@@ -122,7 +122,7 @@ public class RegisterServiceTest {
         registerView.setPassword("Zxcvbnm123$");
         registerView.setConfirmPassword("Zxcvbnm123$");
         registerView.setEmail("kjasdhahdakjhdkjashsdfbbbbhdka@wp.pl");
-        registerView.setType(UserType.Student.name());
+        registerView.setType(UserType.STUDENT.name());
 
         registerService.accept(registerView);
 

@@ -39,7 +39,7 @@
                             <td><c:out value="${courses.subjectName}"  /></td>
                             <td><c:out value="${courses.quantity}"  /></td>
                             <td><c:out value="${courses.teacherName}"  /></td>
-                            <form action="/precenses/info/${courses.courseId}" method="post">
+                            <form action="/precenses/info/${courses.courseId}" method="get">
                                 <td><button name="info" value="${courses.courseId}" type="submit" class="btn btn-info"><spring:message code='view.presence.show'/></button></td>
                             </form>
                         </tr>

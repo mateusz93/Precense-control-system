@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpSession;
 
 /**
- * @Author Mateusz Wieczorek on 11/2/16.
+ * @author Mateusz Wieczorek on 11/2/16.
  */
 @Component
 public class UserUtils {

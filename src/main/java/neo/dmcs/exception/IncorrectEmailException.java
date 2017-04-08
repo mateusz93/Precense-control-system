@@ -1,10 +1,11 @@
 package neo.dmcs.exception;
 
 /**
- * @Author Mateusz Wieczorek, 09.04.16.
+ * @author Mateusz Wieczorek, 09.04.16.
  */
-public class IncorrectEmailException extends Exception {
-    public IncorrectEmailException() {
-        super();
+public class IncorrectEmailException extends ValidationException {
+
+    public IncorrectEmailException(String messageCode) {
+        super(messageCode);
     }
 }

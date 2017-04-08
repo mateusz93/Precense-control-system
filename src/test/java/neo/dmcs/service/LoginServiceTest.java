@@ -48,7 +48,7 @@ public class LoginServiceTest {
         user.setFirstName("zxcvbnm");
         user.setLastName("fghjkajshdh");
         user.setLogin("zxcvbnmfghjkajshdh123");
-        user.setType(UserType.Student.name());
+        user.setType(UserType.STUDENT.name());
         user.setLastLogin(new Timestamp((new Date()).getTime() - 100000000));
 
         userRepository.save(user);
@@ -61,70 +61,70 @@ public class LoginServiceTest {
 
 
     @Test(expected=IncorrectEmailException.class)
-    public void shouldThrowIncorrectEmailException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivedException {
+    public void shouldThrowIncorrectEmailException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
         LoginView loginView = new LoginView();
         loginView.setEmail("q23463utd4hu234hsdt2bt7@wp.plasd");
         loginView.setPassword("o4b2ci7bc4t4ugbjwsadfsdfvdfg");
-        loginView.setType(UserType.Student.name());
+        loginView.setType(UserType.STUDENT.name());
 
         loginService.validate(loginView);
     }
 
-    @Test(expected=UserNotActivedException.class)
-    public void shouldThrowUserNotActivedException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivedException {
+    @Test(expected=UserNotActivatedException.class)
+    public void shouldThrowUserNotActivedException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
         user.setStatus(UserStatus.INACTIVE.name());
         userRepository.save(user);
 
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         loginView.setPassword("zxcvbnmZ123$");
-        loginView.setType(UserType.Student.name());
+        loginView.setType(UserType.STUDENT.name());
 
         loginService.validate(loginView);
     }
 
     @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivedException {
+    public void shouldThrowIncorrectPasswordException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
 
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         loginView.setPassword("o4b2ci7bc4t4ugbjwsadfsdfvdfg");
-        loginView.setType(UserType.Student.name());
+        loginView.setType(UserType.STUDENT.name());
 
         loginService.validate(loginView);
     }
 
     @Test(expected=IncorrectUserTypeException.class)
-    public void shouldThrowIncorrectUserTypeException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivedException {
+    public void shouldThrowIncorrectUserTypeException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
 
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         loginView.setPassword("zxcvbnmZ123$");
-        loginView.setType(UserType.Teacher.name());
+        loginView.setType(UserType.TEACHER.name());
 
         loginService.validate(loginView);
     }
 
     @Test(expected=FieldEmptyException.class)
-    public void shouldThrowFieldEmptyException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivedException {
+    public void shouldThrowFieldEmptyException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
 
         LoginView loginView = new LoginView();
         loginView.setEmail(" ");
         loginView.setPassword("zxcvbnmZ123$");
-        loginView.setType(UserType.Teacher.name());
+        loginView.setType(UserType.TEACHER.name());
 
         loginService.validate(loginView);
     }
 
     @Test
-    public void lastLoginTest() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivedException {
+    public void lastLoginTest() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
 
         long lastLogin = user.getLastLogin().getTime();
 
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         loginView.setPassword("zxcvbnmZ123$");
-        loginView.setType(UserType.Student.name());
+        loginView.setType(UserType.STUDENT.name());
 
         loginService.validate(loginView);
 

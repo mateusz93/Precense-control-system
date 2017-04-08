@@ -1,19 +1,10 @@
 package neo.dmcs.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import neo.dmcs.enums.MessageType;
-import neo.dmcs.enums.UserType;
-import neo.dmcs.model.*;
-import neo.dmcs.repository.*;
+import neo.dmcs.model.User;
 import neo.dmcs.service.CourseService;
-import neo.dmcs.service.EmailService;
-import neo.dmcs.service.SMSService;
 import neo.dmcs.view.course.CourseDateView;
 import neo.dmcs.view.course.NewCourseView;
-import neo.dmcs.view.course.StudentCourseView;
-import neo.dmcs.view.course.TeacherCourseView;
-import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,32 +14,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
+import static neo.dmcs.util.Const.MVC_NOT_LOGGED;
 import static neo.dmcs.util.UserUtils.getUserFromSession;
 import static neo.dmcs.util.UserUtils.isNotLogged;
 
 /**
- * @Author Mateusz Wieczorek on 25.03.16.
+ * @author Mateusz Wieczorek on 25.03.16.
  */
-@Slf4j
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/courses")
 public class CourseController {
 
-    private final UserRepository userRepository;
-    private final CourseDateRepository courseDateRepository;
-    private final SubjectRepository subjectRepository;
-    private final TeacherCourseRepository teacherCourseRepository;
-    private final StudentCourseRepository studentCourseRepository;
     private final CourseService courseService;
-    private final NotificationRepository notificationRepository;
-    private final SMSService smsService;
-    private final EmailService emailService;
-    private final MessageSource messageSource;
 
     @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
     @RequestMapping(method = RequestMethod.GET)
@@ -56,36 +36,20 @@ public class CourseController {
         ModelAndView mvc = new ModelAndView();
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        prepareView(mvc, user);
-        return mvc;
+        return courseService.prepareView(mvc, user);
     }
 
     @PreAuthorize("hasAuthority('TEACHER') or hasAuthority('STUDENT')")
-    @RequestMapping(value = "/info/{teacherCourseId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/info/{teacherCourseId}", method = RequestMethod.GET)
     public ModelAndView info(@PathVariable("teacherCourseId") int teacherCourseId, HttpSession httpSession) {
         ModelAndView mvc = new ModelAndView();
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        if (user.getType().toString().equals(UserType.Student.name())) {
-            mvc.setViewName("course/studentCourseDates");
-            TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
-            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
-            mvc.addObject("datesList", courseDates);
-        } else {
-            mvc.setViewName("course/teacherCourseDates");
-            TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
-            List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
-            mvc.addObject("teacherCourseId", teacherCourseId);
-            mvc.addObject("datesList", courseDates);
-        }
-
-        return mvc;
+        return courseService.prepareViewByCourseId(teacherCourseId, mvc, user);
     }
 
     @PreAuthorize("hasAuthority('TEACHER')")
@@ -94,20 +58,9 @@ public class CourseController {
         ModelAndView mvc = new ModelAndView("course/addCourse");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        List<Subject> subjects = subjectRepository.findAll();
-        mvc.addObject("subjectList", subjects);
-        List<User> users = userRepository.findAll();
-        List<User> teachers = new ArrayList<>();
-        for (User user1 : users) {
-            if (UserType.Teacher.toString().equals(user1.getType())) {
-                teachers.add(user1);
-            }
-        }
-        mvc.addObject("teacherList", teachers);
-        return mvc;
+        return courseService.prepareNewView(mvc);
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")
@@ -116,17 +69,9 @@ public class CourseController {
         ModelAndView mvc = new ModelAndView("course/addCourseDate");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        CourseDate courseDate = courseDateRepository.findOne(dateId);
-        mvc.addObject("date", courseDate.getDate());
-        mvc.addObject("startTime", courseDate.getStartTime());
-        mvc.addObject("finishTime", courseDate.getFinishTime());
-        mvc.addObject("teacherCourseId", courseDate.getTeacherCourse().getId());
-        mvc.addObject("dateId", dateId);
-        mvc.addObject("isEdited", "True");
-        return mvc;
+        return courseService.prepareEditViewByDateId(dateId, mvc);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -135,16 +80,9 @@ public class CourseController {
         ModelAndView mvc = new ModelAndView("course/adminCoursesList");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        CourseDate courseDate = courseDateRepository.findOne(dateId);
-        courseDateRepository.delete(courseDate);
-        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseDate.getTeacherCourse().getId());
-        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
-        mvc.addObject("datesList", courseDates);
-
-        return mvc;
+        return courseService.deleteCourseByDateId(dateId, mvc);
     }
 
     @PreAuthorize("hasAuthority('TEACHER')")
@@ -153,15 +91,9 @@ public class CourseController {
         ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
-        teacherCourseRepository.delete(teacherCourse);
-        mvc.addObject("message", messageSource.getMessage("course.deleted", null, locale));
-        mvc.addObject("messageType", MessageType.SUCCESS.name());
-        prepareAdminView(mvc, user);
-        return mvc;
+        return courseService.deleteCourseById(courseId, locale, mvc);
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")
@@ -170,31 +102,18 @@ public class CourseController {
         ModelAndView mvc = new ModelAndView("course/addCourse");
         String username = (String) session.getAttribute("username");
         if (isNotLogged(username)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        User teacher = userRepository.findByLogin(newCourseForm.getTeacherLogin());
-        Subject subject = subjectRepository.findByName(newCourseForm.getSubjectName());
-        TeacherCourse teacherCourse = new TeacherCourse();
-        teacherCourse.setDescription(newCourseForm.getDescription());
-        teacherCourse.setStudentGroup(newCourseForm.getStudentGroup());
-        teacherCourse.setSubject(subject);
-        teacherCourse.setTeacher(teacher);
-
-        teacherCourseRepository.save(teacherCourse);
-        mvc.addObject("message", messageSource.getMessage("course.added", null, locale));
-        mvc.addObject("messageType", MessageType.SUCCESS.name());
-        return mvc;
+        return courseService.saveNewCourse(newCourseForm, locale, mvc);
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")
-    @RequestMapping(value = "/addOne/{teacherCourseId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/addOne/{teacherCourseId}", method = RequestMethod.GET)
     public ModelAndView newOne(@PathVariable("teacherCourseId") int teacherCourseId, HttpSession session) {
         ModelAndView mvc = new ModelAndView("course/addCourseDate");
         User user = getUserFromSession(session);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
         mvc.addObject("teacherCourseId", teacherCourseId);
         return mvc;
@@ -207,96 +126,9 @@ public class CourseController {
         ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
         User user = getUserFromSession(session);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        CourseDate courseDate;
-        TeacherCourse teacherCourse = teacherCourseRepository.findOne(teacherCourseId);
-        if ("True".equalsIgnoreCase(form.getIsEdited())) {
-            courseDate = courseDateRepository.findOne(Integer.valueOf(form.getDateId()));
-            sendEditCourseDateNotification(teacherCourse, form, courseDate);
-            courseDate.setDate(form.getDate());
-            courseDate.setStartTime(form.getStartTime());
-            courseDate.setFinishTime(form.getFinishTime());
-            courseDateRepository.save(courseDate);
-            mvc.addObject("message", messageSource.getMessage("course.courseDateEdited", null, locale));
-            mvc.addObject("messageType", MessageType.SUCCESS.name());
-        } else {
-            courseDate = new CourseDate();
-            courseDate.setTeacherCourse(teacherCourse);
-            courseDate.setStartTime(form.getStartTime());
-            courseDate.setFinishTime(form.getFinishTime());
-            courseDate.setDate(form.getDate());
-            courseDateRepository.save(courseDate);
-            mvc.addObject("message", messageSource.getMessage("course.courseDateAdded", null, locale));
-            mvc.addObject("messageType", MessageType.SUCCESS.name());
-        }
-
-        List<CourseDate> courseDates = courseDateRepository.findByTeacherCourse(teacherCourse);
-        mvc.addObject("datesList", courseDates);
-
-        return mvc;
+        return courseService.addCourseDateByCourseId(teacherCourseId, form, locale, mvc);
     }
 
-    private void sendEditCourseDateNotification(TeacherCourse teacherCourse, CourseDateView form, CourseDate courseDate) {
-        List<StudentCourse> studentCourses = studentCourseRepository.findByTeacherCourse(teacherCourse);
-        for(StudentCourse studentCourse : studentCourses) {
-            Notification notification = notificationRepository.findByUser(studentCourse.getStudent());
-            if (notification.getChangeCourseDate().contains("EMAIL")) {
-                emailService.sendEmail(studentCourse.getStudent().getEmail(), "Zmieniono termin zajęć",
-                        "Zmieniono termin zajęć przedmiotu: " + studentCourse.getTeacherCourse().getSubject().getName()
-                        + ". Poprzedni termin: " + courseDate.getDate() + ". Start: " + courseDate.getStartTime()
-                        + ". Koniec: " + courseDate.getFinishTime() + ". Nowy termin: " + form.getDate() + ". Start: "
-                        + form.getStartTime() + ". Koniec: " + form.getFinishTime());
-            }
-            if (notification.getChangeCourseDate().contains("SMS")) {
-                smsService.sendSMS(studentCourse.getStudent().getEmail(),
-                        "Zmieniono termin zajęć przedmiotu: " + studentCourse.getTeacherCourse().getSubject().getName()
-                                + ". Poprzedni termin: " + courseDate.getDate() + ". Start: " + courseDate.getStartTime()
-                                + ". Koniec: " + courseDate.getFinishTime() + ". Nowy termin: " + form.getDate() + ". Start: "
-                                + form.getStartTime() + ". Koniec: " + form.getFinishTime());
-            }
-        }
-    }
-
-    private void saveNewCourse(@ModelAttribute("newCourseForm") NewCourseView newCourseForm, User user) {
-        Subject subject = new Subject();
-        subject.setDescription(newCourseForm.getDescription());
-        subject.setName(newCourseForm.getSubjectName());
-        subjectRepository.save(subject);
-
-        TeacherCourse teacherCourse = new TeacherCourse();
-        teacherCourse.setDescription(newCourseForm.getDescription());
-        teacherCourse.setSubject(subject);
-        teacherCourse.setTeacher(user);
-        teacherCourseRepository.save(teacherCourse);
-    }
-
-    private void prepareView(ModelAndView mvc, User user) {
-        if (UserType.Student.name().equals(user.getType())) {
-            prepareStudentView(mvc, user);
-        } else if (UserType.Teacher.name().equals(user.getType())) {
-            prepareTeacherView(mvc, user);
-        } else {
-            prepareAdminView(mvc, user);
-        }
-    }
-
-    private void prepareAdminView(ModelAndView mvc, User user) {
-        List<TeacherCourse> coursesList = teacherCourseRepository.findAll();
-        mvc.setViewName("course/adminCoursesList");
-        mvc.addObject("coursesList", coursesList);
-    }
-
-    private void prepareStudentView(ModelAndView mvc, User user) {
-        List<StudentCourseView> coursesList = courseService.getStudentCoursesList(user);
-        mvc.setViewName("course/studentCoursesList");
-        mvc.addObject("coursesList", coursesList);
-    }
-
-    private void prepareTeacherView(ModelAndView mvc, User user) {
-        List<TeacherCourseView> coursesList = courseService.getTeacherCoursesList(user);
-        mvc.setViewName("course/teacherCoursesList");
-        mvc.addObject("coursesList", coursesList);
-    }
 }

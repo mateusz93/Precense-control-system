@@ -37,7 +37,7 @@
                         <tr>
                             <td><c:out value="${courses.subjectName}"  /></td>
                             <td><c:out value="${courses.quantity}"  /></td>
-                            <form action="/precenses/info/${courses.id}" method="post">
+                            <form action="/precenses/info/${courses.id}" method="get">
                                 <td><button name="info" value="${courses.id}" type="submit" class="btn btn-info"><spring:message code='view.course.dates.show'/></button></td>
                             </form>
                         </tr>

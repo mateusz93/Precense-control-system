@@ -2,6 +2,7 @@ package neo.dmcs.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import neo.dmcs.exception.IncorrectCaptchaException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ import java.net.URL;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class ReCaptchaService {
+public class CaptchaService {
 
     @Value("${google.recaptcha.url}")
     private String url;
@@ -35,13 +36,16 @@ public class ReCaptchaService {
     @Value("${google.recaptcha.user-agent}")
     private String userAgent;
 
-    private final String IS_SUCCESS = "success";
+    private static final String IS_SUCCESS = "success";
+    private static final String POST_METHOD = "POST";
+    private static final String USER_AGENT = "User-Agent";
+    private static final String ACCEPT_LANGUAGE = "Accept-Language";
 
-    public boolean verify(HttpServletRequest request) throws IOException {
+    public boolean verify(HttpServletRequest request) throws IOException, IncorrectCaptchaException {
         String reCaptchaResponse = request.getParameter("g-recaptcha-response");
 
         if (StringUtils.isEmpty(reCaptchaResponse)) {
-            return false;
+            throw new IncorrectCaptchaException("recaptcha.incorrect");
         }
 
         URL obj = new URL(url);
@@ -57,7 +61,6 @@ public class ReCaptchaService {
         jsonReader.close();
 
         return jsonObject.getBoolean(IS_SUCCESS);
-
     }
 
     private String constructParams(String reCaptchaResponse) {
@@ -86,9 +89,9 @@ public class ReCaptchaService {
 
     private HttpsURLConnection getHttpsURLConnection(URL obj) throws IOException {
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("User-Agent", userAgent);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+        con.setRequestMethod(POST_METHOD);
+        con.setRequestProperty(USER_AGENT, userAgent);
+        con.setRequestProperty(ACCEPT_LANGUAGE, "en-US,en;q=0.5");
         return con;
     }
 }

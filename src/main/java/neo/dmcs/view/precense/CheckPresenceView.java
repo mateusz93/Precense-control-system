@@ -6,7 +6,7 @@ import lombok.Data;
  * @Author Mateusz Wieczorek, 18.05.16.
  */
 @Data
-public class CheckPrecenseView {
+public class CheckPresenceView {
 
     private String ID;
     private String firstName;

@@ -5,6 +5,6 @@ package neo.dmcs.enums;
  */
 public enum UserType {
 
-    Student, Teacher, Admin
+    STUDENT, TEACHER, ADMIN
 
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
- * @Author Mateusz Wieczorek on 14.03.2017.
+ * @author Mateusz Wieczorek on 14.03.2017.
  */
 @Slf4j
 @ControllerAdvice

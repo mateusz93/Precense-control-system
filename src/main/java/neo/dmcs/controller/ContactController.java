@@ -25,9 +25,6 @@ public class ContactController {
                              @RequestParam("subject") String subject,
                              @RequestParam("content") String content) {
         ModelAndView mvc = new ModelAndView("index");
-        log.info("Email: " + email);
-        log.info("Subject: " + subject);
-        log.info("Content: " + content);
         contactService.sendEmail(email, subject, content);
         return mvc;
     }

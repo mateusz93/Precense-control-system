@@ -20,7 +20,7 @@
             <br><br>
             <jsp:include page="../alert/allAlerts.jsp"/>
             <hr>
-            <form action="/courses/addOne/${teacherCourseId}" method="post">
+            <form action="/courses/addOne/${teacherCourseId}" method="get">
                 <td><button type="submit" value="${teacherCourseId}" name="teacherCourseId" class="btn btn-success">Dodaj termin</button></td>
             </form>
             <br>

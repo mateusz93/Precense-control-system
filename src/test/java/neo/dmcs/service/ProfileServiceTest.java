@@ -37,7 +37,7 @@ public class ProfileServiceTest {
         profileGeneralView.setPhone("222333444");
         profileGeneralView.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
         profileGeneralView.setConfirmPassword(Encryptor.encryption("zxcvbnmZ123$"));
-        profileGeneralView.setType(UserType.Student.name());
+        profileGeneralView.setType(UserType.STUDENT.name());
         profileGeneralView.setEmail("kasdhnkjan@waea.pl");
         profileGeneralView.setCity("Lodz");
     }

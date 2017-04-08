@@ -2,21 +2,12 @@ package neo.dmcs.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import neo.dmcs.enums.MessageType;
-import neo.dmcs.exception.DifferentPasswordsException;
-import neo.dmcs.exception.FieldEmptyException;
-import neo.dmcs.exception.IncorrectPasswordException;
-import neo.dmcs.model.Notification;
 import neo.dmcs.model.User;
-import neo.dmcs.repository.NotificationRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.service.ProfileService;
 import neo.dmcs.view.user.ProfileGeneralView;
 import neo.dmcs.view.user.ProfileNotificationView;
 import neo.dmcs.view.user.ProfilePasswordView;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,17 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
+import static neo.dmcs.util.Const.MVC_NOT_LOGGED;
 import static neo.dmcs.util.UserUtils.getUserFromSession;
 import static neo.dmcs.util.UserUtils.isNotLogged;
 
 /**
- * @Author Mateusz Wieczorek
+ * @author Mateusz Wieczorek
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -43,262 +31,60 @@ import static neo.dmcs.util.UserUtils.isNotLogged;
 @RequestMapping("/profile")
 public class ProfileController {
 
-    private final UserRepository userRepository;
-    private final NotificationRepository notificationRepository;
     private final ProfileService profileService;
-    private final MessageSource messageSource;
+    private static final String MVC_DEFAULT = "user/profile";
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView profile(HttpSession httpSession) {
-        ModelAndView mvc = new ModelAndView("user/profile");
+        ModelAndView mvc = new ModelAndView(MVC_DEFAULT);
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        prepareProfileView(mvc, user);
-        return mvc;
+        return profileService.prepareGeneralProfileView(mvc, user);
     }
 
     @RequestMapping(value = "/general", method = RequestMethod.POST)
     public ModelAndView profileGeneral(@ModelAttribute("profileForm") ProfileGeneralView form,
                                        HttpSession httpSession, Locale locale) {
-        ModelAndView mvc = new ModelAndView("user/profile");
+        ModelAndView mvc = new ModelAndView(MVC_DEFAULT);
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        try {
-            profileService.update(form);
-        } catch (FieldEmptyException e) {
-            log.error(e.getMessage());
-            mvc.addObject("message", messageSource.getMessage("emptyField", null, locale));
-            mvc.addObject("messageType", MessageType.DANGER.name());
-            return mvc;
-        } catch (DifferentPasswordsException e) {
-            log.error(e.getMessage());
-            mvc.addObject("message", messageSource.getMessage("register.differentPasswords", null, locale));
-            mvc.addObject("messageType", MessageType.DANGER.name());
-            return mvc;
-        } catch (IncorrectPasswordException e) {
-            log.error(e.getMessage());
-            mvc.addObject("message", messageSource.getMessage("register.incorrectPassword", null, locale));
-            mvc.addObject("messageType", MessageType.DANGER.name());
-            return mvc;
-        }
-
-        log.debug("Profile updated");
-        mvc.addObject("message", messageSource.getMessage("profile.updated", null, locale));
-        mvc.addObject("messageType", MessageType.SUCCESS.name());
-        prepareProfileView(mvc, user);
-        return mvc;
+        return profileService.prepareGeneralProfileView(form, mvc, user, locale);
     }
 
     @RequestMapping(value = "/notification", method = RequestMethod.POST)
     public ModelAndView profileNotification(@ModelAttribute("profileForm") ProfileNotificationView form,
                                             HttpSession httpSession, Locale locale) {
-        ModelAndView mvc = new ModelAndView("user/profile");
+        ModelAndView mvc = new ModelAndView(MVC_DEFAULT);
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        saveNewNotificationSettings(user, form);
-        mvc.addObject("message", messageSource.getMessage("profile.updated", null, locale));
-        mvc.addObject("messageType", MessageType.SUCCESS.name());
-        prepareProfileView(mvc, user);
-        return mvc;
+        return profileService.prepareNotificationProfileView(form, mvc, user, locale);
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     public ModelAndView profilePassword(@ModelAttribute("profileForm") ProfilePasswordView form,
                                         HttpSession httpSession, Locale locale) {
-        ModelAndView mvc = new ModelAndView("user/profile");
+        ModelAndView mvc = new ModelAndView(MVC_DEFAULT);
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-
-        try {
-            profileService.updatePassword(form, httpSession);
-        } catch (FieldEmptyException e) {
-            log.error(e.getMessage());
-            mvc.addObject("message", messageSource.getMessage("emptyField", null, locale));
-            mvc.addObject("messageType", MessageType.DANGER.name());
-            return mvc;
-        } catch (DifferentPasswordsException e) {
-            log.error(e.getMessage());
-            mvc.addObject("message", messageSource.getMessage("register.differentPasswords", null, locale));
-            mvc.addObject("messageType", MessageType.DANGER.name());
-            return mvc;
-        } catch (IncorrectPasswordException e) {
-            log.error(e.getMessage());
-            mvc.addObject("message", messageSource.getMessage("register.incorrectPassword", null, locale));
-            mvc.addObject("messageType", MessageType.DANGER.name());
-            return mvc;
-        } catch (NoSuchAlgorithmException e) {
-            log.error(e.getMessage());
-            mvc.addObject("message", messageSource.getMessage("error", null, locale));
-            mvc.addObject("messageType", MessageType.DANGER.name());
-            return mvc;
-        }
-
-        log.debug("Password updated");
-        mvc.addObject("message", messageSource.getMessage("profile.password.updated", null, locale));
-        mvc.addObject("messageType", MessageType.SUCCESS.name());
-        prepareProfileView(mvc, user);
-        return mvc;
+        return profileService.updatePassword(form, user, mvc, locale);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/upload")
     public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file,
                                          HttpSession session, Locale locale) {
-        ModelAndView mvc = new ModelAndView("user/profile");
+        ModelAndView mvc = new ModelAndView(MVC_DEFAULT);
         User user = getUserFromSession(session);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-
-        if (file.isEmpty()) {
-            mvc.addObject("message", messageSource.getMessage("profile.upload.empty", null, locale));
-            mvc.addObject("messageType", MessageType.DANGER.name());
-        } else {
-            try {
-                BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(new File("src/main/webapp/WEB-INF/resources/images/" + user.getLogin())));
-                FileCopyUtils.copy(file.getInputStream(), stream);
-                stream.close();
-                mvc.addObject("message", messageSource.getMessage("profile.upload.success", null, locale));
-                mvc.addObject("messageType", MessageType.SUCCESS.name());
-            } catch (Exception e) {
-                mvc.addObject("message", messageSource.getMessage("profile.upload.fail", null, locale));
-                mvc.addObject("messageType", MessageType.DANGER.name());
-            }
-        }
-
-        return mvc;
+        return profileService.uploadFile(file, user, mvc, locale);
     }
-
-    private void saveNewNotificationSettings(User user, ProfileNotificationView form) {
-        Notification notification = notificationRepository.findByUser(user);
-        if (notification == null) {
-            notification = new Notification();
-            notification.setUser(user);
-            notification.setCriticalPresenceLevel("");
-            notification.setCourseCanceled("");
-            notification.setAbsence("");
-            notification.setBadMark("");
-            notification.setChangeCourseDate("");
-        }
-        if (form.getCriticalPresenceLevelEmail() != null) {
-            notification.setCriticalPresenceLevel("EMAIL ");
-        } else {
-            notification.setCriticalPresenceLevel("");
-        }
-        if (form.getCriticalPresenceLevelSMS() != null) {
-            notification.setCriticalPresenceLevel(notification.getCriticalPresenceLevel() + "SMS");
-        }
-        if (form.getCourseCanceledEmail() != null) {
-            notification.setCourseCanceled("EMAIL ");
-        } else {
-            notification.setCourseCanceled("");
-        }
-        if (form.getCourseCanceledSMS() != null) {
-            notification.setCourseCanceled(notification.getCourseCanceled() + "SMS");
-        }
-        if (form.getAbsenceEmail() != null) {
-            notification.setAbsence("EMAIL ");
-        } else {
-            notification.setAbsence("");
-        }
-        if (form.getAbsenceSMS() != null) {
-            notification.setAbsence(notification.getAbsence() + "SMS");
-        }
-        if (form.getBadMarkEmail() != null) {
-            notification.setBadMark("EMAIL ");
-        } else {
-            notification.setBadMark("");
-        }
-        if (form.getBadMarkSMS() != null) {
-            notification.setBadMark(notification.getBadMark() + "SMS");
-        }
-        if (form.getChangeCourseDateEmail() != null) {
-            notification.setChangeCourseDate("EMAIL ");
-        } else {
-            notification.setChangeCourseDate("");
-        }
-        if (form.getChangeCourseDateSMS() != null) {
-            notification.setChangeCourseDate(notification.getChangeCourseDate() + "SMS");
-        }
-        notificationRepository.save(notification);
-    }
-
-    private void prepareProfileView(ModelAndView mvc, User user) {
-        prepareGeneralData(mvc, user);
-        prepareImage(mvc, user);
-        prepareNotificationData(mvc, user);
-    }
-
-    private void prepareNotificationData(ModelAndView mvc, User user) {
-        Notification notification = notificationRepository.findByUser(user);
-        if (notification == null) {
-            return;
-        }
-        if (notification.getCourseCanceled().contains("EMAIL")) {
-            mvc.addObject("courseCanceledEmail", "on");
-        }
-        if (notification.getCourseCanceled().contains("SMS")) {
-            mvc.addObject("courseCanceledSMS", "on");
-        }
-        if (notification.getAbsence().contains("EMAIL")) {
-            mvc.addObject("absenceEmail", "on");
-        }
-        if (notification.getAbsence().contains("SMS")) {
-            mvc.addObject("absenceSMS", "on");
-        }
-        if (notification.getBadMark().contains("EMAIL")) {
-            mvc.addObject("badMarkEmail", "on");
-        }
-        if (notification.getBadMark().contains("SMS")) {
-            mvc.addObject("badMarkSMS", "on");
-        }
-        if (notification.getChangeCourseDate().contains("EMAIL")) {
-            mvc.addObject("changeCourseDateEmail", "on");
-        }
-        if (notification.getChangeCourseDate().contains("SMS")) {
-            mvc.addObject("changeCourseDateSMS", "on");
-        }
-        if (notification.getCriticalPresenceLevel().contains("EMAIL")) {
-            mvc.addObject("criticalPresenceLevelEmail", "on");
-        }
-        if (notification.getCriticalPresenceLevel().contains("SMS")) {
-            mvc.addObject("criticalPresenceLevelSMS", "on");
-        }
-    }
-
-    private void prepareImage(ModelAndView mvc, User user) {
-        File f = new File("src/main/webapp/WEB-INF/resources/images/" + user.getLogin());
-        if (f.exists() && !f.isDirectory()) {
-            mvc.addObject("photoPath", "/resources/images/" + user.getLogin());
-        } else {
-            mvc.addObject("photoPath", "/resources/images/default.png");
-        }
-    }
-
-    private User prepareGeneralData(ModelAndView mvc, User user) {
-        mvc.addObject("firstName", user.getFirstName());
-        mvc.addObject("lastName", user.getLastName());
-        mvc.addObject("ID", user.getId());
-        mvc.addObject("email", user.getEmail());
-        mvc.addObject("type", user.getType());
-        mvc.addObject("city", user.getCity());
-        mvc.addObject("group", user.getGroup());
-        mvc.addObject("phone", user.getPhone());
-        mvc.addObject("street", user.getStreet());
-        return user;
-    }
-
 }

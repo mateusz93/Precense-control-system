@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.NoSuchElementException;
 
 /**
- * @Author Mateusz Wieczorek on 14.03.2017.
+ * @author Mateusz Wieczorek on 14.03.2017.
  */
 @Slf4j
 @ControllerAdvice

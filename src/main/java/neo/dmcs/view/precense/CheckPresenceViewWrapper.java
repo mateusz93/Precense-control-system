@@ -8,7 +8,7 @@ import java.util.List;
  * @Author Mateusz Wieczorek, 19.05.16.
  */
 @Data
-public class CheckPrecenseViewWrapper {
+public class CheckPresenceViewWrapper {
 
-    private List<CheckPrecenseView> students;
+    private List<CheckPresenceView> students;
 }

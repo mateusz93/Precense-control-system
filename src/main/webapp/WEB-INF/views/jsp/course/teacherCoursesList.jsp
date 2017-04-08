@@ -37,7 +37,7 @@
                         <tr>
                             <td><c:out value="${course.subjectName}"  /></td>
                             <td><c:out value="${course.coursesQuantity}"  /></td>
-                            <form action="/courses/info/${course.ID}" method="post">
+                            <form action="/courses/info/${course.ID}" method="get">
                                 <td><button value="${course.ID}" type="submit" class="btn btn-info">Wyświetl terminy</button></td>
                             </form>
                         </tr>

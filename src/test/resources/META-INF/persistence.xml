@@ -8,7 +8,7 @@
         <class>neo.dmcs.model.Department</class>
         <class>neo.dmcs.model.EventDictionary</class>
         <class>neo.dmcs.model.StudentCourse</class>
-        <class>neo.dmcs.model.StudentPrecense</class>
+        <class>neo.dmcs.model.StudentPresence</class>
         <class>neo.dmcs.model.Subject</class>
         <class>neo.dmcs.model.TeacherCourse</class>
         <class>neo.dmcs.model.User</class>

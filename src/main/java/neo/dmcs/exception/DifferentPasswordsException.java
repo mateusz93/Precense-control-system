@@ -1,10 +1,11 @@
 package neo.dmcs.exception;
 
 /**
- * @Author Mateusz Wieczorek, 09.04.16.
+ * @author Mateusz Wieczorek, 09.04.16.
  */
-public class DifferentPasswordsException extends Exception {
-    public DifferentPasswordsException() {
-        super();
+public class DifferentPasswordsException extends ValidationException {
+
+    public DifferentPasswordsException(String messageCode) {
+        super(messageCode);
     }
 }

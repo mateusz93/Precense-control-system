@@ -2,17 +2,8 @@ package neo.dmcs.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import neo.dmcs.enums.MessageType;
-import neo.dmcs.model.StudentCourse;
-import neo.dmcs.model.TeacherCourse;
 import neo.dmcs.model.User;
-import neo.dmcs.repository.StudentCourseRepository;
-import neo.dmcs.repository.TeacherCourseRepository;
-import neo.dmcs.repository.UserRepository;
 import neo.dmcs.service.SaveService;
-import neo.dmcs.view.course.SaveView;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Locale;
 
+import static neo.dmcs.util.Const.MVC_NOT_LOGGED;
 import static neo.dmcs.util.UserUtils.getUserFromSession;
 import static neo.dmcs.util.UserUtils.isNotLogged;
 
 /**
- * @Author Mateusz Wieczorek, 14.05.16.
+ * @author Mateusz Wieczorek, 14.05.16.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -36,11 +27,7 @@ import static neo.dmcs.util.UserUtils.isNotLogged;
 @RequestMapping("/saves")
 public class SaveController {
 
-    private final UserRepository userRepository;
-    private final TeacherCourseRepository teacherCourseRepository;
-    private final StudentCourseRepository studentCourseRepository;
     private final SaveService saveService;
-    private final MessageSource messageSource;
 
     @PreAuthorize("hasAuthority('STUDENT')")
     @RequestMapping(method = RequestMethod.GET)
@@ -48,11 +35,9 @@ public class SaveController {
         ModelAndView mvc = new ModelAndView("course/studentSaves");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        prepareView(mvc, user);
-        return mvc;
+        return saveService.prepareView(mvc, user);
     }
 
     @PreAuthorize("hasAuthority('STUDENT')")
@@ -61,29 +46,8 @@ public class SaveController {
         ModelAndView mvc = new ModelAndView("course/studentSaves");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
-            mvc.setViewName("security/login");
-            return mvc;
+            return new ModelAndView(MVC_NOT_LOGGED);
         }
-        TeacherCourse teacherCourse = teacherCourseRepository.findOne(courseId);
-        StudentCourse studentCourse = new StudentCourse();
-        studentCourse.setStudent(user);
-        studentCourse.setTeacherCourse(teacherCourse);
-        studentCourseRepository.save(studentCourse);
-
-        prepareView(mvc, user);
-
-        mvc.addObject("message", messageSource.getMessage("course.subscribed", null, locale));
-        mvc.addObject("messageType", MessageType.SUCCESS.name());
-
-        return mvc;
-    }
-
-    private void prepareView(ModelAndView mvc, User user) {
-        List<SaveView> subjectList =  saveService.getSubjects(user);
-        mvc.addObject("subjectList", subjectList);
-    }
-
-    private boolean isLogged(String username) {
-        return StringUtils.isNotBlank(username);
+        return saveService.prepareViewByCourseId(courseId, mvc, user, locale);
     }
 }

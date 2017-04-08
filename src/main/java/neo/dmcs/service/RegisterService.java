@@ -2,13 +2,11 @@ package neo.dmcs.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import neo.dmcs.enums.MessageType;
 import neo.dmcs.enums.Role;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.enums.UserType;
-import neo.dmcs.exception.DifferentPasswordsException;
-import neo.dmcs.exception.EmailExistsException;
-import neo.dmcs.exception.FieldEmptyException;
-import neo.dmcs.exception.IncorrectPasswordException;
+import neo.dmcs.exception.*;
 import neo.dmcs.model.Token;
 import neo.dmcs.model.User;
 import neo.dmcs.repository.TokenRepository;
@@ -17,16 +15,19 @@ import neo.dmcs.util.Encryptor;
 import neo.dmcs.util.PasswordValidator;
 import neo.dmcs.view.security.RegisterView;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
- * @Author Mateusz Wieczorek, 30.03.16.
+ * @author Mateusz Wieczorek, 30.03.16.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -34,16 +35,18 @@ import java.util.UUID;
 @Service
 public class RegisterService {
 
+    private final MessageSource messageSource;
+    private final EmailService emailService;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private static final String APPLICATION_ADDRESS = "http://localhost:8080";
 
-    public User activateUser(User user) {
+    private User activateUser(User user) {
         user.setStatus(UserStatus.ACTIVE.name());
         return userRepository.save(user);
     }
 
-    public String generateToken(User user) {
+    private String generateToken(User user) {
         String tokenAsString = UUID.randomUUID().toString();
         Token token = new Token();
         token.setUser(user);
@@ -53,12 +56,11 @@ public class RegisterService {
         return tokenAsString;
     }
 
-    public String generateActivationLink(String token) {
+    private String generateActivationLink(String token) {
         return APPLICATION_ADDRESS + "/register/registrationConfirm.html?token=" + token;
     }
 
-
-    public User accept(RegisterView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException, EmailExistsException {
+    private User accept(RegisterView form) throws ValidationException {
         validate(form);
         String username = generateUsername(form.getFirstName(), form.getLastName());
         User user = createUser(form, username);
@@ -66,55 +68,51 @@ public class RegisterService {
     }
 
     private User createUser(RegisterView form, String username) {
-        try {
-            User user = new User();
-            user.setEmail(form.getEmail());
-            user.setFirstName(form.getFirstName());
-            user.setLastName(form.getLastName());
-            user.setType(UserType.Student.toString().equalsIgnoreCase(form.getType()) ? Role.STUDENT : Role.TEACHER);
-            user.setLogin(username);
-            user.setPassword(Encryptor.encryption(form.getPassword()));
-            user.setStatus(UserStatus.INACTIVE.name());
-            return user;
-        } catch (NoSuchAlgorithmException e) {
-            log.error(e.toString());
-        }
-        return null;
+        User user = new User();
+        user.setEmail(form.getEmail());
+        user.setFirstName(form.getFirstName());
+        user.setLastName(form.getLastName());
+        user.setType(UserType.STUDENT.toString().equalsIgnoreCase(form.getType()) ? Role.STUDENT : Role.TEACHER);
+        user.setLogin(username);
+        user.setPassword(Encryptor.encryption(form.getPassword()));
+        user.setStatus(UserStatus.INACTIVE.name());
+        return user;
     }
 
-    private void validate(RegisterView form) throws FieldEmptyException, DifferentPasswordsException, IncorrectPasswordException, EmailExistsException {
+    private void validate(RegisterView form) throws ValidationException {
+        validateEmpties(form);
+        validatePassword(form);
+        checkEmailExists(form.getEmail());
+    }
 
+    private void validateEmpties(RegisterView form) throws ValidationException {
         if (!StringUtils.isNotBlank(form.getEmail())) {
-            throw new FieldEmptyException("Email address not passed");
+            throw new FieldEmptyException("emptyField");
         }
         if (!(StringUtils.isNotBlank(form.getConfirmPassword()) && StringUtils.isNotBlank(form.getPassword()))) {
-            throw new FieldEmptyException("Password not passed");
+            throw new FieldEmptyException("emptyField");
         }
         if (!StringUtils.isNotBlank(form.getFirstName())) {
-            throw new FieldEmptyException("Firstname not passed");
+            throw new FieldEmptyException("emptyField");
         }
         if (!StringUtils.isNotBlank(form.getLastName())) {
-            throw new FieldEmptyException("Lastname not passed");
+            throw new FieldEmptyException("emptyField");
         }
-
-        validatePassword(form);
-        checkEmail(form.getEmail());
     }
 
-    private void validatePassword(RegisterView form) throws DifferentPasswordsException, IncorrectPasswordException {
+    private void validatePassword(RegisterView form) throws ValidationException {
         if (!form.getPassword().equals(form.getConfirmPassword())) {
-            throw new DifferentPasswordsException();
+            throw new DifferentPasswordsException("register.differentPasswords");
         }
-
         if (!PasswordValidator.validate(form.getPassword())) {
-            throw new IncorrectPasswordException();
+            throw new IncorrectPasswordException("register.incorrectPassword");
         }
     }
 
-    private void checkEmail(String email) throws EmailExistsException {
+    private void checkEmailExists(String email) throws ValidationException {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            throw new EmailExistsException();
+            throw new EmailExistsException("register.emailUsed");
         }
     }
 
@@ -131,4 +129,67 @@ public class RegisterService {
         return username;
     }
 
+    public ModelAndView registerUser(RegisterView form, ModelAndView mvc, Locale locale) {
+        try {
+            User user = accept(form);
+            String token = generateToken(user);
+            String activationLink = generateActivationLink(token);
+            emailService.sendActivationLink(user, activationLink);
+        } catch (ValidationException e) {
+            mapFields(form, mvc);
+            mvc.addObject("message", messageSource.getMessage(e.getMessage(), null, locale));
+            mvc.addObject("messageType", MessageType.DANGER.name());
+            mvc.setViewName("security/register");
+            return mvc;
+        }
+        cleanFields(form, mvc);
+        mvc.addObject("message", messageSource.getMessage("register.userCreated", null, locale));
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
+        return mvc;
+    }
+
+    private void mapFields(RegisterView form, ModelAndView mvc) {
+        mvc.addObject("newEmail", form.getEmail());
+        mvc.addObject("firstName", form.getFirstName());
+        mvc.addObject("lastName", form.getLastName());
+        mvc.addObject("password", form.getPassword());
+        mvc.addObject("confirmPassword", form.getConfirmPassword());
+        mvc.addObject("type", form.getType());
+    }
+
+    private void cleanFields(RegisterView form, ModelAndView mvc) {
+        mvc.addObject("newEmail", "");
+        mvc.addObject("firstName", "");
+        mvc.addObject("lastName", "");
+        mvc.addObject("password", "");
+        mvc.addObject("confirmPassword", "");
+        mvc.addObject("type", form.getType());
+    }
+
+    public ModelAndView confirmRegistration(WebRequest request, String tokenAsString) {
+        Locale locale = request.getLocale();
+        ModelAndView mvc = new ModelAndView("redirect:/login");
+        try {
+            Token token = tokenRepository.findByToken(tokenAsString);
+            validateToken(token);
+            activateUser(token.getUser());
+        } catch (ValidationException e) {
+            mvc.addObject("message", messageSource.getMessage(e.getMessage(), null, locale));
+            mvc.addObject("messageType", MessageType.SUCCESS.name());
+            return mvc;
+        }
+        mvc.addObject("message", messageSource.getMessage("view.register.confirmed", null, locale));
+        mvc.addObject("messageType", MessageType.DANGER.name());
+        mvc.setViewName("security/register");
+        return mvc;
+    }
+
+    private void validateToken(Token token) throws ValidationException {
+        if (token == null) {
+            throw new TokenIncorrectException("register.token.incorrect");
+        }
+        if (token.getExpiryDate().getTime() < Date.valueOf(LocalDate.now()).getTime()) {
+            throw new TokenExpireException("register.token.expiry");
+        }
+    }
 }
