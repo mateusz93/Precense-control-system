@@ -1,5 +1,9 @@
 package neo.dmcs.service;
 
+import neo.dmcs.Application;
+import neo.dmcs.configuration.WebMvcConfig;
+import neo.dmcs.configuration.WebSecurityConfig;
+import neo.dmcs.enums.Role;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.exception.*;
@@ -12,8 +16,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
@@ -22,10 +31,11 @@ import java.util.Date;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @Author Mateusz Wieczorek, 19.04.16.
+ * @author Mateusz Wieczorek, 19.04.16.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/spring-test-config.xml"})
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ContextConfiguration(classes = {Application.class})
 public class LoginServiceTest {
 
     @Autowired
@@ -40,15 +50,11 @@ public class LoginServiceTest {
         user = new User();
         user.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         user.setStatus(UserStatus.ACTIVE.name());
-        try {
-            user.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        user.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
         user.setFirstName("zxcvbnm");
         user.setLastName("fghjkajshdh");
         user.setLogin("zxcvbnmfghjkajshdh123");
-        user.setType(UserType.STUDENT.name());
+        user.setType(Role.STUDENT);
         user.setLastLogin(new Timestamp((new Date()).getTime() - 100000000));
 
         userRepository.save(user);
@@ -61,7 +67,7 @@ public class LoginServiceTest {
 
 
     @Test(expected=IncorrectEmailException.class)
-    public void shouldThrowIncorrectEmailException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
+    public void shouldThrowIncorrectEmailException() throws ValidationException {
         LoginView loginView = new LoginView();
         loginView.setEmail("q23463utd4hu234hsdt2bt7@wp.plasd");
         loginView.setPassword("o4b2ci7bc4t4ugbjwsadfsdfvdfg");
@@ -71,7 +77,7 @@ public class LoginServiceTest {
     }
 
     @Test(expected=UserNotActivatedException.class)
-    public void shouldThrowUserNotActivedException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
+    public void shouldThrowUserNotActivedException() throws ValidationException {
         user.setStatus(UserStatus.INACTIVE.name());
         userRepository.save(user);
 
@@ -84,7 +90,7 @@ public class LoginServiceTest {
     }
 
     @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
+    public void shouldThrowIncorrectPasswordException() throws ValidationException {
 
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
@@ -95,7 +101,7 @@ public class LoginServiceTest {
     }
 
     @Test(expected=IncorrectUserTypeException.class)
-    public void shouldThrowIncorrectUserTypeException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
+    public void shouldThrowIncorrectUserTypeException() throws ValidationException {
 
         LoginView loginView = new LoginView();
         loginView.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
@@ -106,7 +112,7 @@ public class LoginServiceTest {
     }
 
     @Test(expected=FieldEmptyException.class)
-    public void shouldThrowFieldEmptyException() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
+    public void shouldThrowFieldEmptyException() throws ValidationException {
 
         LoginView loginView = new LoginView();
         loginView.setEmail(" ");
@@ -117,7 +123,7 @@ public class LoginServiceTest {
     }
 
     @Test
-    public void lastLoginTest() throws IncorrectUserTypeException, IncorrectEmailException, IncorrectPasswordException, FieldEmptyException, UserNotActivatedException {
+    public void lastLoginTest() throws ValidationException {
 
         long lastLogin = user.getLastLogin().getTime();
 

@@ -1,11 +1,10 @@
 package neo.dmcs.service;
 
+import neo.dmcs.Application;
+import neo.dmcs.enums.Role;
 import neo.dmcs.enums.UserStatus;
 import neo.dmcs.enums.UserType;
-import neo.dmcs.exception.DifferentPasswordsException;
-import neo.dmcs.exception.EmailExistsException;
-import neo.dmcs.exception.FieldEmptyException;
-import neo.dmcs.exception.IncorrectPasswordException;
+import neo.dmcs.exception.*;
 import neo.dmcs.model.User;
 import neo.dmcs.repository.UserRepository;
 import neo.dmcs.util.Encryptor;
@@ -15,8 +14,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
@@ -25,10 +26,11 @@ import java.util.Date;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @Author Mateusz Wieczorek, 20.04.16.
+ * @author Mateusz Wieczorek, 20.04.16.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/spring-test-config.xml"})
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ContextConfiguration(classes = {Application.class})
 public class RegisterServiceTest {
 
     @Autowired
@@ -43,15 +45,11 @@ public class RegisterServiceTest {
         user = new User();
         user.setEmail("kjasdhahdakjhdkjashdkjashdka@wp.pl");
         user.setStatus(UserStatus.ACTIVE.name());
-        try {
-            user.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        user.setPassword(Encryptor.encryption("zxcvbnmZ123$"));
         user.setFirstName("zxcvbnm");
         user.setLastName("fghjkajshdh");
         user.setLogin("zxcvbnmfghjkajshdh");
-        user.setType(UserType.STUDENT.name());
+        user.setType(Role.STUDENT);
         user.setLastLogin(new Timestamp((new Date()).getTime() - 100000000));
 
         userRepository.save(user);
@@ -63,7 +61,7 @@ public class RegisterServiceTest {
     }
 
     @Test(expected=FieldEmptyException.class)
-    public void shouldThrowFieldEmptyException() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
+    public void shouldThrowFieldEmptyException() throws ValidationException {
 
         RegisterView registerView = new RegisterView();
         registerView.setFirstName(" ");
@@ -72,7 +70,7 @@ public class RegisterServiceTest {
     }
 
     @Test(expected=DifferentPasswordsException.class)
-    public void shouldThrowDifferentPasswordsException() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
+    public void shouldThrowDifferentPasswordsException() throws ValidationException {
 
         RegisterView registerView = new RegisterView();
         registerView.setFirstName("jhgvhgvh");
@@ -86,7 +84,7 @@ public class RegisterServiceTest {
     }
 
     @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
+    public void shouldThrowIncorrectPasswordException() throws ValidationException {
 
         RegisterView registerView = new RegisterView();
         registerView.setFirstName("jhgvhgvh");
@@ -100,7 +98,7 @@ public class RegisterServiceTest {
     }
 
     @Test(expected=EmailExistsException.class)
-    public void shouldThrowEmailExistsException() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
+    public void shouldThrowEmailExistsException() throws ValidationException {
 
         RegisterView registerView = new RegisterView();
         registerView.setFirstName("jhgvhgvh");
@@ -114,7 +112,7 @@ public class RegisterServiceTest {
     }
 
     @Test
-    public void generateUsernameTest() throws FieldEmptyException, DifferentPasswordsException, EmailExistsException, IncorrectPasswordException {
+    public void generateUsernameTest() throws ValidationException {
 
         RegisterView registerView = new RegisterView();
         registerView.setFirstName("zxcvbnm");

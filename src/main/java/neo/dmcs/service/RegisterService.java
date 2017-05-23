@@ -60,7 +60,7 @@ public class RegisterService {
         return APPLICATION_ADDRESS + "/register/registrationConfirm.html?token=" + token;
     }
 
-    private User accept(RegisterView form) throws ValidationException {
+    public User accept(RegisterView form) throws ValidationException {
         validate(form);
         String username = generateUsername(form.getFirstName(), form.getLastName());
         User user = createUser(form, username);

@@ -40,12 +40,19 @@ public class ProfileService {
     private final MessageSource messageSource;
     private final UserRepository userRepository;
 
-    private void update(ProfileGeneralView form) throws ValidationException {
+    public void update(ProfileGeneralView form) throws ValidationException {
         form.setFirstName(form.getFirstName().trim());
         form.setLastName(form.getLastName().trim());
 
         if (!areFieldsNotEmpty(form)) {
             throw new FieldEmptyException("emptyField");
+        }
+        if (!form.getPassword().equals(form.getConfirmPassword())) {
+            throw new DifferentPasswordsException("register.differentPasswords");
+        }
+
+        if (!PasswordValidator.validate(form.getPassword())) {
+            throw new IncorrectPasswordException("register.incorrectPassword");
         }
 
         User user = getUpdatedUser(form);

@@ -40,16 +40,21 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <bean id="appLogDao" class="neo.dmcs.repository.impl.AppLogDaoImpl" />
-    <bean id="contactDao" class="neo.dmcs.repository.impl.ContactDaoImpl" />
-    <bean id="courseDateDao" class="neo.dmcs.repository.impl.CourseDateDaoImpl" />
-    <bean id="departmentDao" class="neo.dmcs.repository.impl.DepartmentDaoImpl" />
-    <bean id="eventDictionaryDao" class="neo.dmcs.repository.impl.EventDictionaryDaoImpl" />
-    <bean id="studentCourseDao" class="neo.dmcs.repository.impl.StudentCourseDaoImpl" />
-    <bean id="studentPrecenseDao" class="neo.dmcs.repository.impl.StudentPrecenseDaoImpl" />
-    <bean id="subjectDao" class="neo.dmcs.repository.impl.SubjectDaoImpl" />
-    <bean id="teacherCourseDao" class="neo.dmcs.repository.impl.TeacherCourseDaoImpl" />
-    <bean id="userDao" class="neo.dmcs.repository.impl.UserDaoImpl" />
+    <bean id="appLogRepository" class="neo.dmcs.repository.AppLogRepository" />
+    <bean id="appPropertyRepository" class="neo.dmcs.repository.AppPropertyRepository" />
+    <bean id="courseDateRepository" class="neo.dmcs.repository.CourseDateRepository" />
+    <bean id="emailTemplateRepository" class="neo.dmcs.repository.EmailTemplateRepository" />
+    <bean id="eventDictionaryRepository" class="neo.dmcs.repository.EventDictionaryRepository" />
+    <bean id="fieldRepository" class="neo.dmcs.repository.FieldRepository" />
+    <bean id="gradeRepository" class="neo.dmcs.repository.GradeRepository" />
+    <bean id="notificationRepository" class="neo.dmcs.repository.NotificationRepository" />
+    <bean id="sMSTemplateRepository" class="neo.dmcs.repository.SMSTemplateRepository" />
+    <bean id="studentCourseRepository" class="neo.dmcs.repository.StudentCourseRepository" />
+    <bean id="studentPresenceRepository" class="neo.dmcs.repository.StudentPresenceRepository" />
+    <bean id="subjectRepository" class="neo.dmcs.repository.SubjectRepository" />
+    <bean id="teacherCourseRepository" class="neo.dmcs.repository.TeacherCourseRepository" />
+    <bean id="tokenRepository" class="neo.dmcs.repository.TokenRepository" />
+    <bean id="userRepository" class="neo.dmcs.repository.UserRepository" />
 
     <bean id="loginService" class="neo.dmcs.service.LoginService" />
     <bean id="registerService" class="neo.dmcs.service.RegisterService" />

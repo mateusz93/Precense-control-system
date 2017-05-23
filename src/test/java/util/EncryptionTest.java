@@ -23,10 +23,6 @@ public class EncryptionTest {
     public void shouldReturnTrueIfPasswordIsCorrectEncrypted() {
         String password1 = "Hello World";
         String password2 = "Hello World";
-        try {
-            assertTrue(Encryptor.encryption(password1).equals(Encryptor.encryption(password2)));
-        } catch (NoSuchAlgorithmException e) {
-            assertTrue(false);
-        }
+        assertTrue(Encryptor.encryption(password1).equals(Encryptor.encryption(password2)));
     }
 }

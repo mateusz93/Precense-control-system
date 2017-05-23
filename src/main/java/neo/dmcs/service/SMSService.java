@@ -1,14 +1,11 @@
 package neo.dmcs.service;
 
-import com.twilio.sdk.Twilio;
-import com.twilio.sdk.resource.api.v2010.account.Message;
-import com.twilio.sdk.type.PhoneNumber;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.repository.AppPropertyRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +32,7 @@ public class SMSService {
         PhoneNumber from = new PhoneNumber(phoneNumber);
         PhoneNumber to = new PhoneNumber(recipient);
 
-        Message message = Message.create(ACCOUNT_SID, to, from, content).execute();
+        Message message = Message.creator(ACCOUNT_SID, to, from, content).create();
 
         if (message.getStatus().equals(Message.Status.FAILED)) {
             log.info("Sending sms failed. " + message.getErrorMessage());

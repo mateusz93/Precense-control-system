@@ -1,25 +1,30 @@
 package neo.dmcs.service;
 
+import neo.dmcs.Application;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.exception.DifferentPasswordsException;
 import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.IncorrectPasswordException;
+import neo.dmcs.exception.ValidationException;
 import neo.dmcs.util.Encryptor;
 import neo.dmcs.view.user.ProfileGeneralView;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.security.NoSuchAlgorithmException;
 
 /**
- * @Author Mateusz Wieczorek, 27.04.16.
+ * @author Mateusz Wieczorek, 27.04.16.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/spring-test-config.xml"})
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ContextConfiguration(classes = {Application.class})
 public class ProfileServiceTest {
 
     @Autowired
@@ -43,14 +48,14 @@ public class ProfileServiceTest {
     }
 
     @Test(expected=FieldEmptyException.class)
-    public void shouldThrowFieldEmptyExceptionException() throws FieldEmptyException, IncorrectPasswordException, DifferentPasswordsException {
+    public void shouldThrowFieldEmptyExceptionException() throws ValidationException {
 
         profileGeneralView.setFirstName("  ");
         profileService.update(profileGeneralView);
     }
 
     @Test(expected=DifferentPasswordsException.class)
-    public void shouldThrowDifferentPasswordsException() throws FieldEmptyException, IncorrectPasswordException, DifferentPasswordsException, NoSuchAlgorithmException {
+    public void shouldThrowDifferentPasswordsException() throws ValidationException {
 
         profileGeneralView.setPassword("zxcvbnmZ123$");
         profileGeneralView.setConfirmPassword("zxcvbn2mZ123$");
@@ -59,7 +64,7 @@ public class ProfileServiceTest {
     }
 
     @Test(expected=IncorrectPasswordException.class)
-    public void shouldThrowIncorrectPasswordException() throws FieldEmptyException, IncorrectPasswordException, DifferentPasswordsException, NoSuchAlgorithmException {
+    public void shouldThrowIncorrectPasswordException() throws ValidationException {
 
         profileGeneralView.setPassword("zxcvbnmZ");
         profileGeneralView.setConfirmPassword("zxcvbnmZ");
