@@ -52,7 +52,7 @@ public class GradeService {
         if (user.getType().name().equals(UserType.TEACHER.name())){
             prepareTeacherView(mvc, user);
         }
-        return new ModelAndView();
+        return mvc;
     }
 
     private void prepareStudentGrades(User user, ModelAndView mvc) {
