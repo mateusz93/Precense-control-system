@@ -78,7 +78,6 @@ public class LoginService {
             mvc.addObject("message", messageSource.getMessage(e.getMessage(), null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/login");
-            return mvc;
         } catch (IOException e) {
             log.error("Problem with captcha. ", e);
             mvc.addObject("message", messageSource.getMessage("error", null, locale));

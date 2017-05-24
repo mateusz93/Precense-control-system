@@ -9,11 +9,11 @@
         <title><spring:message code='view.register.title'/></title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="resources/css/bootstrap.3.3.7.min.css"/>
-        <link rel="stylesheet" href="resources/css/register.css"/>
-        <script src="resources/js/jquery.1.11.3.min.js"></script>
-        <script src="resources/js/bootstrap.3.3.7.min.js"></script>
-        <script src="resources/js/register.js"></script>
+        <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
+        <link rel="stylesheet" href="/resources/css/register.css"/>
+        <script src="/resources/js/jquery.1.11.3.min.js"></script>
+        <script src="/resources/js/bootstrap.3.3.7.min.js"></script>
+        <script src="/resources/js/register.js"></script>
         <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"</script>
     </head>
 
