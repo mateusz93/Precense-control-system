@@ -8,7 +8,7 @@
 
 <html>
     <head>
-        <title><spring:message code='view.presence.details'/</title>
+        <title><spring:message code='view.presence.details'/></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/resources/css/bootstrap.3.3.7.min.css"/>
         <link rel="stylesheet" href="/resources/css/menu.css"/>
@@ -49,7 +49,7 @@
                                             <input checked disabled type="radio" name="optionRadio"><spring:message code='view.presence.present'/>
                                         </label>
                                         <label class="radio-inline">
-                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.absence'/
+                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.absence'/>
                                         </label>
                                         <label class="radio-inline">
                                             <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.late'/>
@@ -60,7 +60,7 @@
                                             <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.present'/>
                                         </label>
                                         <label class="radio-inline">
-                                            <input checked disabled type="radio" name="optionRadio"><spring:message code='view.presence.absence'/
+                                            <input checked disabled type="radio" name="optionRadio"><spring:message code='view.presence.absence'/>
                                         </label>
                                         <label class="radio-inline">
                                             <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.late'/>
@@ -71,7 +71,7 @@
                                             <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.present'/>
                                         </label>
                                         <label class="radio-inline">
-                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.absence'/
+                                            <input disabled type="radio" name="optionRadio"><spring:message code='view.presence.absence'/>
                                         </label>
                                         <label class="radio-inline">
                                             <input checked disabled type="radio" name="optionRadio"><spring:message code='view.presence.late'/>

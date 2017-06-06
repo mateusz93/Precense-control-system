@@ -188,7 +188,7 @@ public class PresenceService {
             absence = 0;
             for (CourseDate cd : courseDates) {
                 StudentPresence studentPresence = studentPresenceRepository.findByCourseDateAndStudent(cd, sc.getStudent());
-                if (ABSENCE.equalsIgnoreCase(studentPresence.getStatus())) {
+                if (studentPresence != null && ABSENCE.equalsIgnoreCase(studentPresence.getStatus())) {
                     absence++;
                 }
             }

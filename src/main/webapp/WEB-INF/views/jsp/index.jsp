@@ -17,7 +17,9 @@
         <jsp:include page="menu.jsp"/>
 
         <div class="jumbotron text-center">
-            <h5>Language : <a href="?lang=pl">Polski</a> | <a href="?lang=en">English</a></h5>
+            <h5><spring:message code='view.language'/> :
+                <a href="?lang=pl"><spring:message code='view.language.polish'/></a> |
+                <a href="?lang=en"><spring:message code='view.language.english'/></a></h5>
             <h1><spring:message code='view.index.title'/></h1>
             <p><spring:message code='view.index.subtitle'/></p>
             <% if ("".equals(session.getAttribute("username")) || session.getAttribute("username") == null) { %>

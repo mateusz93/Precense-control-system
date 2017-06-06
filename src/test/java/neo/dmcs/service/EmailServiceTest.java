@@ -1,5 +1,6 @@
 package neo.dmcs.service;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.mail.*;
@@ -15,6 +16,7 @@ import static org.junit.Assert.assertThat;
  */
 public class EmailServiceTest {
 
+    @Ignore
     @Test
     public void sendEmail() throws Exception {
 
