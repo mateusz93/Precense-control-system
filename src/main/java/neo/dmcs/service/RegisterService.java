@@ -144,7 +144,7 @@ public class RegisterService {
         }
         cleanFields(form, mvc);
         mvc.addObject("message", messageSource.getMessage("register.userCreated", null, locale));
-        mvc.addObject("messageType", MessageType.SUCCESS.name());
+        mvc.addObject("messageType", MessageType.WARNING.name());
         return mvc;
     }
 
@@ -175,11 +175,11 @@ public class RegisterService {
             activateUser(token.getUser());
         } catch (ValidationException e) {
             mvc.addObject("message", messageSource.getMessage(e.getMessage(), null, locale));
-            mvc.addObject("messageType", MessageType.SUCCESS.name());
+            mvc.addObject("messageType", MessageType.DANGER.name());
             return mvc;
         }
         mvc.addObject("message", messageSource.getMessage("view.register.confirmed", null, locale));
-        mvc.addObject("messageType", MessageType.DANGER.name());
+        mvc.addObject("messageType", MessageType.SUCCESS.name());
         mvc.setViewName("security/register");
         return mvc;
     }

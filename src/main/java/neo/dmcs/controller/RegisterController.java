@@ -30,6 +30,11 @@ public class RegisterController {
     private final RegisterService registerService;
     private static final String MVC_DEFAULT = "security/register";
 
+    @RequestMapping(method = RequestMethod.GET)
+    public ModelAndView register() {
+        return new ModelAndView(MVC_DEFAULT);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView register(@ModelAttribute("newEmail") String email) {
         ModelAndView mvc = new ModelAndView(MVC_DEFAULT);
@@ -38,7 +43,7 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-    public ModelAndView registerUser(@ModelAttribute("registerForm") RegisterView form, Locale locale, BindingResult bindingResult) {
+    public ModelAndView registerUser(@ModelAttribute("registerForm") RegisterView form, Locale locale) {
         ModelAndView mvc = new ModelAndView(MVC_DEFAULT);
         return registerService.registerUser(form, mvc, locale);
     }
