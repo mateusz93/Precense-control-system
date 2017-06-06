@@ -173,6 +173,7 @@ public class RegisterService {
             Token token = tokenRepository.findByToken(tokenAsString);
             validateToken(token);
             activateUser(token.getUser());
+            tokenRepository.delete(token);
         } catch (ValidationException e) {
             mvc.addObject("message", messageSource.getMessage(e.getMessage(), null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
