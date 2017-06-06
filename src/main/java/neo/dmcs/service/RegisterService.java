@@ -86,17 +86,20 @@ public class RegisterService {
     }
 
     private void validateEmpties(RegisterView form) throws ValidationException {
-        if (!StringUtils.isNotBlank(form.getEmail())) {
-            throw new FieldEmptyException("emptyField");
-        }
-        if (!(StringUtils.isNotBlank(form.getConfirmPassword()) && StringUtils.isNotBlank(form.getPassword()))) {
-            throw new FieldEmptyException("emptyField");
-        }
         if (!StringUtils.isNotBlank(form.getFirstName())) {
-            throw new FieldEmptyException("emptyField");
+            throw new FieldEmptyException("emptyField", "view.profile.firstname");
         }
         if (!StringUtils.isNotBlank(form.getLastName())) {
-            throw new FieldEmptyException("emptyField");
+            throw new FieldEmptyException("emptyField", "view.profile.lastname");
+        }
+        if (!StringUtils.isNotBlank(form.getEmail())) {
+            throw new FieldEmptyException("emptyField", "view.profile.firstname");
+        }
+        if (!StringUtils.isNotBlank(form.getPassword())) {
+            throw new FieldEmptyException("emptyField", "view.profile.password");
+        }
+        if (!StringUtils.isNotBlank(form.getConfirmPassword())) {
+            throw new FieldEmptyException("emptyField", "view.profile.password.confirme");
         }
     }
 
@@ -137,6 +140,15 @@ public class RegisterService {
             emailService.sendActivationLink(user, activationLink);
         } catch (ValidationException e) {
             mapFields(form, mvc);
+            if (e instanceof FieldEmptyException) {
+                String fieldName = messageSource.getMessage(((FieldEmptyException) e).getFieldName(), null, locale);
+                String message = messageSource.getMessage(e.getMessage(), null, locale);
+                message = message.replace("{}", "'" + fieldName + "'");
+                mvc.addObject("message", message);
+                mvc.addObject("messageType", MessageType.DANGER.name());
+                mvc.setViewName("security/register");
+                return mvc;
+            }
             mvc.addObject("message", messageSource.getMessage(e.getMessage(), null, locale));
             mvc.addObject("messageType", MessageType.DANGER.name());
             mvc.setViewName("security/register");

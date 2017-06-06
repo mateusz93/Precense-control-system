@@ -74,10 +74,10 @@ public class CourseController {
         return courseService.prepareEditViewByDateId(dateId, mvc);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('TEACHER')")
     @RequestMapping(value = "/delete/{dateId}", method = RequestMethod.POST)
     public ModelAndView deleteCourse(@PathVariable("dateId") int dateId, HttpSession httpSession) {
-        ModelAndView mvc = new ModelAndView("course/adminCoursesList");
+        ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
             return new ModelAndView(MVC_NOT_LOGGED);
@@ -85,10 +85,10 @@ public class CourseController {
         return courseService.deleteCourseByDateId(dateId, mvc);
     }
 
-    @PreAuthorize("hasAuthority('TEACHER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @RequestMapping(value = "/deleteCourse/{id}", method = RequestMethod.POST)
     public ModelAndView delete(@PathVariable("id") int courseId, HttpSession httpSession, Locale locale) {
-        ModelAndView mvc = new ModelAndView("course/teacherCourseDates");
+        ModelAndView mvc = new ModelAndView("course/adminCoursesList");
         User user = getUserFromSession(httpSession);
         if (isNotLogged(user)) {
             return new ModelAndView(MVC_NOT_LOGGED);

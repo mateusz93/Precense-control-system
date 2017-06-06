@@ -3,6 +3,7 @@ package neo.dmcs.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
+import neo.dmcs.enums.Role;
 import neo.dmcs.enums.UserType;
 import neo.dmcs.model.*;
 import neo.dmcs.repository.*;
@@ -131,7 +132,7 @@ public class CourseService {
     public ModelAndView prepareNewView(ModelAndView mvc) {
         List<Subject> subjects = subjectRepository.findAll();
         mvc.addObject("subjectList", subjects);
-        List<User> teachers = userRepository.findByType(UserType.TEACHER.name());
+        List<User> teachers = userRepository.findByType(Role.TEACHER);
         mvc.addObject("teacherList", teachers);
         return mvc;
     }
