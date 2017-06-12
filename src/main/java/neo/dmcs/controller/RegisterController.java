@@ -2,10 +2,10 @@ package neo.dmcs.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import neo.dmcs.bpm.BpmProcessService;
 import neo.dmcs.service.RegisterService;
 import neo.dmcs.view.security.RegisterView;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +27,7 @@ public class RegisterController {
     /* Obsluga błedów */
     // http://www.mkyong.com/spring-mvc/spring-mvc-form-check-if-a-field-has-an-error/
 
+    private final BpmProcessService bpmProcessService;
     private final RegisterService registerService;
     private static final String MVC_DEFAULT = "security/register";
 

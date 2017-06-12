@@ -18,4 +18,6 @@ public final class Const {
     public static final String TOKEN_TIMEOUT_CODE = "504";
     public static final String PROCESS_STARTED = "PROCESS_STARTED_Message";
     public static final String PROCESS_FINISHED = "PROCESS_FINISHED_Message";
+
+    public static final String PROCESS_ID = "Process_0w2p6p8";
 }
