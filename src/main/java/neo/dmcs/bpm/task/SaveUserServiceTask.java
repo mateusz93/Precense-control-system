@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class SendValidationErrors implements JavaDelegate {
+public class SaveUserServiceTask implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        log.info("Sending validation error");
+        log.info("Saving user in database with active = false flag");
     }
 }
