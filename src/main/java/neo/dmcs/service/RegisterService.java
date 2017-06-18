@@ -46,7 +46,7 @@ public class RegisterService {
         return userRepository.save(user);
     }
 
-    private String generateToken(User user) {
+    public String generateToken(User user) {
         String tokenAsString = UUID.randomUUID().toString();
         Token token = new Token();
         token.setUser(user);
@@ -56,8 +56,13 @@ public class RegisterService {
         return tokenAsString;
     }
 
-    private String generateActivationLink(String token) {
+    public String generateActivationLink(String token) {
         return APPLICATION_ADDRESS + "/register/registrationConfirm.html?token=" + token;
+    }
+
+    public String generateActivationLink(String token, String processIntanceId) {
+        return APPLICATION_ADDRESS + "/register/registrationConfirm.html?token=" + token
+                + "&processInstanceId=" + processIntanceId;
     }
 
     public User accept(RegisterView form) throws ValidationException {
@@ -67,7 +72,7 @@ public class RegisterService {
         return userRepository.save(user);
     }
 
-    private User createUser(RegisterView form, String username) {
+    public User createUser(RegisterView form, String username) {
         User user = new User();
         user.setEmail(form.getEmail());
         user.setFirstName(form.getFirstName());
@@ -79,7 +84,7 @@ public class RegisterService {
         return user;
     }
 
-    private void validate(RegisterView form) throws ValidationException {
+    public void validate(RegisterView form) throws ValidationException {
         validateEmpties(form);
         validatePassword(form);
         checkEmailExists(form.getEmail());
@@ -119,7 +124,7 @@ public class RegisterService {
         }
     }
 
-    private String generateUsername(String firstName, String lastName) {
+    public String generateUsername(String firstName, String lastName) {
         String username = firstName + lastName;
 
         for (int i = 0; i < 1000; ++i) {
@@ -197,12 +202,12 @@ public class RegisterService {
         return mvc;
     }
 
-    private void validateToken(Token token) throws ValidationException {
+    public void validateToken(Token token) throws ValidationException {
         if (token == null) {
             throw new TokenIncorrectException("register.token.incorrect");
         }
-        if (token.getExpiryDate().getTime() < Date.valueOf(LocalDate.now()).getTime()) {
-            throw new TokenExpireException("register.token.expiry");
-        }
+//        if (token.getExpiryDate().getTime() < Date.valueOf(LocalDate.now()).getTime()) {
+//            throw new TokenExpireException("register.token.expiry");
+//        }
     }
 }

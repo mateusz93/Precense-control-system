@@ -2,11 +2,13 @@ package neo.dmcs.view.security;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author Mateusz Wieczorek, 09.04.16.
  */
 @Data
-public class RegisterView {
+public class RegisterView implements Serializable {
 
     private String firstName;
     private String lastName;

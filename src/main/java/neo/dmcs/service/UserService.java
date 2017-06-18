@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {//implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService {
         return currentUser != null && (currentUser.getRole() == Role.ADMIN || currentUser.getId() == userId);
     }
 
-    @Override
+    //@Override
     public CurrentUser loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByLogin(username);
         if (user == null) {

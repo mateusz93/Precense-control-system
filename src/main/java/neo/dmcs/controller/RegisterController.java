@@ -28,7 +28,6 @@ public class RegisterController {
     // http://www.mkyong.com/spring-mvc/spring-mvc-form-check-if-a-field-has-an-error/
 
     private final BpmProcessService bpmProcessService;
-    private final RegisterService registerService;
     private static final String MVC_DEFAULT = "security/register";
 
     @RequestMapping(method = RequestMethod.GET)
@@ -45,13 +44,15 @@ public class RegisterController {
 
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     public ModelAndView registerUser(@ModelAttribute("registerForm") RegisterView form, Locale locale) {
-        ModelAndView mvc = new ModelAndView(MVC_DEFAULT);
-        return registerService.registerUser(form, mvc, locale);
+        return bpmProcessService.startProcess(form, locale);
     }
 
     @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
-    public ModelAndView confirmRegistration(WebRequest request, @RequestParam("token") String token) {
-        return registerService.confirmRegistration(request, token);
+    public ModelAndView confirmRegistration(WebRequest request,
+                                            @RequestParam("token") String token,
+                                            @RequestParam("processInstanceId") String processInstanceId) {
+
+        return bpmProcessService.confirmRegistration(request.getLocale(), token, processInstanceId);
     }
 
 }

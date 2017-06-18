@@ -1,4 +1,4 @@
-package neo.dmcs.bpm.signal;
+package neo.dmcs.bpm;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -19,5 +19,5 @@ public final class Const {
     public static final String PROCESS_STARTED = "PROCESS_STARTED_Message";
     public static final String PROCESS_FINISHED = "PROCESS_FINISHED_Message";
 
-    public static final String PROCESS_ID = "Process_0w2p6p8";
+    public static final String PROCESS_ID = "Process_0ji4cd4";
 }

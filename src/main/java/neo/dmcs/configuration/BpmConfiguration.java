@@ -6,6 +6,7 @@ import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.history.HistoryLevel;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -19,7 +20,10 @@ import javax.sql.DataSource;
  */
 @Configuration
 public class BpmConfiguration {
-//
+
+    @Autowired
+    private DataSource dataSource;
+
 //    @Bean
 //    public DataSource dataSource() {
 //        SimpleDriverDataSource ds = new SimpleDriverDataSource();
@@ -30,42 +34,42 @@ public class BpmConfiguration {
 //        ds.setPassword("root");
 //        return ds;
 //    }
-//
-//    @Bean(name = "transactionManager")
-//    public PlatformTransactionManager annotationDrivenTransactionManager() {
-//        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-//        transactionManager.setDataSource(dataSource());
-//        return transactionManager;
-//    }
-//
-//    @Bean(name="processEngineFactoryBean")
-//    public ProcessEngineFactoryBean processEngineFactoryBean() {
-//        ProcessEngineFactoryBean factoryBean = new ProcessEngineFactoryBean();
-//        factoryBean.setProcessEngineConfiguration(processEngineConfiguration());
-//        return factoryBean;
-//    }
-//
-//    @Bean(name="processEngine")
-//    public ProcessEngine processEngine() {
-//        // Safe to call the getObject() on the @Bean annotated processEngineFactoryBean(), will be
-//        // the fully initialized object instanced from the factory and will NOT be created more than once
-//        try {
-//            return processEngineFactoryBean().getObject();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
-//    @Bean(name="processEngineConfiguration")
-//    public ProcessEngineConfigurationImpl processEngineConfiguration() {
-//        SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
-//        processEngineConfiguration.setDataSource(dataSource());
-//        processEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
-//        processEngineConfiguration.setTransactionManager(annotationDrivenTransactionManager());
-//        processEngineConfiguration.setJobExecutorActivate(false);
-//        processEngineConfiguration.setAsyncExecutorEnabled(true);
-//        processEngineConfiguration.setAsyncExecutorActivate(false);
-//        processEngineConfiguration.setHistoryLevel(HistoryLevel.FULL);
-//        return processEngineConfiguration;
-//    }
+    @Bean(name = "transactionManager")
+    public PlatformTransactionManager annotationDrivenTransactionManager() {
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
+        transactionManager.setDataSource(dataSource);
+        return transactionManager;
+    }
+
+    @Bean(name="processEngineFactoryBean")
+    public ProcessEngineFactoryBean processEngineFactoryBean() {
+        ProcessEngineFactoryBean factoryBean = new ProcessEngineFactoryBean();
+        factoryBean.setProcessEngineConfiguration(processEngineConfiguration());
+        return factoryBean;
+    }
+
+    @Bean(name="processEngine")
+    public ProcessEngine processEngine() {
+        // Safe to call the getObject() on the @Bean annotated processEngineFactoryBean(), will be
+        // the fully initialized object instanced from the factory and will NOT be created more than once
+        try {
+            return processEngineFactoryBean().getObject();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Bean(name="processEngineConfiguration")
+    public ProcessEngineConfigurationImpl processEngineConfiguration() {
+        SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
+        processEngineConfiguration.setDataSource(dataSource);
+        processEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+        processEngineConfiguration.setTransactionManager(annotationDrivenTransactionManager());
+        processEngineConfiguration.setJobExecutorActivate(false);
+        processEngineConfiguration.setAsyncExecutorEnabled(true);
+        processEngineConfiguration.setAsyncExecutorActivate(false);
+        processEngineConfiguration.setHistoryLevel(HistoryLevel.FULL);
+        return processEngineConfiguration;
+    }
 }

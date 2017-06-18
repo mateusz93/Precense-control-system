@@ -3,15 +3,13 @@ package neo.dmcs.bpm.task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
-import neo.dmcs.enums.UserStatus;
-import neo.dmcs.model.Token;
-import neo.dmcs.model.User;
-import neo.dmcs.repository.TokenRepository;
-import neo.dmcs.repository.UserRepository;
+import neo.dmcs.service.EmailService;
+import neo.dmcs.service.RegisterService;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import neo.dmcs.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
@@ -22,23 +20,22 @@ import java.util.Locale;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ActivateUserAccountServiceTask implements JavaDelegate {
+public class SendActivationTokenServiceTask implements JavaDelegate {
 
-    private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
+    private final RegisterService registerService;
+    private final EmailService emailService;
     private final MessageSource messageSource;
 
     @Transactional
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        log.info("Activation user account");
-        Locale locale = (Locale) execution.getVariable("locale");
+        log.info("Generate and send activation token");
         User user = (User) execution.getVariable("user");
-        user.setStatus(UserStatus.ACTIVE.name());
-        userRepository.save(user);
-        execution.setVariable("message", messageSource.getMessage("view.register.confirmed", null, locale));
+        String token = registerService.generateToken(user);
+        String activationLink = registerService.generateActivationLink(token, execution.getProcessInstanceId());
+        emailService.sendActivationLink(user, activationLink);
+        Locale locale = (Locale) execution.getVariable("locale");
+        execution.setVariable("message", messageSource.getMessage("register.userCreated", null, locale));
         execution.setVariable("messageType", MessageType.SUCCESS.name());
-        Token token = tokenRepository.findByUser(user);
-        tokenRepository.delete(token);
     }
 }
