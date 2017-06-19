@@ -3,14 +3,13 @@ package neo.dmcs.bpm.task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import neo.dmcs.enums.MessageType;
+import neo.dmcs.model.User;
 import neo.dmcs.service.EmailService;
 import neo.dmcs.service.RegisterService;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import neo.dmcs.model.User;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
@@ -26,7 +25,6 @@ public class SendActivationTokenServiceTask implements JavaDelegate {
     private final EmailService emailService;
     private final MessageSource messageSource;
 
-    @Transactional
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         log.info("Generate and send activation token");

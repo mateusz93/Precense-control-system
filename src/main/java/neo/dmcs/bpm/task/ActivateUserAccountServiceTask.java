@@ -12,7 +12,6 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
@@ -28,7 +27,6 @@ public class ActivateUserAccountServiceTask implements JavaDelegate {
     private final TokenRepository tokenRepository;
     private final MessageSource messageSource;
 
-    @Transactional
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         log.info("Activation user account");

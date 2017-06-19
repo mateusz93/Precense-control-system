@@ -8,13 +8,11 @@ import neo.dmcs.exception.FieldEmptyException;
 import neo.dmcs.exception.ValidationException;
 import neo.dmcs.service.RegisterService;
 import neo.dmcs.view.security.RegisterView;
-import org.activiti.engine.RuntimeService;
 import org.activiti.engine.delegate.BpmnError;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
@@ -28,9 +26,7 @@ public class ValidationServiceTask implements JavaDelegate {
 
     private final MessageSource messageSource;
     private final RegisterService registerService;
-    private final RuntimeService runtimeService;
 
-    @Transactional
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         log.info("Validation user data");

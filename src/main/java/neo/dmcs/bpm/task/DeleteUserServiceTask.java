@@ -9,7 +9,6 @@ import neo.dmcs.repository.UserRepository;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +30,7 @@ public class DeleteUserServiceTask implements JavaDelegate {
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.DEFAULT)
-    //@Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         log.info("Delete incorrect user data from database");
