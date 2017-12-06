@@ -47,11 +47,11 @@ public class ProfileService {
         if (!areFieldsNotEmpty(form)) {
             throw new FieldEmptyException("emptyField");
         }
-        if (!form.getPassword().equals(form.getConfirmPassword())) {
+        if (form.getPassword() != null && !form.getPassword().equals(form.getConfirmPassword())) {
             throw new DifferentPasswordsException("register.differentPasswords");
         }
 
-        if (!PasswordValidator.validate(form.getPassword())) {
+        if (form.getPassword() != null && !PasswordValidator.validate(form.getPassword())) {
             throw new IncorrectPasswordException("register.incorrectPassword");
         }
 

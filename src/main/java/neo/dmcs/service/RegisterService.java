@@ -75,7 +75,7 @@ public class RegisterService {
         user.setType(UserType.STUDENT.toString().equalsIgnoreCase(form.getType()) ? Role.STUDENT : Role.TEACHER);
         user.setLogin(username);
         user.setPassword(Encryptor.encryption(form.getPassword()));
-        user.setStatus(UserStatus.INACTIVE.name());
+        user.setStatus(UserStatus.ACTIVE.name());
         return user;
     }
 
@@ -135,9 +135,9 @@ public class RegisterService {
     public ModelAndView registerUser(RegisterView form, ModelAndView mvc, Locale locale) {
         try {
             User user = accept(form);
-            String token = generateToken(user);
-            String activationLink = generateActivationLink(token);
-            emailService.sendActivationLink(user, activationLink);
+            // String token = generateToken(user);
+            // String activationLink = generateActivationLink(token);
+            // emailService.sendActivationLink(user, activationLink);
         } catch (ValidationException e) {
             mapFields(form, mvc);
             if (e instanceof FieldEmptyException) {

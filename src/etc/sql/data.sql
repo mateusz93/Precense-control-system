@@ -3,11 +3,11 @@ USE data;
 SET foreign_key_checks = 0;
 
 INSERT INTO `data`.`User` (`fieldID`, `login`, `firstName`, `lastName`, `type`, `password`, `yearOfStudy`, `group`, `email`, `Status`)
-   VALUES (1, 'mateuszek', 'Mateusz', 'Wieczorek', 'Student', '92d7ddd2a010c59511dc2905b7e14f64', 1, 'I_2013', 'mati@edu.p.lodz.pl', 'ACTIVE');
+   VALUES (1, 'mateuszek', 'Mateusz', 'Wieczorek', 'STUDENT', '92d7ddd2a010c59511dc2905b7e14f64', 1, 'I_2013', 'mati@edu.p.lodz.pl', 'ACTIVE');
 INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `type`, `password`, `email`, `Status`)
-   VALUES ('grzegorzmaslowski', 'Grzegorz', 'Maslowski', 'Teacher', '92d7ddd2a010c59511dc2905b7e14f64', 'grzegorz@edu.p.lodz.pl', 'ACTIVE');
+   VALUES ('grzegorzmaslowski', 'Grzegorz', 'Maslowski', 'TEACHER', '92d7ddd2a010c59511dc2905b7e14f64', 'grzegorz@edu.p.lodz.pl', 'ACTIVE');
 INSERT INTO `data`.`User` (`login`, `firstName`, `lastName`, `type`, `password`, `email`, `Status`)
-   VALUES ('igordudek', 'Igor', 'Dudek', 'Admin', '92d7ddd2a010c59511dc2905b7e14f64', 'igor@edu.p.lodz.pl', 'ACTIVE');
+   VALUES ('igordudek', 'Igor', 'Dudek', 'ADMIN', '92d7ddd2a010c59511dc2905b7e14f64', 'igor@edu.p.lodz.pl', 'ACTIVE');
 
 INSERT INTO `data`.`TeacherCourse` (`subjectID`, `teacherID`, `studentGroup`, `description`) VALUES ('1', '2', 'I_2013', 'Nowy kurs 1');
 INSERT INTO `data`.`TeacherCourse` (`subjectID`, `teacherID`, `studentGroup`, `description`) VALUES ('2', '2', 'I_2013', 'Jakis kurs 2');

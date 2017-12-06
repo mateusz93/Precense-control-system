@@ -27,7 +27,6 @@
                     <li><a href="/precenses"><spring:message code='view.menu.presences'/></a></li>
                     <li><a href="/courses"><spring:message code='view.menu.subjects'/></a></li>
                     <li><a href="/grades"><spring:message code='view.menu.grades'/></a></li>
-                    <li><a href="/stats"><spring:message code='view.menu.stats'/></a></li>
                 <%} %>
 
                 <% if ("ADMIN".equals(session.getAttribute("userType"))) { %>

@@ -224,10 +224,10 @@ public class PresenceService {
                 User user = userRepository.findOne(Integer.valueOf(ids[i]));
                 Notification notification = notificationRepository.findByUser(user);
                 CourseDate courseDate = courseDateRepository.findOne(courseDateId);
-                if (notification.getAbsence().contains(EMAIL)) {
+                if (notification.getAbsence() != null && notification.getAbsence().contains(EMAIL)) {
                     sendAbsenceEmail(user, courseDate);
                 }
-                if (notification.getAbsence().contains(SMS)) {
+                if (notification.getAbsence() != null && notification.getAbsence().contains(SMS)) {
                     sendAbsenceSMS(user, courseDate);
                 }
             }

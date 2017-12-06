@@ -2,21 +2,21 @@ USE data;
 
 SET foreign_key_checks = 0;
 
-drop table `AppLog`;
-drop table `AppProperty`;
-drop table `CourseDate`;
-drop table `EmailTemplate`;
-drop table `EventDictionary`;
-drop table `Field`;
-drop table `Grade`;
-drop table `Notification`;
-drop table `SMSTemplate`;
-drop table `StudentCourse`;
-drop table `StudentPrecense`;
-drop table `Subject`;
-drop table `TeacherCourse`;
-drop table `Token`;
-drop table `User`;
+drop table if exists `AppLog`;
+drop table if exists `AppProperty`;
+drop table if exists `CourseDate`;
+drop table if exists `EmailTemplate`;
+drop table if exists `EventDictionary`;
+drop table if exists `Field`;
+drop table if exists `Grade`;
+drop table if exists `Notification`;
+drop table if exists `SMSTemplate`;
+drop table if exists `StudentCourse`;
+drop table if exists `StudentPrecense`;
+drop table if exists `Subject`;
+drop table if exists `TeacherCourse`;
+drop table if exists `Token`;
+drop table if exists `User`;
 
 CREATE TABLE `AppLog` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
